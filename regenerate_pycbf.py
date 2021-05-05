@@ -4,7 +4,11 @@ import subprocess
 import re
 import logging
 from pathlib import Path
-import shutil
+
+try:
+    from typing import Optional, List, Tuple
+except ImportError:
+    pass
 
 
 def check_call(command, *args, **kwargs):
@@ -23,7 +27,7 @@ def check_output(command, *args, **kwargs):
 def check_tool(
     name, version_args=[], version_re=None, expect_fail=False, minimum_version=None
 ):
-    # type: (str, List[str]), Optional[str], bool, Tuple[int]) -> bool
+    # type: (str, List[str], Optional[str], bool, Tuple[int]) -> bool
     """
     Checks if an external tool is present
 
