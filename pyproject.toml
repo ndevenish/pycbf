@@ -21,7 +21,7 @@ classifiers = [
 
 
 [tool.poetry.dependencies]
-python = ">=2.7"
+python = ">=2.7,<3.0.0 || >=3.6.0"
 
 [tool.poetry.dev-dependencies]
 ninja = "^1.10.0"
