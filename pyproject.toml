@@ -10,6 +10,9 @@ build = "build.py"
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
+scikit-build = "^0.11.1"
+ninja = "^1.10.0"
+cmake = [ { version="^3.18.4", markers= "platform_machine != 'arm64' " } ]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
