@@ -1,3 +1,4 @@
 [submodule "cbflib"]
 	path = cbflib
 	url = https://github.com/yayahjb/cbflib.git
+    ignore = dirty
