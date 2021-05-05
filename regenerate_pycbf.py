@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import absolute_import, division, print_function
 
+import glob
 import logging
 import os.path
 import re
@@ -94,6 +95,7 @@ if __name__ == "__main__":
         "latex": check_tool("latex", ["-v"]),
         "dvipdfm": check_tool("dvipdfm", ["--version"]),
         "git": check_tool("git", ["--version"]),
+        "patch": check_tool("patch", ["-v"]),
         "swig": check_tool(
             "swig", ["-version"], r"SWIG Version (\d[^\s]+)", minimum_version=(4, 0, 0)
         ),
@@ -122,6 +124,19 @@ if __name__ == "__main__":
         check_call(["git", "reset", "--hard", "HEAD"], cwd=CBFLIB_DIR)
     else:
         print("\nNo changes - OK to continue\n")
+
+    print("Applying patches from patches/")
+    patch_dir = os.path.join(ROOT_DIR, "patches")
+    for patch in sorted(
+        glob.glob(
+            os.path.join(
+                patch_dir, "[0123456789][0123456789][0123456789][0123456789][-_]*"
+            )
+        )
+    ):
+        print("Applying patch", patch)
+        with open(patch, "rb") as f:
+            subprocess.check_call(["patch", "-p1"], stdin=f, cwd=CBFLIB_DIR)
 
     print("Starting regeneration")
     regen_dir = os.path.join(CBFLIB_DIR, "pycbf")
