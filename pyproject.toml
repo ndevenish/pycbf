@@ -28,6 +28,7 @@ pytest = [
     { version="^4.6", python="^2.7" },
     { version=">6", python=">=3.6"},
 ]
+setuptools = "^56.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
