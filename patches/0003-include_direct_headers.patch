@@ -1,0 +1,16 @@
+diff --git a/pycbf/pycbf_i.w b/pycbf/pycbf_i.w
+index fd1323f..9def9ed 100644
+--- a/pycbf/pycbf_i.w
++++ b/pycbf/pycbf_i.w
+@@ -395,8 +395,8 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
+ %{  // Here is the c code needed to compile the wrappers, but not 
+     // to be wrapped 
+ 
+-#include "../include/cbf.h"          
+-#include "../include/cbf_simple.h"
++#include "cbf.h"          
++#include "cbf_simple.h"
+ 
+ // Helper functions to generate error message
+  
+

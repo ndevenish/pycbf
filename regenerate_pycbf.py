@@ -5,6 +5,7 @@ import glob
 import logging
 import os.path
 import re
+import shutil
 import subprocess
 import sys
 
@@ -172,11 +173,8 @@ if __name__ == "__main__":
         )
     # Copy over the .c file to build
     print("Copying over and amending pycbf_wrap.c...")
-    with open(os.path.join(regen_dir, "pycbf_wrap.c"), "rb") as f:
-        pycbf_wrap = f.read()
-    # Rewrite the include to cbf.h etc
-    pycbf_wrap_rewritten = pycbf_wrap.replace(b"../include/cbf", b"cbf")
-    with open(os.path.join(ROOT_DIR, "pycbf_wrap.c"), "wb") as f:
-        f.write(pycbf_wrap_rewritten)
+    shutil.copy(
+        os.path.join(regen_dir, "pycbf_wrap.c"), os.path.join(ROOT_DIR, "pycbf_wrap.c")
+    )
 
     print("done.")
