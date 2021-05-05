@@ -17,3 +17,6 @@ cmake = [ { version="^3.18.4", markers= "platform_machine != 'arm64' " } ]
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+exclude = "cbflib/|src/pycbf/__init__.py"
