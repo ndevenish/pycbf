@@ -119,7 +119,7 @@ if __name__ == "__main__":
             ["git", "diff", "--no-ext-diff", "--quiet"],
             cwd=os.path.join(ROOT_DIR, "cbflib"),
         )
-    except subprocess.SubprocessError:
+    except subprocess.CalledProcessError:
         # We have changes - reset it
         print("cbflib subdirectory has changes - resetting to reapply")
         check_call(["git", "reset", "--hard", "HEAD"], cwd=CBFLIB_DIR)
