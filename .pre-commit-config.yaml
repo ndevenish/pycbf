@@ -14,3 +14,9 @@ repos:
       rev: 3.9.1
       hooks:
           - id: flake8
+
+    - repo: https://github.com/PyCQA/isort.git
+      rev: 5.8.0
+      hooks:
+          - id: isort
+

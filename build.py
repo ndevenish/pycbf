@@ -1,7 +1,7 @@
-from typing import Any, Dict
-from distutils.core import Extension
-from pathlib import PurePath, Path
 import re
+from distutils.core import Extension
+from pathlib import Path, PurePath
+from typing import Any, Dict
 
 # import skbuild
 # import skbuild.constants

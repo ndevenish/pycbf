@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-import sys
-import subprocess
-import re
 import logging
+import re
+import subprocess
+import sys
 from pathlib import Path
 
 try:
-    from typing import Optional, List, Tuple
+    from typing import List, Optional, Tuple
 except ImportError:
     pass
 
