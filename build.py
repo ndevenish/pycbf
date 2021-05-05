@@ -8,7 +8,7 @@ from typing import Any, Dict
 
 extensions = [
     Extension(
-        "pycbf._cbflib",
+        "pycbf._pycbf",
         sources=["pycbf_wrap.c"],
         include_dirs=[str(PurePath(__file__).parent / "cbflib" / "include")],
     )
