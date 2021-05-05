@@ -1,16 +1,15 @@
 [tool.poetry]
 name = "pycbf"
-version = "0.9.6"
+version = "0.0.96"
 description = ""
 authors = ["Nicholas Devenish <ndevenish@gmail.com>"]
 license = "LGPL-2.1-or-later"
 build = "build.py"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = ">=2.7"
 
 [tool.poetry.dev-dependencies]
-scikit-build = "^0.11.1"
 ninja = "^1.10.0"
 cmake = [ { version="^3.18.4", markers= "platform_machine != 'arm64' " } ]
 
