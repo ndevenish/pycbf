@@ -14,6 +14,7 @@ except ImportError:
 
 
 ROOT_DIR = os.path.dirname(__file__)
+CBFLIB_DIR = os.path.join(ROOT_DIR, "cbflib")
 
 PY2 = sys.version_info < (3, 0)
 
@@ -90,11 +91,12 @@ if __name__ == "__main__":
     # Verify that we have the right versions of everything to regenerate
     tools_available = {
         "nuweb": check_tool("nuweb", expect_fail=True),
+        "latex": check_tool("latex", ["-v"]),
+        "dvipdfm": check_tool("dvipdfm", ["--version"]),
+        "git": check_tool("git", ["--version"]),
         "swig": check_tool(
             "swig", ["-version"], r"SWIG Version (\d[^\s]+)", minimum_version=(4, 0, 0)
         ),
-        "latex": check_tool("latex", ["-v"]),
-        "dvipdfm": check_tool("dvipdfm", ["--version"]),
     }
 
     try:
@@ -108,9 +110,22 @@ if __name__ == "__main__":
     if could_not_find:
         sys.exit("Error: Some regeneration tooling is missing. Cannot regenerate.")
 
+    # Reset the sub-repository
+    try:
+        check_call(
+            ["git", "diff", "--no-ext-diff", "--quiet"],
+            cwd=os.path.join(ROOT_DIR, "cbflib"),
+        )
+    except subprocess.SubprocessError:
+        # We have changes - reset it
+        print("cbflib subdirectory has changes - resetting to reapply")
+        check_call(["git", "reset", "--hard", "HEAD"], cwd=CBFLIB_DIR)
+    else:
+        print("\nNo changes - OK to continue\n")
+
     print("Starting regeneration")
-    regen_dir = os.path.join(ROOT_DIR, "cbflib", "pycbf")
-    html_file = os.path.join(ROOT_DIR, "cbflib", "doc", "CBFlib.html")
+    regen_dir = os.path.join(CBFLIB_DIR, "pycbf")
+    html_file = os.path.join(CBFLIB_DIR, "doc", "CBFlib.html")
 
     check_call(["nuweb", "pycbf"], cwd=regen_dir)
     check_call(["latex", "pycbf"], cwd=regen_dir)
