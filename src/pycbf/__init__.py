@@ -371,8 +371,8 @@ def compute_cell_volume(cell):
     DESCRIPTION
     cbf_compute_cell_volume sets *volume to point to the volume of the 
     unit cell computed from the double values in cell[0:2] for the cell 
-    edge lengths a, b and c in AAngstroms and the double values given in 
-    cell[3:5] for the cell angles a, b and g in degrees.
+    edge lengths a, b and c in Ångstroms and the double values given in 
+    cell[3:5] for the cell angles α, β and γ in degrees.
     ARGUMENTS
     cell     Pointer to the array of 6 doubles giving the cell 
     parameters. volume   Pointer to the doubles for cell volume.
@@ -397,11 +397,12 @@ def compute_reciprocal_cell(cell):
     DESCRIPTION
     cbf_compute_reciprocal_cell sets rcell to point to the array of 
     reciprocal cell parameters computed from the double values cell[0:2] 
-    giving the cell edge lengths a, b and c in AAngstroms, and the double 
-    values cell[3:5] giving the cell angles a, b and g in degrees. The 
+    giving the cell edge lengths a, b and c in Ångstroms, and the double 
+    values cell[3:5] giving the cell angles α, β and γ in degrees. The 
     double values rcell[0:2] will be set to the reciprocal cell lengths 
-    a*, b* and c* in AAngstroms-1 and the double values rcell[3:5] will 
-    be set to the reciprocal cell angles a*, b* and g* in degrees.
+    a^*, b^* and c^* in Ångstroms^-1 and the double values rcell[3:5] 
+    will be set to the reciprocal cell angles α^*, β^* and γ^* in 
+    degrees.
     ARGUMENTS
     cell     Pointer to the array of 6 doubles giving the cell 
     parameters. rcell    Pointer to the destination array of 6 doubles 
@@ -632,7 +633,7 @@ class cbf_positioner_struct(object):
         corresponding to the real-space vector (real1, real2, real3). The 
         reciprocal-space vector is oriented to correspond to the goniometer 
         setting with all axes at 0. The value wavelength is the wavlength in 
-        AA and the value ratio specifies the current goniometer setting and 
+        Å and the value ratio specifies the current goniometer setting and 
         varies from 0.0 at the beginning of the exposur e to 1.0 at the end, 
         irrespective of the actual rotation range.
         Any of the destination pointers may be NULL.
@@ -640,8 +641,8 @@ class cbf_positioner_struct(object):
         ARGUMENTS
         goniometer    Goniometer handle. reserved      Unused. Any value 
         other than 0 is invalid. ratio         Goniometer setting. 0 = 
-        beginning of exposure, 1 = end. wavelength    Wavelength in AA. real1 
-                x component of the real-space vector. real2         y 
+        beginning of exposure, 1 = end. wavelength    Wavelength in Å. real1  
+               x component of the real-space vector. real2         y 
         component of the real-space vector. real3         z component of the 
         real-space vector. reciprocal1   Pointer to the destination x 
         component of the reciprocal-space vector. reciprocal2   Pointer to 
@@ -4199,11 +4200,11 @@ class cbf_handle_struct(object):
         An additional restriction in the current version of CBFlib is that 
         values too large to fit in an int are not correctly decompressed. As 
         an example, if the machine with 32-bit ints is reading an array 
-        containing a value outside the range 0 .. 2^32-1 (unsigned) or -2^31 
-        .. 2^31-1 (signed), the array will not be correctly decompressed. 
-        This restriction will be removed in a future release. For 
-        cbf_get_realarray, only IEEE format is supported. No conversion to 
-        other floating point formats is done at this time.
+        containing a value outside the range 0 .. 2^^32-1 (unsigned) or 
+        -2^^31 .. 2^^31-1 (signed), the array will not be correctly 
+        decompressed. This restriction will be removed in a future release. 
+        For cbf_get_realarray, only IEEE format is supported. No conversion 
+        to other floating point formats is done at this time.
         ARGUMENTS
         handle          CBF handle. binary_id       Pointer to the 
         destination integer binary identifier. array           Pointer to the 
@@ -4254,11 +4255,11 @@ class cbf_handle_struct(object):
         An additional restriction in the current version of CBFlib is that 
         values too large to fit in an int are not correctly decompressed. As 
         an example, if the machine with 32-bit ints is reading an array 
-        containing a value outside the range 0 .. 2^32-1 (unsigned) or -2^31 
-        .. 2^31-1 (signed), the array will not be correctly decompressed. 
-        This restriction will be removed in a future release. For 
-        cbf_get_realarray, only IEEE format is supported. No conversion to 
-        other floating point formats is done at this time.
+        containing a value outside the range 0 .. 2^^32-1 (unsigned) or 
+        -2^^31 .. 2^^31-1 (signed), the array will not be correctly 
+        decompressed. This restriction will be removed in a future release. 
+        For cbf_get_realarray, only IEEE format is supported. No conversion 
+        to other floating point formats is done at this time.
         ARGUMENTS
         handle          CBF handle. binary_id       Pointer to the 
         destination integer binary identifier. array           Pointer to the 
@@ -5326,7 +5327,7 @@ class cbf_handle_struct(object):
 
         CBFLib documentation:
         DESCRIPTION
-        cbf_get_wavelength sets *wavelength to the current wavelength in AA.
+        cbf_get_wavelength sets *wavelength to the current wavelength in Å.
         ARGUMENTS
         handle       CBF handle. wavelength   Pointer to the destination.
         RETURN VALUE
@@ -5346,9 +5347,9 @@ class cbf_handle_struct(object):
 
         CBFLib documentation:
         DESCRIPTION
-        cbf_set_wavelength sets the current wavelength in AA to wavelength.
+        cbf_set_wavelength sets the current wavelength in Å to wavelength.
         ARGUMENTS
-        handle       CBF handle. wavelength   Wavelength in AA.
+        handle       CBF handle. wavelength   Wavelength in Å.
         RETURN VALUE
         Returns an error code on failure or 0 for success.
         ----------------------------------------------------------------------
@@ -5954,17 +5955,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -5996,17 +5997,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6038,17 +6039,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6080,17 +6081,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6123,17 +6124,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6166,17 +6167,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6210,17 +6211,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6254,17 +6255,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6298,17 +6299,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6341,17 +6342,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6384,17 +6385,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6427,17 +6428,17 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_get_image, cbf_get_image_fs and cbf_get_image_sf read the image 
         array for element number element_number into an array. The array 
-        consists of ndimslow *ndimfast elements of elsize bytes each, 
-        starting at array. The elements are signed if elsign is non-0 and 
-        unsigned otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
+        consists of ndimslow×ndimfast elements of elsize bytes each, starting 
+        at array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_image, cbf_get_real_image_fs and 
         cbf_get_real_image_sf read the image array of IEEE doubles or floats 
         for element number element_number into an array. A real array is 
         always signed. cbf_get_3d_image, cbf_get_3d_image_fs and 
         cbf_get_3d_image_sf read the 3D image array for element number 
-        element_number into an array. The array consists of ndimslow *ndimmid 
-        *ndimfast elements of elsize bytes each, starting at array. The 
-        elements are signed if elsign is non-0 and unsigned otherwise. 
-        cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
+        element_number into an array. The array consists of 
+        ndimslow×ndimmid×ndimfast elements of elsize bytes each, starting at 
+        array. The elements are signed if elsign is non-0 and unsigned 
+        otherwise. cbf_get_real_3d_image, cbf_get_real_3d_image_fs, 
         cbf_get_real_3d_image_sf reads the 3D image array of IEEE doubles or 
         floats for element number element_number into an array. A real array 
         is always signed.
@@ -6471,21 +6472,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6543,21 +6543,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6615,21 +6614,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6687,21 +6685,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6759,21 +6756,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6831,21 +6827,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6903,21 +6898,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -6975,21 +6969,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -7047,21 +7040,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -7119,21 +7111,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -7191,21 +7182,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -7263,21 +7253,20 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_image, cbf_set_image_fs and cbf_set_image_sf write the image 
         array for element number element_number. The array consists of 
-        ndimfast *ndimslow elements of elsize bytes each, starting at array. 
+        ndimfast×ndimslow elements of elsize bytes each, starting at array. 
         The elements are signed if elsign is non-zero and unsigned otherwise. 
         cbf_set_real_image, cbf_set_real_image_fs and cbf_set_real_image_sf 
         write the image array for element number element_number. The array 
-        consists of ndimfast *ndimslow IEEE double or float elements of 
-        elsize bytes each, starting at array. cbf_set_3d_image, 
-        cbf_set_3d_image_fs and cbf_set_3d_image_sf write the 3D image array 
-        for element number element_number. The array consists of ndimfast 
-        *ndimmid *ndimslow elements of elsize bytes each, starting at array. 
-        The elements are signed if elsign is non-0 and unsigned otherwise. 
+        consists of ndimfast×ndimslow IEEE double or float elements of elsize 
+        bytes each, starting at array. cbf_set_3d_image, cbf_set_3d_image_fs 
+        and cbf_set_3d_image_sf write the 3D image array for element number 
+        element_number. The array consists of ndimfast×ndimmid×ndimslow 
+        elements of elsize bytes each, starting at array. The elements are 
+        signed if elsign is non-0 and unsigned otherwise. 
         cbf_set_real_3d_image, cbf_set_real_3d_image_fs and 
         cbf_set_real_3d_image_sf writes the 3D image array for element number 
-        element_number. The array consists of ndimfast *ndimmid *ndimslow 
-        IEEE double or float elements of elsize bytes each, starting at 
-        array.
+        element_number. The array consists of ndimfast×ndimmid×ndimslow IEEE 
+        double or float elements of elsize bytes each, starting at array.
         The _fs calls give the dimensions in a fast-to-slow order. The calls 
         with no suffix and the calls _sf calls give the dimensions in 
         slow-to-fast order
@@ -8344,14 +8333,34 @@ class cbf_handle_struct(object):
 
         CBFLib documentation:
         DESCRIPTION
-        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the 
-        &quote;size&quote; column of the  "array_structure_list " category 
-        at the row which matches axis axis_number of the detector element 
+        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the  
+        "size " column of the  "array_structure_list " category at the 
+        row which matches axis axis_number of the detector element 
         element_number converting the double pixel size psize from meters to 
         millimeters in storing it in the  "size " column for the axis 
         axis_number of the detector element element_number. The axis_number 
         is numbered from 1, starting with the slowest axis. 
-        cbf_set_pixel_size_fs sets the item
+        cbf_set_pixel_size_fs sets the item in the  "size " column of the  
+        "array_structure_list " category at the row which matches axis 
+        axis_number of the detector element element_number converting the 
+        double pixel size psize from meters to millimeters in storing it in 
+        the  "size " column for the axis axis_number of the detector 
+        element element_number. The axis_number is numbered from 1, starting 
+        with the fastest axis.
+        If a negative axis number is given, the order of axes is reversed, so 
+        that -1 specifies the slowest axis for cbf_get_pixel_size_fs and the 
+        fastest axis for cbf_get_pixel_size_sf.
+        If the  "array_structure_list " category does not already exist, it 
+        is created.
+        If the appropriate row in the  "array_structure_list " catgeory 
+        does not already exist, it is created.
+        If the pixel size is not given explcitly in the  "array_element_size 
+        category ", the function returns CBF_NOTFOUND.
+        ARGUMENTS
+        handle           CBF handle. element_number   The number of the 
+        detector element counting from 0 by order of appearance in the  
+        "diffrn_data_frame " category. axis_number      The number of the 
+        axis, fastest first, starting from 1.
 
         """
         return _pycbf.cbf_handle_struct_set_pixel_size(self, element_number, axis_number, psize)
@@ -8368,14 +8377,34 @@ class cbf_handle_struct(object):
 
         CBFLib documentation:
         DESCRIPTION
-        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the 
-        &quote;size&quote; column of the  "array_structure_list " category 
-        at the row which matches axis axis_number of the detector element 
+        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the  
+        "size " column of the  "array_structure_list " category at the 
+        row which matches axis axis_number of the detector element 
         element_number converting the double pixel size psize from meters to 
         millimeters in storing it in the  "size " column for the axis 
         axis_number of the detector element element_number. The axis_number 
         is numbered from 1, starting with the slowest axis. 
-        cbf_set_pixel_size_fs sets the item
+        cbf_set_pixel_size_fs sets the item in the  "size " column of the  
+        "array_structure_list " category at the row which matches axis 
+        axis_number of the detector element element_number converting the 
+        double pixel size psize from meters to millimeters in storing it in 
+        the  "size " column for the axis axis_number of the detector 
+        element element_number. The axis_number is numbered from 1, starting 
+        with the fastest axis.
+        If a negative axis number is given, the order of axes is reversed, so 
+        that -1 specifies the slowest axis for cbf_get_pixel_size_fs and the 
+        fastest axis for cbf_get_pixel_size_sf.
+        If the  "array_structure_list " category does not already exist, it 
+        is created.
+        If the appropriate row in the  "array_structure_list " catgeory 
+        does not already exist, it is created.
+        If the pixel size is not given explcitly in the  "array_element_size 
+        category ", the function returns CBF_NOTFOUND.
+        ARGUMENTS
+        handle           CBF handle. element_number   The number of the 
+        detector element counting from 0 by order of appearance in the  
+        "diffrn_data_frame " category. axis_number      The number of the 
+        axis, fastest first, starting from 1.
 
         """
         return _pycbf.cbf_handle_struct_set_pixel_size_fs(self, element_number, axis_number, psize)
@@ -8392,14 +8421,34 @@ class cbf_handle_struct(object):
 
         CBFLib documentation:
         DESCRIPTION
-        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the 
-        &quote;size&quote; column of the  "array_structure_list " category 
-        at the row which matches axis axis_number of the detector element 
+        cbf_set_pixel_size and cbf_set_pixel_size_sf set the item in the  
+        "size " column of the  "array_structure_list " category at the 
+        row which matches axis axis_number of the detector element 
         element_number converting the double pixel size psize from meters to 
         millimeters in storing it in the  "size " column for the axis 
         axis_number of the detector element element_number. The axis_number 
         is numbered from 1, starting with the slowest axis. 
-        cbf_set_pixel_size_fs sets the item
+        cbf_set_pixel_size_fs sets the item in the  "size " column of the  
+        "array_structure_list " category at the row which matches axis 
+        axis_number of the detector element element_number converting the 
+        double pixel size psize from meters to millimeters in storing it in 
+        the  "size " column for the axis axis_number of the detector 
+        element element_number. The axis_number is numbered from 1, starting 
+        with the fastest axis.
+        If a negative axis number is given, the order of axes is reversed, so 
+        that -1 specifies the slowest axis for cbf_get_pixel_size_fs and the 
+        fastest axis for cbf_get_pixel_size_sf.
+        If the  "array_structure_list " category does not already exist, it 
+        is created.
+        If the appropriate row in the  "array_structure_list " catgeory 
+        does not already exist, it is created.
+        If the pixel size is not given explcitly in the  "array_element_size 
+        category ", the function returns CBF_NOTFOUND.
+        ARGUMENTS
+        handle           CBF handle. element_number   The number of the 
+        detector element counting from 0 by order of appearance in the  
+        "diffrn_data_frame " category. axis_number      The number of the 
+        axis, fastest first, starting from 1.
 
         """
         return _pycbf.cbf_handle_struct_set_pixel_size_sf(self, element_number, axis_number, psize)
@@ -8416,11 +8465,11 @@ class cbf_handle_struct(object):
         CBFLib documentation:
         DESCRIPTION
         cbf_get_unit_cell sets cell[0:2] to the double values of the cell 
-        edge lengths a, b and c in AAngstroms, cell[3:5] to the double values 
-        of the cell angles a, b and g in degrees, cell_esd[0:2] to the double 
+        edge lengths a, b and c in Ångstroms, cell[3:5] to the double values 
+        of the cell angles α, β and γ in degrees, cell_esd[0:2] to the double 
         values of the estimated strandard deviations of the cell edge lengths 
-        a, b and c in AAngstroms, cell_esd[3:5] to the double values of the 
-        estimated standard deviations of the the cell angles a, b and g in 
+        a, b and c in Ångstroms, cell_esd[3:5] to the double values of the 
+        estimated standard deviations of the the cell angles α, β and γ in 
         degrees.
         The values returned are retrieved from the first row of the  "cell 
         " category. The value of  "_cell.entry_id " is ignored.
@@ -8457,12 +8506,12 @@ class cbf_handle_struct(object):
         CBFLib documentation:
         DESCRIPTION
         cbf_set_unit_cell sets the cell parameters to the double values given 
-        in cell[0:2] for the cell edge lengths a, b and c in AAngstroms, the 
-        double values given in cell[3:5] for the cell angles a, b and g in 
+        in cell[0:2] for the cell edge lengths a, b and c in Ångstroms, the 
+        double values given in cell[3:5] for the cell angles α, β and γ in 
         degrees, the double values given in cell_esd[0:2] for the estimated 
         strandard deviations of the cell edge lengths a, b and c in 
-        AAngstroms, and the double values given in cell_esd[3:5] for the 
-        estimated standard deviations of the the cell angles a, b and g in 
+        Ångstroms, and the double values given in cell_esd[3:5] for the 
+        estimated standard deviations of the the cell angles α, β and γ in 
         degrees.
         The values are placed in the first row of the  "cell " category. If 
         no value has been given for  "_cell.entry_id ", it is set to the 
@@ -8495,12 +8544,12 @@ class cbf_handle_struct(object):
         CBFLib documentation:
         DESCRIPTION
         cbf_set_unit_cell sets the cell parameters to the double values given 
-        in cell[0:2] for the cell edge lengths a, b and c in AAngstroms, the 
-        double values given in cell[3:5] for the cell angles a, b and g in 
+        in cell[0:2] for the cell edge lengths a, b and c in Ångstroms, the 
+        double values given in cell[3:5] for the cell angles α, β and γ in 
         degrees, the double values given in cell_esd[0:2] for the estimated 
         strandard deviations of the cell edge lengths a, b and c in 
-        AAngstroms, and the double values given in cell_esd[3:5] for the 
-        estimated standard deviations of the the cell angles a, b and g in 
+        Ångstroms, and the double values given in cell_esd[3:5] for the 
+        estimated standard deviations of the the cell angles α, β and γ in 
         degrees.
         The values are placed in the first row of the  "cell " category. If 
         no value has been given for  "_cell.entry_id ", it is set to the 
@@ -8534,13 +8583,13 @@ class cbf_handle_struct(object):
         CBFLib documentation:
         DESCRIPTION
         cbf_get_reciprocal_cell sets cell[0:2] to the double values of the 
-        reciprocal cell edge lengths a*, b* and c* in AAngstroms-1, cell[3:5] 
-        to the double values of the reciprocal cell angles a*, b* and g* in 
-        degrees, cell_esd[0:2] to the double values of the estimated 
-        strandard deviations of the reciprocal cell edge lengths a*, b* and 
-        c* in AAngstroms-1, cell_esd[3:5] to the double values of the 
-        estimated standard deviations of the the reciprocal cell angles a*, 
-        b* and g* in degrees.
+        reciprocal cell edge lengths a^*, b^* and c^* in Ångstroms^-1, 
+        cell[3:5] to the double values of the reciprocal cell angles α^*, β^* 
+        and γ^* in degrees, cell_esd[0:2] to the double values of the 
+        estimated strandard deviations of the reciprocal cell edge lengths 
+        a^*, b^* and c^* in Ångstroms^-1, cell_esd[3:5] to the double values 
+        of the estimated standard deviations of the the reciprocal cell 
+        angles α^*, β^* and γ^* in degrees.
         The values returned are retrieved from the first row of the  "cell 
         " category. The value of  "_cell.entry_id " is ignored.
         cell or cell_esd may be NULL.
@@ -8579,12 +8628,13 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_reciprocal_cell sets the reciprocal cell parameters to the 
         double values given in cell[0:2] for the reciprocal cell edge lengths 
-        a*, b* and c* in AAngstroms-1, the double values given in cell[3:5] 
-        for the reciprocal cell angles a*, b* and g* in degrees, the double 
-        values given in cell_esd[0:2] for the estimated strandard deviations 
-        of the reciprocal cell edge lengths a*, b* and c* in AAngstroms, and 
-        the double values given in cell_esd[3:5] for the estimated standard 
-        deviations of the reciprocal cell angles a*, b* and g* in degrees.
+        a^*, b^* and c^* in Ångstroms^-1, the double values given in 
+        cell[3:5] for the reciprocal cell angles α^*, β^* and γ^* in degrees, 
+        the double values given in cell_esd[0:2] for the estimated strandard 
+        deviations of the reciprocal cell edge lengths a^*, b^* and c^* in 
+        Ångstroms, and the double values given in cell_esd[3:5] for the 
+        estimated standard deviations of the reciprocal cell angles α^*, β^* 
+        and γ^* in degrees.
         The values are placed in the first row of the  "cell " category. If 
         no value has been given for  "_cell.entry_id ", it is set to the 
         value of the  "diffrn.id " entry of the current data block.
@@ -8617,12 +8667,13 @@ class cbf_handle_struct(object):
         DESCRIPTION
         cbf_set_reciprocal_cell sets the reciprocal cell parameters to the 
         double values given in cell[0:2] for the reciprocal cell edge lengths 
-        a*, b* and c* in AAngstroms-1, the double values given in cell[3:5] 
-        for the reciprocal cell angles a*, b* and g* in degrees, the double 
-        values given in cell_esd[0:2] for the estimated strandard deviations 
-        of the reciprocal cell edge lengths a*, b* and c* in AAngstroms, and 
-        the double values given in cell_esd[3:5] for the estimated standard 
-        deviations of the reciprocal cell angles a*, b* and g* in degrees.
+        a^*, b^* and c^* in Ångstroms^-1, the double values given in 
+        cell[3:5] for the reciprocal cell angles α^*, β^* and γ^* in degrees, 
+        the double values given in cell_esd[0:2] for the estimated strandard 
+        deviations of the reciprocal cell edge lengths a^*, b^* and c^* in 
+        Ångstroms, and the double values given in cell_esd[3:5] for the 
+        estimated standard deviations of the reciprocal cell angles α^*, β^* 
+        and γ^* in degrees.
         The values are placed in the first row of the  "cell " category. If 
         no value has been given for  "_cell.entry_id ", it is set to the 
         value of the  "diffrn.id " entry of the current data block.
