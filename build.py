@@ -48,6 +48,9 @@ extensions = [
         "pycbf._pycbf",
         sources=["pycbf_wrap.c", *CBF_SOURCES],
         include_dirs=[str(PurePath(__file__).parent / "cbflib" / "include")],
+        define_macros=[
+            ("CBF_NO_REGEX", None),
+        ],
     )
 ]
 
