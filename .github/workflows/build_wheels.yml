@@ -20,8 +20,8 @@ jobs:
               uses: joerick/cibuildwheel@v1.11.0
               env:
                   CIBW_SKIP: cp2* cp35* pp27*
-#                  CIBW_TEST_COMMAND: pytest {package}/tests
-#                  CIBW_BEFORE_TEST: pip install pytest
+                  CIBW_TEST_COMMAND: pytest {package}/tests
+                  CIBW_BEFORE_TEST: pip install pytest
 
             # to supply options, put them in 'env', like:
             # env:

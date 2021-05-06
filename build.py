@@ -50,7 +50,6 @@ extensions = [
         include_dirs=[str(PurePath(__file__).parent / "cbflib" / "include")],
         define_macros=[
             ("CBF_NO_REGEX", None),
-            ("SWIG_PYTHON_STRICT_BYTE_CHAR", None),
         ],
     )
 ]
