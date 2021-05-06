@@ -3,13 +3,13 @@ from pathlib import Path
 
 import pycbf
 
+DATA_DIR = Path(__file__).parent.parent / "data"
+
 
 def test_4():
     object = pycbf.cbf_handle_struct()
     newobject = pycbf.cbf_handle_struct()
-    object.read_file(
-        str(Path(__file__).parent.parent / "img2cif_packed.cif"), pycbf.MSG_DIGEST
-    )
+    object.read_file(str(DATA_DIR / "img2cif_packed.cif"), pycbf.MSG_DIGEST)
     object.rewind_datablock()
     print("Found", object.count_datablocks(), "blocks")
     object.select_datablock(0)
