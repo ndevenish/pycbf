@@ -15,7 +15,7 @@ jobs:
             - uses: actions/checkout@v2
               with:
                   submodules: true
-            - name: Build s
+            - name: Build wheel
               uses: joerick/cibuildwheel@v1.11.0
               env:
                   CIBW_SKIP: cp2* cp35* pp27*
