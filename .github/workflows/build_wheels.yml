@@ -13,7 +13,9 @@ jobs:
 
         steps:
             - uses: actions/checkout@v2
-
+            - uses: actions/setup-python@2
+            - name: Install cibuildwheel
+              run: python -mpip install cibuildwheel
             - name: Build wheels
               uses: joerick/cibuildwheel@v1.11.0
         # to supply options, put them in 'env', like:
