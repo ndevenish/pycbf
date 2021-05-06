@@ -18,7 +18,7 @@ jobs:
             - name: Build wheels
               uses: joerick/cibuildwheel@v1.11.0
               env:
-                  CIBW_SKIP: cp2* cp35*
+                  CIBW_SKIP: cp2* cp35* *-win*
       # to supply options, put them in 'env', like:
       # env:
       #   CIBW_SOME_OPTION: value
