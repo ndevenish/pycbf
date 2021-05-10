@@ -95,3 +95,11 @@ cdef class Img:
     @property
     def columns(self):
         return self._img_handle.size[0]
+
+    @property
+    def image(self):
+        pass
+
+    @property
+    def rowmajor(self):
+        return self._img_handle.rowmajor
