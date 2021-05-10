@@ -43,7 +43,6 @@ cdef extern from "cbflib/include/img.h":
     int img_read_mar345data(img_object * img, FILE *file, int *org_data)
     int img_read_mar345(img_object * img, const char *name)
     int img_get_tags(img_object * img)
-    int img_set_tags(img_object * img, int tags)
     int img_delete_fieldnumber(img_object * img, int x)
 
     int img_read(img_object * img, const char *name)
