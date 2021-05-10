@@ -3,6 +3,8 @@ from distutils.core import Extension
 from pathlib import Path, PurePath
 from typing import Any, Dict
 
+from Cython.Build import cythonize
+
 # import skbuild
 # import skbuild.constants
 
@@ -51,7 +53,8 @@ extensions = [
         define_macros=[
             ("CBF_NO_REGEX", None),
         ],
-    )
+    ),
+    *cythonize("img.pyx"),
 ]
 
 
