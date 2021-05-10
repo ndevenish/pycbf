@@ -45,16 +45,30 @@ CBF_SOURCES = [
     # "cbflib/src/cbf_hdf5.c",
     # "cbflib/src/cbf_hdf5_filter.c",
 ]
+
+CBFLIB_INCLUDE = PurePath(__file__).parent / "cbflib" / "include"
+
 extensions = [
     Extension(
         "pycbf._pycbf",
         sources=["pycbf_wrap.c", *CBF_SOURCES],
-        include_dirs=[str(PurePath(__file__).parent / "cbflib" / "include")],
+        include_dirs=[str(CBFLIB_INCLUDE)],
         define_macros=[
             ("CBF_NO_REGEX", None),
         ],
     ),
-    *cythonize("img.pyx"),
+    *cythonize(
+        [
+            Extension(
+                "pycbf.img",
+                sources=["src/pycbf/img.pyx"],
+                include_dirs=[
+                    str(CBFLIB_INCLUDE),
+                    PurePath(__file__).parent,  # img.c includes from cbflib/include
+                ],
+            ),
+        ]
+    ),
 ]
 
 

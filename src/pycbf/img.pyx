@@ -8,7 +8,7 @@ from cpython cimport array
 from cpython.ref cimport PyObject
 from libc.stdio cimport FILE, fdopen
 
-cimport img
+cimport pycbf.img as img
 
 # img_BAD_ARGUMENT
 # img_BAD_OPEN
