@@ -39,3 +39,9 @@ exclude = "cbflib/|src/pycbf/__init__.py"
 
 [tool.isort]
 skip = [ "cbflib/", "setup.py", "src/pycbf/__init__.py"]
+
+[tool.towncrier]
+package = "pycbf"
+package_dir = ".."
+filename = "CHANGELOG.rst"
+version = "0.9.6.0"
