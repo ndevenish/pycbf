@@ -3,9 +3,28 @@
 from libc.stdio cimport FILE
 
 
+cdef enum ImageError:
+    BAD_ARGUMENT = 0x01
+    BAD_ALLOC    = 0x02
+    BAD_OPEN     = 0x04
+    BAD_READ     = 0x08
+    BAD_FORMAT   = 0x10
+    BAD_FIELD    = 0x20
+    BAD_WRITE    = 0x40
+
+# img_set_tags is missing from img.h
+cdef extern int img_set_tags(img_object * img, int tags)
+
 cdef extern from "cbflib/include/img.h":
-    ctypedef struct img_object:
+    ctypedef struct img_tag:
         pass
+
+    ctypedef struct img_object:
+        int tags
+        img_tag *tag
+        int size [2];  # size[0] = columns, size[1] = rows
+        int	rowmajor;  # set to 1 for row major, 0 for column major
+        int *image
 
     img_object *img_make_handle()
     int img_free_handle(img_object* img)
@@ -24,6 +43,7 @@ cdef extern from "cbflib/include/img.h":
     int img_read_mar345data(img_object * img, FILE *file, int *org_data)
     int img_read_mar345(img_object * img, const char *name)
     int img_get_tags(img_object * img)
+    int img_set_tags(img_object * img, int tags)
     int img_delete_fieldnumber(img_object * img, int x)
 
     int img_read(img_object * img, const char *name)
