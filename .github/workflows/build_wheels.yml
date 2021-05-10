@@ -20,6 +20,7 @@ jobs:
               uses: joerick/cibuildwheel@v1.11.0
               env:
                   CIBW_SKIP: cp2* cp35* pp27*
+                  CIBW_BEFORE_BUILD: pip install Cython
                   CIBW_TEST_COMMAND: pytest {package}/tests
                   CIBW_BEFORE_TEST: pip install pytest
 
