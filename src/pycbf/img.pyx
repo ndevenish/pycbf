@@ -74,7 +74,7 @@ cdef class Img:
             img.img_read_mar345header(self._img_handle, file, mardata)
         )
         # Restore the tell position - for some reason, on some versions
-        # of python, the python fileobject changes 2 bytes for every byte
+        # of python, the python fileobject changes 2 bytes for every byte
         # - Since the code we are replacing explicitly winds the file
         # back to the .tell() position, make that work here.
         fileobject.seek(ftell(file))
