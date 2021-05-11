@@ -29,6 +29,7 @@ import numpy as np
 # img_read_mar345data
 # img_read_mar345header
 
+np.import_array()
 
 
 cdef extern from "Python.h":
@@ -118,21 +119,25 @@ cdef class Img:
     @property
     def image(self):
         """Return the raw image data array pointer"""
-        # cdef int shape[2];
-        # shape[0] = self.rows
-        # shape[1] =  self.cols
+        #cdef int shape[3];
+        cdef np.npy_intp shape[2];
+        shape[0] = self._img_handle.size[1]
+        shape[1] =  self._img_handle.size[0]
+        shape[2] = 0
 
-        cdef my_array = arrayview(
-            shape=(self.rows,self.cols),
-            itemsize=sizeof(int),
-            format='i',
-            allocate_buffer=False)
-        return arrayview
+        print("Shape: ", shape)
+        #cdef my_array = arrayview(
+        #    shape=(self.rows,self.cols),
+        #    itemsize=sizeof(int),
+        #    format='i',
+        #    allocate_buffer=False)
+        #return arrayview
         # my_array.callback_free_data = free
 
 # cdef char[:] ret = my_array
 
-#         cdef object arr= np.PyArray_SimpleNewFromData(2, shape, np.NPY_INT32, self._img_handle.image)
+        cdef object arr= np.PyArray_SimpleNewFromData(2, shape, np.NPY_INT32, self._img_handle.image)
+        return arr
 #         # cdef int [:] carr_view = self._img_handle.image
 #         return arr
 

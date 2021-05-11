@@ -150,3 +150,7 @@ def test_adaptor(mar_image):
         "TWOTHETA": mar.twotheta(),
         "DETECTOR_SN": 0,
     }
+    mar.read_data()
+    img = mar._img
+    breakpoint()
+    pass
