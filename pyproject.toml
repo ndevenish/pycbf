@@ -44,4 +44,3 @@ skip = [ "cbflib/", "setup.py", "src/pycbf/__init__.py"]
 package = "pycbf"
 package_dir = ".."
 filename = "CHANGELOG.rst"
-version = "0.9.6.0"
