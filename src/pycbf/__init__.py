@@ -67,7 +67,7 @@ class _SwigNonDynamicMeta(type):
 
 __author__ = "Jon Wright <wright@esrf.fr>"
 __date__ = "14 Dec 2005"
-__version__ = "CBFlib 0.9"
+__version__ = "0.9.6.1"
 __credits__ = """Paul Ellis and Herbert Bernstein for the excellent CBFlib!"""
 __doc__=""" pycbf - python bindings to the CBFlib library
 

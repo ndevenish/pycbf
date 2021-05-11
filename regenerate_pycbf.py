@@ -9,11 +9,7 @@ import shutil
 import subprocess
 import sys
 
-try:
-    import toml
-except ImportError:
-    print("Warning: No toml module, cannot rewrite version spec cleanly")
-    toml = None
+import toml
 
 try:
     from typing import List, Optional, Tuple
@@ -181,18 +177,17 @@ if __name__ == "__main__":
     )
 
     # Get the version out of our pyproject.toml
-    if toml:
-        with open(os.path.join(ROOT_DIR, "pyproject.toml"), "r") as f:
-            ppt = toml.load(f)
-        new_version = b'__version__ = "%s"'.format(
-            ppt["tool"]["poetry"]["version"].encode()
-        )
-        OLD_VER = b'__version__ = "CBFlib 0.9"'
-        assert OLD_VER in pycbf_data
-        pycbf_data = pycbf_data.replace(OLD_VER, new_version)
+    with open(os.path.join(ROOT_DIR, "pyproject.toml"), "r") as f:
+        ppt = toml.load(f)
+    new_version = '__version__ = "{}"'.format(ppt["tool"]["poetry"]["version"]).encode(
+        "utf-8"
+    )
+    OLD_VER = b'__version__ = "CBFlib 0.9"'
+    assert OLD_VER in pycbf_data
+    pycbf_data = pycbf_data.replace(OLD_VER, new_version)
 
     with open(os.path.join(ROOT_DIR, "src", "pycbf", "__init__.py"), "wb") as f:
-        f.write()
+        f.write(pycbf_data)
 
     # Copy over the .c file to build
     print("Copying over and amending pycbf_wrap.c...")
