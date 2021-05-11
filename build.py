@@ -46,7 +46,8 @@ CBF_SOURCES = [
     # "cbflib/src/cbf_hdf5_filter.c",
 ]
 
-CBFLIB_INCLUDE = PurePath(__file__).parent / "cbflib" / "include"
+PYCBF_ROOT = PurePath(__file__).parent
+CBFLIB_INCLUDE = PYCBF_ROOT / "cbflib" / "include"
 
 extensions = [
     Extension(
@@ -64,7 +65,7 @@ extensions = [
                 sources=["src/pycbf/img.pyx"],
                 include_dirs=[
                     str(CBFLIB_INCLUDE),
-                    PurePath(__file__).parent,  # img.c includes from cbflib/include
+                    str(PYCBF_ROOT),  # img.c includes from cbflib/include
                 ],
             ),
         ]
