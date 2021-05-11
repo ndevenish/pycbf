@@ -3,6 +3,7 @@ from distutils.core import Extension
 from pathlib import Path, PurePath
 from typing import Any, Dict
 
+import numpy
 from Cython.Build import cythonize
 
 # import skbuild
@@ -66,6 +67,7 @@ extensions = [
                 include_dirs=[
                     str(CBFLIB_INCLUDE),
                     str(PYCBF_ROOT),  # img.c includes from cbflib/include
+                    numpy.get_include(),
                 ],
             ),
         ]

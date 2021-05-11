@@ -4,11 +4,17 @@
 
 # img_set_dimensions
 # img_set_tags
+
+cimport numpy as np
 from cpython cimport array
 from cpython.ref cimport PyObject
+from cython.view cimport array as arrayview
+from cython.view cimport array as cvarray
 from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
+
+import numpy as np
 
 # img_BAD_ARGUMENT
 # img_BAD_OPEN
@@ -108,3 +114,26 @@ cdef class Img:
     @property
     def rowmajor(self):
         return self._img_handle.rowmajor
+
+    @property
+    def image(self):
+        """Return the raw image data array pointer"""
+        # cdef int shape[2];
+        # shape[0] = self.rows
+        # shape[1] =  self.cols
+
+        cdef my_array = arrayview(
+            shape=(self.rows,self.cols),
+            itemsize=sizeof(int),
+            format='i',
+            allocate_buffer=False)
+        return arrayview
+        # my_array.callback_free_data = free
+
+# cdef char[:] ret = my_array
+
+#         cdef object arr= np.PyArray_SimpleNewFromData(2, shape, np.NPY_INT32, self._img_handle.image)
+#         # cdef int [:] carr_view = self._img_handle.image
+#         return arr
+
+
