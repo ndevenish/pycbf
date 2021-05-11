@@ -109,36 +109,45 @@ cdef class Img:
         return self._img_handle.size[0]
 
     @property
-    def image(self):
-        pass
-
-    @property
     def rowmajor(self):
         return self._img_handle.rowmajor
 
     @property
     def image(self):
         """Return the raw image data array pointer"""
-        #cdef int shape[3];
+        if self._img_handle.image == NULL:
+            return None
+        assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"
+
+        # Work out the proper way to convert this data e.g. orientation:
+        # Internally between flex/libimg:
+        #       size1 == img_org_data[0] == cols, size2 == img_org_data[1] == rows
+        # We constructed a flex array from:
+        #       af::flex_int z(af::flex_grid<>((long)size1(), (long)size2()));
+        # And wrote to the 2d-ized flex array with:
+        #       begin[r * side + c] = img->image[r * side + c];
+        # And inside libimg get_pixel(r, c):
+        #       return img->image[r * img->size[1] + c];
+        # Flex itself uses the lookup all[1, 2] => (r, c) / (row, col) ->:
+        #        return r * all_[1] + c;
+
+        # e.g....
+        # rowmajor = False: Normal c-style e.g. what's normally called _Row Major_
+        #   [[0,1,2],
+        #    [3,4,5],
+        #    [6,7,8]]
+        # i.e. what the default numpy is. This matches flex, so we should
+        # be able to convert without an issue.
+
         cdef np.npy_intp shape[2];
         shape[0] = self._img_handle.size[1]
         shape[1] =  self._img_handle.size[0]
-        shape[2] = 0
 
-        print("Shape: ", shape)
-        #cdef my_array = arrayview(
-        #    shape=(self.rows,self.cols),
-        #    itemsize=sizeof(int),
-        #    format='i',
-        #    allocate_buffer=False)
-        #return arrayview
-        # my_array.callback_free_data = free
-
-# cdef char[:] ret = my_array
-
-        cdef object arr= np.PyArray_SimpleNewFromData(2, shape, np.NPY_INT32, self._img_handle.image)
-        return arr
-#         # cdef int [:] carr_view = self._img_handle.image
-#         return arr
+        return np.PyArray_SimpleNewFromData(
+            2,
+            shape,
+            np.NPY_INT32,
+            self._img_handle.image,
+        )
 
 

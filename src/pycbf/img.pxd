@@ -23,7 +23,7 @@ cdef extern from "cbflib/include/img.h":
         int tags
         img_tag *tag
         int size [2];  # size[0] = columns, size[1] = rows
-        int	rowmajor;  # set to 1 for row major, 0 for column major
+        bint rowmajor;  # set to 1 for row major, 0 for column major
         int *image
 
     img_object *img_make_handle()
