@@ -1,5 +1,6 @@
 # distutils: sources = cbflib/src/img.c
 # distutils: include_dirs = cbflib/include
+# distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 # cython: c_string_encoding=utf8
 
 # img_set_dimensions
