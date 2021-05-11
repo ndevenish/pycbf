@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from pycbf.img import Img
@@ -18,13 +20,23 @@ def test_get_number():
     assert i.get_number("sadasdasd") == 0.0
 
 
-MAR_IMAGE = "/Users/nickd/dials/regression/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300"
+@pytest.fixture
+def mar_image():
+    mar_image_locations = [
+        "/dls/science/groups/scisoft/DIALS/repositories/git-reference/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
+        "/Users/nickd/dials/regression/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
+    ]
+    for path in mar_image_locations:
+        if Path(path).is_file():
+            return path
+    pytest.skip("No mar345 file found")
 
 
-def test_regression_image():
-    with open(MAR_IMAGE, "rb") as f:
+def test_regression_image(mar_image):
+    with open(mar_image, "rb") as f:
         img = Img()
         img.read_mar345header(f)
+        img.read_mar345data(f)
 
 
 class Mar345Adaptor:
@@ -121,8 +133,8 @@ def beam_center_fast(adaptor):
     return adaptor.size2() * adaptor.pixel_size() / 2.0
 
 
-def test_adaptor():
-    mar = Mar345Adaptor(MAR_IMAGE)
+def test_adaptor(mar_image):
+    mar = Mar345Adaptor(mar_image)
 
     meta = {
         "SIZE1": mar.size1(),
@@ -138,5 +150,3 @@ def test_adaptor():
         "TWOTHETA": mar.twotheta(),
         "DETECTOR_SN": 0,
     }
-    breakpoint()
-    pass
