@@ -6,7 +6,7 @@
 # img_set_tags
 from cpython cimport array
 from cpython.ref cimport PyObject
-from libc.stdio cimport FILE, fdopen
+from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
 
@@ -73,6 +73,11 @@ cdef class Img:
         check_error(
             img.img_read_mar345header(self._img_handle, file, mardata)
         )
+        # Restore the tell position - for some reason, on some versions
+        # of python, the python fileobject changes 2 bytes for every byte
+        # - Since the code we are replacing explicitly winds the file
+        # back to the .tell() position, make that work here.
+        fileobject.seek(ftell(file))
         return array.array('i', mardata)
 
     def read_mar345data(self, object fileobject, array.array org_data):
