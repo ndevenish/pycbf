@@ -2,6 +2,7 @@ import copy
 import re
 import sys
 from pathlib import Path
+from pprint import pprint
 from typing import NamedTuple
 
 from bs4 import BeautifulSoup, NavigableString, Tag
@@ -124,12 +125,13 @@ def extract_definition(section):
     current_part = None
 
     for part in section:
-        text = part.text if hasattr(part, "text") else part.string
+        text = part.get_text() if isinstance(part, Tag) else part.string
         if text is None:
             break
-        for header in headers:
+        for header in list(headers):
             if header in text:
                 current_part = header
+                headers.remove(header)
                 assert header not in defn
                 defn[header] = Tag(name="div")
                 defn[header].append(copy.copy(part))
@@ -163,38 +165,6 @@ def extract_definition(section):
     return defn
 
 
-# Parse the soup
-sys.setrecursionlimit(4305)
-data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
-soup = BeautifulSoup(data, "html5lib")
-
-# Find all headers in sections 2.3+
-rePrototype = re.compile(r"^2\.[346789]\d*\.")
-h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
-
-# Turn the list of headers into a list of sections (the whole block of tags)
-sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
-
-# Extract all sections
-defs = {n: extract_definition(section) for n, section in sections.items()}
-# for n, section in sections.items():
-#     # print(n)
-#     try:
-#         defs[n] = extract_definition(section)
-#     except:
-#         print("Failed on:", n)
-#         raise
-
-# print(defs["2.4.14"])
-
-# # Print all the sections nicely, with colour
-# import itertools
-# for c, defn in zip(itertools.cycle([B, G]), defs):
-#     print(c, type(c), repr(c))
-#     print(f"{c}{defn}:")
-#     pprint(defs[defn])
-#     print(NC)
-
 reInclude = re.compile(r'\s*#include "([^"]+)')
 
 
@@ -219,13 +189,117 @@ def parse_prototype(element):
     return [Prototype(header, x) for x in definitions]
 
 
-for n, defn in defs.items():
-    print(n)
-    if "PROTOTYPE" in defn:
-        # if n == "2.3.62":
-        #     breakpoint()
-        proto = parse_prototype(defn["PROTOTYPE"])
-        assert proto
-        if len(proto) > 0:
-            for p in proto:
-                print("PROTO", n, p)
+# Parse the soup
+sys.setrecursionlimit(4305)
+data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
+soup = BeautifulSoup(data, "html5lib")
+
+# Find all headers in sections 2.3+
+rePrototype = re.compile(r"^2\.[346789]\d*\.")
+h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
+
+# Turn the list of headers into a list of sections (the whole block of tags)
+sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
+
+
+def parse_arguments(element):
+    """Parse an arguments section into argument descriptions"""
+    data = []
+    table = element.find("table").extract()
+    table_body = table.find("tbody")
+
+    rows = table_body.find_all("tr")
+    for row in rows:
+        cols = row.find_all("td")
+        cols = [ele.text.strip() for ele in cols]
+        data.append([ele for ele in cols if ele])  # Get rid of empty values
+    # Make extra sure the described all the argument data
+    if element.get_text().strip():
+        breakpoint()
+    assert not element.get_text().strip()
+    # Make sure only two elements
+    assert all(len(x) == 2 for x in data)
+    return {
+        name: " ".join(line.strip() for line in desc.splitlines())
+        for name, desc in data
+    }
+
+
+# # Let's try extracting from sections as text - this html is awful
+# for num, section in sections.items():
+#     text = section.get_text().splitlines()
+#     cnt = {}
+#     headers = [
+#         "PROTOTYPE",
+#         "DESCRIPTION",
+#         "ARGUMENTS",
+#         "RETURN VALUE",
+#         "SEE ALSO",
+#         "DEFINITION",
+#     ]
+#     cnt["TITLE"] = text[0]
+#     current_section = "PREAMBLE"
+#     for line in text[1:]:
+#         if line.strip().upper() in headers:
+#             current_section = line.strip()
+#             cnt[current_section] = Tag(name="div")
+#             continue
+#         cnt.setdefault(current_section, Tag(name="div")).append(line + "\n")
+#     # Handle prototype
+#     cnt["PROTOTYPE"] = parse_prototype(cnt["PROTOTYPE"])
+#     # cnt["ARGUMENTS"] = parse_arguments(cnt["ARGUMENTS"])
+#     breakpoint()
+
+# breakpoint()
+# Extract all sections
+defs = {n: extract_definition(section) for n, section in sections.items()}
+# for n, section in sections.items():
+#     # print(n)
+#     try:
+#         defs[n] = extract_definition(section)
+#     except:
+#         print("Failed on:", n)
+#         raise
+
+# print(defs["2.4.14"])
+breakpoint()
+extract_definition(sections["2.3.66"])
+
+# # Print all the sections nicely, with colour
+# import itertools
+# for c, defn in zip(itertools.cycle([B, G]), defs):
+#     print(c, type(c), repr(c))
+#     print(f"{c}{defn}:")
+#     pprint(defs[defn])
+#     print(NC)
+
+
+# # Extract and Print prototypes
+# for n, defn in defs.items():
+#     print(n)
+#     if "PROTOTYPE" in defn:
+#         # if n == "2.3.62":
+#         #     breakpoint()
+#         proto = parse_prototype(defn["PROTOTYPE"])
+#         assert proto
+#         if len(proto) > 0:
+#             for p in proto:
+#                 print("PROTO", n, p)
+
+cm = defs["2.3.3"]
+pprint(cm)
+print()
+pprint(parse_prototype(cm["PROTOTYPE"]))
+print()
+
+
+# for num, defn in defs.items():
+#     if "ARGUMENTS" in defn:
+#         print(num)
+#         print(parse_arguments(defn["ARGUMENTS"]))
+
+# # # Now let's try parsing the arguments list
+# # print(cm["ARGUMENTS"])
+# # print(parse_arguments(cm["ARGUMENTS"]))
+# # print(cm["ARGUMENTS"])
+# # breakpoint()
