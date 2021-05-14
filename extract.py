@@ -3,7 +3,7 @@ import re
 import sys
 from pathlib import Path
 from pprint import pprint
-from typing import Callable, Iterable, NamedTuple, Union
+from typing import Callable, Iterable, NamedTuple, Optional, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -33,6 +33,7 @@ def extract_until(
     """Extract all elements until a condition is reached"""
     if VERBOSE:
         print("  " * depth + str(element)[:80].replace("\n", "^N"))
+        breakpoint()
     # Do the simple parts - all future siblings not containing the tag
     prev_element = None
     while True:
@@ -50,10 +51,11 @@ def extract_until(
             ), "Something went wrong if stepping out of dead end while recursing"
             # We already emitted the previous element, so move over next
             # elements until the prev_element doesn't contain the new one
-            element = prev_element.next_element
+            # element = prev_element.next_element
             # If it's not a tag - then it doesn't have children. Safe to step out.
-            while isinstance(prev_element, Tag) and element in prev_element.descendants:
-                element = element.next_element
+            element = next_uncontained_element(prev_element)
+            if element is None:
+                return
 
     # If we found the tag through direct iteration just return it
     if is_condition(element):
@@ -146,7 +148,17 @@ def remove_paragraph_newlines(element):
             para.insert(0, NavigableString(" ".join(cleanstr)))
 
 
-def extract_definition(section):
+def next_uncontained_element(element: Node) -> Optional[Node]:
+    """Advance until the next element that is not contained within the argument"""
+    if isinstance(element, NavigableString) or not element.descendants:
+        return element.next_element
+
+    for next_element in element.next_elements:
+        if next_element not in element.descendants:
+            return next_element
+
+
+def extract_definition(element):
     """Split up and determine definition data from a <div> section"""
     headers = [
         "PROTOTYPE",
@@ -156,48 +168,58 @@ def extract_definition(section):
         "SEE ALSO",
         "DEFINITION",
     ]
-    defn = {}
-    current_part = None
 
-    for part in section:
-        text = part.get_text() if isinstance(part, Tag) else part.string
-        if text is None:
-            break
-        for header in list(headers):
-            if header in text:
-                current_part = header
-                headers.remove(header)
-                assert header not in defn
-                defn[header] = Tag(name="div")
-                defn[header].append(copy.copy(part))
-                break
+    definition = {}
+    # breakpoint()
+    while element:
+        if not list(extract_until_string(element, headers)):
+            # We are *at* a section header
+            # Wind forwards until we get the navigablestring
+            while not isinstance(element, NavigableString):
+                element = element.next_element
+            section = element.string
+            # Move one element past the end of the string
+            element = element.next_element
+            subsection = Tag(name="div")
+            assert section not in definition
+            definition[section] = subsection
         else:
-            if current_part:
-                defn[current_part].append(copy.copy(part))
-            elif (
-                isinstance(part, Tag)
-                and (part.find("h4") or part.name == "h4")
-                and "TITLE" not in defn
-            ):
-                defn["TITLE"] = part
-            else:
-                defn.setdefault("PREAMBLE", Tag(name="div")).append(copy.copy(part))
+            # We're in a preamble?
+            subsection = Tag(name="div")
+            assert "PREAMBLE" not in definition
+            definition["PREAMBLE"] = subsection
 
-    # For each section, strip out the header part
-    for header, parts in defn.items():
-        for part in parts:
-            if isinstance(part, NavigableString):
-                continue
-            h_tag = part.find(string=header)
-            if h_tag:
-                assert h_tag.parent.name == "b" or h_tag.parent.name == "strong"
-                h_tag.parent.decompose()
-                break
-        remove_empty_paragraphs(parts)
-        remove_paragraph_newlines(parts)
+        last_part = None
+        for part in extract_until_string(element, headers):
+            if part is None:
+                breakpoint()
+                list(extract_until_string(element, headers))
+            subsection.append(copy.copy(part))
+            last_part = part
+
+        assert not [
+            x for x in headers if x in subsection.get_text()
+        ], "Section should not contain header"
+
+        element = next_uncontained_element(last_part)
+
+    # # For each section, strip out the header part
+    # for header, parts in defn.items():
+    #     for part in parts:
+    #         if isinstance(part, NavigableString):
+    #             continue
+    #         h_tag = part.find(string=header)
+    #         if h_tag:
+    #             assert h_tag.parent.name == "b" or h_tag.parent.name == "strong"
+    #             h_tag.parent.decompose()
+    #             break
+    #     remove_empty_paragraphs(parts)
+    #     remove_paragraph_newlines(parts)
+
     # if "PROTOTYPE" in defn:
     #     remove_string(defn["PROTOTYPE"], '#include "cbf.h"')
-    return defn
+
+    return definition
 
 
 reInclude = re.compile(r'\s*#include "([^"]+)')
