@@ -2,7 +2,6 @@ import copy
 import re
 import sys
 from pathlib import Path
-from pprint import pprint
 from typing import Callable, Iterable, NamedTuple, Optional, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
@@ -187,6 +186,10 @@ def extract_definition(element):
 
         element = next_uncontained_element(last_part)
 
+    if "ARGUMENTS" in definition:
+        definition["ARGUMENTS"] = parse_arguments(definition["ARGUMENTS"])
+    if "PROTOTYPE" in definition:
+        definition["PROTOTYPE"] = parse_prototype(definition["PROTOTYPE"])
     # # For each section, strip out the header part
     # for header, parts in defn.items():
     #     for part in parts:
