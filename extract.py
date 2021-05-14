@@ -158,7 +158,6 @@ def extract_definition(element):
     ]
 
     definition = {}
-    # breakpoint()
     while element:
         if not list(extract_until_string(element, headers)):
             # We are *at* a section header
@@ -179,20 +178,12 @@ def extract_definition(element):
 
         last_part = None
         for part in extract_until_string(element, headers):
-            if part is None:
-                breakpoint()
-                list(extract_until_string(element, headers))
             subsection.append(copy.copy(part))
             last_part = part
 
-        # assert not [
-        #     x for x in headers if x in subsection.get_text()
-        # ], "Section should not contain header"
-        if [x for x in headers if x in subsection.get_text()]:
-            breakpoint()
-            assert False
-            pass
-        # , "Section should not contain header"
+        assert not [
+            x for x in headers if x in subsection.get_text()
+        ], "Section should not contain header"
 
         element = next_uncontained_element(last_part)
 
@@ -242,7 +233,12 @@ def parse_prototype(element):
 def parse_arguments(element):
     """Parse an arguments section into argument descriptions"""
     data = []
-    table = element.find("table").extract()
+    table = element.find("table")
+    if table:
+        table.extract()
+    else:
+        assert "no arguments" in element.get_text()
+        return
     table_body = table.find("tbody")
 
     rows = table_body.find_all("tr")
@@ -250,12 +246,14 @@ def parse_arguments(element):
         cols = row.find_all("td")
         cols = [ele.text.strip() for ele in cols]
         data.append([ele for ele in cols if ele])  # Get rid of empty values
+
     # Make extra sure the described all the argument data
-    if element.get_text().strip():
-        breakpoint()
     assert not element.get_text().strip()
-    # Make sure only two elements
-    assert all(len(x) == 2 for x in data)
+    # Make sure only two elements max
+    assert all(len(x) <= 2 for x in data)
+    # Pad out if not 2 items
+    data = [x if len(x) == 2 else x + [""] for x in data]
+
     return {
         name: " ".join(line.strip() for line in desc.splitlines())
         for name, desc in data
@@ -318,10 +316,12 @@ defs = {n: extract_definition(section) for n, section in sections.items()}
 #                 print("PROTO", n, p)
 
 
-# for num, defn in defs.items():
-#     if "ARGUMENTS" in defn:
-#         print(num)
-#         print(parse_arguments(defn["ARGUMENTS"]))
+for num, defn in defs.items():
+    if "ARGUMENTS" in defn:
+        print(num)
+        # if num == "2.7.15":
+        #     breakpoint()
+        print(parse_arguments(defn["ARGUMENTS"]))
 
 # # # Now let's try parsing the arguments list
 # # print(cm["ARGUMENTS"])
