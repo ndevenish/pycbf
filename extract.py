@@ -144,6 +144,8 @@ def next_uncontained_element(element: Node) -> Optional[Node]:
         if next_element not in element.descendants:
             return next_element
 
+    return None
+
 
 def extract_definition(element):
     """Split up and determine definition data from a <div> section"""
