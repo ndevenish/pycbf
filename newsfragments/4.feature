@@ -1,0 +1,1 @@
+- Functions that accept string arguments will accept both ``bytes`` and ``str``, for easier transition away from ``SWIG_PYTHON_BYTE_CHAR``
