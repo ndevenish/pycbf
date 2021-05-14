@@ -1,34 +1,22 @@
 #!/usr/bin/env python3
-from __future__ import absolute_import, division, print_function
 
-import glob
 import logging
-import os.path
 import re
 import shutil
 import subprocess
 import sys
+from pathlib import Path
+from typing import List, Optional, Tuple
 
 import toml
 
-try:
-    from typing import List, Optional, Tuple
-except ImportError:
-    pass
-
-
-ROOT_DIR = os.path.dirname(__file__)
-CBFLIB_DIR = os.path.join(ROOT_DIR, "cbflib")
-
-PY2 = sys.version_info < (3, 0)
-
-if PY2:
-    FileNotFoundError = OSError
+ROOT_DIR = Path(__file__).parent
+CBFLIB_DIR = ROOT_DIR / "cbflib"
 
 
 def check_call(command, *args, **kwargs):
     command_str = command if isinstance(command, str) else " ".join(command)
-    print("\n\nRunning", command_str)
+    print(f"\n\nRunning {command_str}")
     print("=" * (len(command_str) + len("Running ")))
 
     return subprocess.check_call(command, *args, **kwargs)
@@ -40,24 +28,28 @@ def check_output(command, *args, **kwargs):
 
 
 def check_tool(
-    name, version_args=[], version_re=None, expect_fail=False, minimum_version=None
-):
-    # type: (str, List[str], Optional[str], bool, Tuple[int]) -> bool
+    name: str,
+    version_args: List[str] = [],
+    version_re: Optional[str] = None,
+    expect_fail: bool = False,
+    minimum_version: Tuple[int] = None,
+) -> bool:
     """
     Checks if an external tool is present
 
     Args:
-        name: The name of the command
+        name: The name of the tool executable
         version_args: Any extra arguments to request version number printing
         version_re: The regex string to extract the version number
-        expect_fail: Will the command fail to run if
+        expect_fail:
+            Will the command return a failing exit code when called? If
+            this is set to True, then this will still count as presence.
     """
-    print(("Checking " + name + ": ").ljust(20), end="")
+    print(f"{'Checking ' + name + ': ':20}", end="")
     try:
         output = subprocess.check_output(
-            [name] + version_args, stderr=subprocess.STDOUT
+            [name] + version_args, stderr=subprocess.STDOUT, encoding="utf-8"
         )
-        output = output.decode("utf-8")
     except FileNotFoundError:
         print("FAIL")
         return False
@@ -117,10 +109,7 @@ if __name__ == "__main__":
 
     # Reset the sub-repository
     try:
-        check_call(
-            ["git", "diff", "--no-ext-diff", "--quiet"],
-            cwd=os.path.join(ROOT_DIR, "cbflib"),
-        )
+        check_call(["git", "diff", "--no-ext-diff", "--quiet"], cwd=CBFLIB_DIR)
     except subprocess.CalledProcessError:
         # We have changes - reset it
         print("cbflib subdirectory has changes - resetting to reapply")
@@ -129,13 +118,9 @@ if __name__ == "__main__":
         print("\nNo changes - OK to continue\n")
 
     print("Applying patches from patches/")
-    patch_dir = os.path.join(ROOT_DIR, "patches")
+    patch_dir = ROOT_DIR / "patches"
     for patch in sorted(
-        glob.glob(
-            os.path.join(
-                patch_dir, "[0123456789][0123456789][0123456789][0123456789][-_]*"
-            )
-        )
+        patch_dir.glob("[0123456789][0123456789][0123456789][0123456789][-_]*")
     ):
         print("Applying patch", patch)
         with open(patch, "rb") as f:
@@ -144,8 +129,8 @@ if __name__ == "__main__":
     print("Applying version specifier patch")
 
     print("Starting regeneration")
-    regen_dir = os.path.join(CBFLIB_DIR, "pycbf")
-    html_file = os.path.join(CBFLIB_DIR, "doc", "CBFlib.html")
+    regen_dir = CBFLIB_DIR / "pycbf"
+    html_file = CBFLIB_DIR / "doc" / "CBFlib.html"
 
     check_call(["nuweb", "pycbf"], cwd=regen_dir)
     check_call(["latex", "pycbf"], cwd=regen_dir)
@@ -154,46 +139,38 @@ if __name__ == "__main__":
     check_call(["dvipdfm", "pycbf"], cwd=regen_dir)
     check_call(["nuweb", "pycbf"], cwd=regen_dir)
     dumped_html = check_output([browser_dump_tool, "-dump", str(html_file)])
-    with open(os.path.join(regen_dir, "CBFlib.txt"), "wb") as f:
+    with open(regen_dir / "CBFlib.txt", "wb") as f:
         f.write(dumped_html)
 
-    if not PY2:
-        # Run 2to3 on make_pycbf.py so we can run it
-        make_pycbf = os.path.abspath(os.path.join(regen_dir, "make_pycbf.py"))
-        check_call(["2to3", "-w", make_pycbf], cwd=regen_dir)
-        check_call([sys.executable, make_pycbf], cwd=regen_dir)
+    # Run 2to3 on make_pycbf.py so we can run it
+    make_pycbf = (regen_dir / "make_pycbf.py").absolute()
+    check_call(["2to3", "-w", str(make_pycbf)], cwd=regen_dir)
+    check_call([sys.executable, str(make_pycbf)], cwd=regen_dir)
 
     # Finally, regenerate with swig
     check_call(["swig", "-v", "-python", "pycbf.i"], cwd=regen_dir)
 
     # Take the pycbf.py, move it to this folder and add the header line
     print("\n\nCopying over and amending pycbf.py")
-    with open(os.path.join(regen_dir, "pycbf.py"), "rb") as f:
-        pycbf_data = f.read()
+    pycbf_data = (regen_dir / "pycbf.py").read_bytes()
 
-    # Rewrite the version specifier
+    # # Rewrite the header to add # coding
     pycbf_data = (
-        b"# AUTOMATICALLY GENERATED BY PYCBF WRAPPER - DO NOT EDIT\n# coding: utf-8\n#\n"
-        + pycbf_data
+        b"# AUTOMATICALLY GENERATED BY PYCBF WRAPPER - DO NOT EDIT\n#\n" + pycbf_data
     )
 
     # Get the version out of our pyproject.toml
-    with open(os.path.join(ROOT_DIR, "pyproject.toml"), "r") as f:
-        ppt = toml.load(f)
-    new_version = '__version__ = "{}"'.format(ppt["tool"]["poetry"]["version"]).encode(
-        "utf-8"
-    )
+    ppt = toml.loads((ROOT_DIR / "pyproject.toml").read_text())
+    new_version = '__version__ = "{}"'.format(ppt["tool"]["poetry"]["version"]).encode()
+
     OLD_VER = b'__version__ = "CBFlib 0.9"'
-    assert OLD_VER in pycbf_data
+    assert OLD_VER in pycbf_data, "Source pycbf.py doesn't appear to be version 0.9"
     pycbf_data = pycbf_data.replace(OLD_VER, new_version)
 
-    with open(os.path.join(ROOT_DIR, "src", "pycbf", "_wrapper.py"), "wb") as f:
-        f.write(pycbf_data)
+    (ROOT_DIR / "src" / "pycbf" / "_wrapper.py").write_bytes(pycbf_data)
 
     # Copy over the .c file to build
     print("Copying over and amending pycbf_wrap.c...")
-    shutil.copy(
-        os.path.join(regen_dir, "pycbf_wrap.c"), os.path.join(ROOT_DIR, "pycbf_wrap.c")
-    )
+    shutil.copy(regen_dir / "pycbf_wrap.c", ROOT_DIR / "pycbf_wrap.c")
 
     print("done.")
