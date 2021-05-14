@@ -3,7 +3,7 @@ import re
 import sys
 from pathlib import Path
 from pprint import pprint
-from typing import NamedTuple
+from typing import Callable, Iterable, NamedTuple, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -11,6 +11,9 @@ BOLD = "\033[1m"
 NC = "\033[0m"
 B = "\033[34m"
 G = "\033[32m"
+W = "\033[37m"
+
+Node = Union[Tag, NavigableString]
 
 
 class Prototype(NamedTuple):
@@ -18,19 +21,22 @@ class Prototype(NamedTuple):
     definition: str
 
 
-def extract_until(element, tags, depth=0):
-    """Extract all elements until we hit a tag, recursing if necessary"""
+VERBOSE = 0
 
-    def is_tag(el):
-        return isinstance(element, Tag) and any(element.name == tag for tag in tags)
 
-    def contains_tag(el):
-        return isinstance(element, Tag) and any(element.find(tag) for tag in tags)
-
+def extract_until(
+    element,
+    is_condition: Callable[[Node], bool],
+    contains_condition: Callable[[Node], bool],
+    depth=0,
+) -> Iterable[Node]:
+    """Extract all elements until a condition is reached"""
+    if VERBOSE:
+        print("  " * depth + str(element)[:80].replace("\n", "^N"))
     # Do the simple parts - all future siblings not containing the tag
     prev_element = None
     while True:
-        if is_tag(element) or contains_tag(element):
+        if is_condition(element) or contains_condition(element):
             break
         yield element
         prev_element = element
@@ -50,19 +56,47 @@ def extract_until(element, tags, depth=0):
                 element = element.next_element
 
     # If we found the tag through direct iteration just return it
-    if is_tag(element):
+    if is_condition(element):
         return
     # Otherwise, it must be one of our children
     for child in element.children:
         # If it's not the tag or doesn't contain - pass over
-        while not is_tag(child) and not contains_tag(child):
-            yield child
-        # Maybe this child *is* the tag?
-        if is_tag(child):
+        # if not is_condition(child) and not contains_condition(child):
+        #     yield child
+        if is_condition(child):
             return
-        # This child must contain the tag - stop this loop then recurse
-        break
-    yield from extract_until(child, tags, depth=depth + 1)
+        elif contains_condition(child):
+            break
+        else:
+            yield child
+
+    if depth > 100:
+        breakpoint()
+    yield from extract_until(child, is_condition, contains_condition, depth=depth + 1)
+
+
+def extract_until_tag(element, tags):
+    """Extract all elements until we hit a tag, recursing if necessary"""
+
+    def is_tag(el):
+        return isinstance(el, Tag) and el.name in tags
+
+    def contains_tag(el):
+        return isinstance(el, Tag) and el.find(tags)
+
+    yield from extract_until(element, is_tag, contains_tag)
+
+
+def extract_until_string(element, strings):
+    """Extract all elements until we hit a string"""
+
+    def is_string(el):
+        return isinstance(el, NavigableString) and el.string in strings
+
+    def contains_string(el):
+        return isinstance(el, Tag) and el.find(string=strings)
+
+    yield from extract_until(element, is_string, contains_string)
 
 
 def extract_section(header):
@@ -70,7 +104,8 @@ def extract_section(header):
     section = []
     section = Tag(name="div")
     section.append(copy.copy(header))
-    for t in extract_until(header.next_sibling, {"hr", "h4"}):
+    for t in extract_until_tag(header.next_sibling, {"hr", "h4"}):
+        # print(W + str(t).replace("\n", "^N") + NC)
         section.append(copy.copy(t))
 
     return section
@@ -189,19 +224,6 @@ def parse_prototype(element):
     return [Prototype(header, x) for x in definitions]
 
 
-# Parse the soup
-sys.setrecursionlimit(4305)
-data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
-soup = BeautifulSoup(data, "html5lib")
-
-# Find all headers in sections 2.3+
-rePrototype = re.compile(r"^2\.[346789]\d*\.")
-h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
-
-# Turn the list of headers into a list of sections (the whole block of tags)
-sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
-
-
 def parse_arguments(element):
     """Parse an arguments section into argument descriptions"""
     data = []
@@ -225,31 +247,29 @@ def parse_arguments(element):
     }
 
 
-# # Let's try extracting from sections as text - this html is awful
-# for num, section in sections.items():
-#     text = section.get_text().splitlines()
-#     cnt = {}
-#     headers = [
-#         "PROTOTYPE",
-#         "DESCRIPTION",
-#         "ARGUMENTS",
-#         "RETURN VALUE",
-#         "SEE ALSO",
-#         "DEFINITION",
-#     ]
-#     cnt["TITLE"] = text[0]
-#     current_section = "PREAMBLE"
-#     for line in text[1:]:
-#         if line.strip().upper() in headers:
-#             current_section = line.strip()
-#             cnt[current_section] = Tag(name="div")
-#             continue
-#         cnt.setdefault(current_section, Tag(name="div")).append(line + "\n")
-#     # Handle prototype
-#     cnt["PROTOTYPE"] = parse_prototype(cnt["PROTOTYPE"])
-#     # cnt["ARGUMENTS"] = parse_arguments(cnt["ARGUMENTS"])
-#     breakpoint()
+# Parse the soup
+sys.setrecursionlimit(8096)
+data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
+soup = BeautifulSoup(data, "html5lib")
 
+# Find all headers in sections 2.3+
+rePrototype = re.compile(r"^2\.[346789]\d*\.")
+h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
+
+# Turn the list of headers into a list of sections (the whole block of tags)
+sections = {}
+for tag in h4s:
+    number = tag.text.split()[0]
+    print(number)
+    sections[number] = extract_section(tag)
+    print(".....length =", len(str(sections[number])))
+
+# sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
+
+
+breakpoint()
+extract_definition(sections["2.3.66"])
+sys.exit(1)
 # breakpoint()
 # Extract all sections
 defs = {n: extract_definition(section) for n, section in sections.items()}
@@ -261,10 +281,6 @@ defs = {n: extract_definition(section) for n, section in sections.items()}
 #         print("Failed on:", n)
 #         raise
 
-# print(defs["2.4.14"])
-breakpoint()
-extract_definition(sections["2.3.66"])
-
 # # Print all the sections nicely, with colour
 # import itertools
 # for c, defn in zip(itertools.cycle([B, G]), defs):
@@ -274,7 +290,7 @@ extract_definition(sections["2.3.66"])
 #     print(NC)
 
 
-# # Extract and Print prototypes
+# Extract and Print prototypes
 # for n, defn in defs.items():
 #     print(n)
 #     if "PROTOTYPE" in defn:
@@ -285,12 +301,6 @@ extract_definition(sections["2.3.66"])
 #         if len(proto) > 0:
 #             for p in proto:
 #                 print("PROTO", n, p)
-
-cm = defs["2.3.3"]
-pprint(cm)
-print()
-pprint(parse_prototype(cm["PROTOTYPE"]))
-print()
 
 
 # for num, defn in defs.items():
