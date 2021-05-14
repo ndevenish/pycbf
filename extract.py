@@ -93,10 +93,14 @@ def extract_until_string(element, strings):
     """Extract all elements until we hit a string"""
 
     def is_string(el):
-        return isinstance(el, NavigableString) and el.string in strings
+        return isinstance(el, NavigableString) and (
+            el.string in strings or any(x in el.string for x in strings)
+        )
 
     def contains_string(el):
-        return isinstance(el, Tag) and el.find(string=strings)
+        return isinstance(el, Tag) and (
+            el.find(string=strings) or any(x in el.get_text() for x in strings)
+        )
 
     yield from extract_until(element, is_string, contains_string)
 
@@ -177,7 +181,7 @@ def extract_definition(element):
             # Wind forwards until we get the navigablestring
             while not isinstance(element, NavigableString):
                 element = element.next_element
-            section = element.string
+            section = element.string.strip()
             # Move one element past the end of the string
             element = element.next_element
             subsection = Tag(name="div")
@@ -197,9 +201,14 @@ def extract_definition(element):
             subsection.append(copy.copy(part))
             last_part = part
 
-        assert not [
-            x for x in headers if x in subsection.get_text()
-        ], "Section should not contain header"
+        # assert not [
+        #     x for x in headers if x in subsection.get_text()
+        # ], "Section should not contain header"
+        if [x for x in headers if x in subsection.get_text()]:
+            breakpoint()
+            assert False
+            pass
+        # , "Section should not contain header"
 
         element = next_uncontained_element(last_part)
 
@@ -289,14 +298,14 @@ for tag in h4s:
 # sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
 
 
-breakpoint()
-extract_definition(sections["2.3.66"])
-sys.exit(1)
+# breakpoint()
+# pprint(extract_definition(sections["2.3.55"]))
+# sys.exit(1)
 # breakpoint()
 # Extract all sections
 defs = {n: extract_definition(section) for n, section in sections.items()}
+# defs = {}
 # for n, section in sections.items():
-#     # print(n)
 #     try:
 #         defs[n] = extract_definition(section)
 #     except:
