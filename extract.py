@@ -34,42 +34,26 @@ def extract_until(
     if VERBOSE:
         print("  " * depth + str(element)[:80].replace("\n", "^N"))
         breakpoint()
-    # Do the simple parts - all future siblings not containing the tag
-    prev_element = None
+    # Do the simple parts - all future elements not containing the tag
     while True:
         if is_condition(element) or contains_condition(element):
             break
         yield element
-        prev_element = element
-        element = element.next_sibling
-        # It's possible that we reach the end of the initial chain of
-        # siblings before finding the next stop-tag. In this case, we
-        # want to "iterate out" of this dead end.
+        element = next_uncontained_element(element)
         if element is None:
-            assert (
-                depth == 0
-            ), "Something went wrong if stepping out of dead end while recursing"
-            # We already emitted the previous element, so move over next
-            # elements until the prev_element doesn't contain the new one
-            # element = prev_element.next_element
-            # If it's not a tag - then it doesn't have children. Safe to step out.
-            element = next_uncontained_element(prev_element)
-            if element is None:
-                return
+            return
 
     # If we found the tag through direct iteration just return it
     if is_condition(element):
         return
     # Otherwise, it must be one of our children
     for child in element.children:
-        # If it's not the tag or doesn't contain - pass over
-        # if not is_condition(child) and not contains_condition(child):
-        #     yield child
         if is_condition(child):
             return
         elif contains_condition(child):
             break
         else:
+            # It's a child without the condition
             yield child
 
     if depth > 100:
@@ -312,7 +296,7 @@ defs = {n: extract_definition(section) for n, section in sections.items()}
 #         print("Failed on:", n)
 #         raise
 
-# # Print all the sections nicely, with colour
+# Print all the sections nicely, with colour
 # import itertools
 # for c, defn in zip(itertools.cycle([B, G]), defs):
 #     print(c, type(c), repr(c))
@@ -321,7 +305,7 @@ defs = {n: extract_definition(section) for n, section in sections.items()}
 #     print(NC)
 
 
-# Extract and Print prototypes
+# # Extract and Print prototypes
 # for n, defn in defs.items():
 #     print(n)
 #     if "PROTOTYPE" in defn:
