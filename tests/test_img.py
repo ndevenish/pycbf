@@ -22,6 +22,11 @@ def test_get_number():
 
 @pytest.fixture
 def mar_image():
+    # return (
+    #     dials_data("image_examples", pathlib=True)
+    #     / "DESY_BW7B"
+    #     / "mar345_01_001.mar2300"
+    # )
     mar_image_locations = [
         "/dls/science/groups/scisoft/DIALS/repositories/git-reference/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
         "/Users/nickd/dials/regression/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
@@ -152,5 +157,15 @@ def test_adaptor(mar_image):
     }
     mar.read_data()
     img = mar._img
+    id = img.image
+    mv = memoryview(id)
+    import numpy as np
+
+    arr = np.asarray(mv)
+
+    refs = []
+    for i in range(10):
+        print("Doing", i)
+        refs.append(memoryview(id))
     breakpoint()
     pass
