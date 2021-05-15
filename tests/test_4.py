@@ -1,4 +1,5 @@
 # version of pycbf_test1 with write logic added
+import os
 from pathlib import Path
 
 import pycbf
@@ -6,10 +7,11 @@ import pycbf
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 
-def test_4():
+def test_4(dials_data, tmp_path):
+    data_dir = dials_data("pycbf", pathlib=True)
     object = pycbf.cbf_handle_struct()
     newobject = pycbf.cbf_handle_struct()
-    object.read_file(str(DATA_DIR / "img2cif_packed.cif"), pycbf.MSG_DIGEST)
+    object.read_file(str(data_dir / "img2cif_packed.cif"), pycbf.MSG_DIGEST)
     object.rewind_datablock()
     print("Found", object.count_datablocks(), "blocks")
     object.select_datablock(0)
@@ -122,6 +124,7 @@ def test_4():
                     print("Val:", value, i)
         print()
     del object
+    os.cd(tmp_path)
     newobject.write_widefile(
         "newtest1.cbf",
         pycbf.CBF,

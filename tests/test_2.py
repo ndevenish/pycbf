@@ -1,23 +1,23 @@
-from pathlib import Path
-
-import pycbf
 import pytest
 
-DATA_DIR = Path(__file__).parent.parent / "data"
+import pycbf
 
 
-def test_2():
+def test_2(dials_data):
+    data_dir = dials_data("pycbf", pathlib=True)
     cbf = pycbf.cbf_handle_struct()
-    cbf.read_file(str(DATA_DIR / "adscconverted.cbf"), 0)
+    cbf.read_file(str(data_dir / "adscconverted.cbf"), 0)
     cbf.select_datablock(0)
     g = cbf.construct_goniometer()
     print(("Rotation axis is", g.get_rotation_axis()))
     d = cbf.construct_detector(0)
     print(("Beam center is", d.get_beam_center()))
 
-def test2_asbytefilename():
+
+def test2_asbytefilename(dials_data):
+    data_dir = dials_data("pycbf", pathlib=True)
     cbf = pycbf.cbf_handle_struct()
-    cbf.read_file(str(DATA_DIR / "adscconverted.cbf").encode(), 0)
+    cbf.read_file(str(data_dir / "adscconverted.cbf").encode(), 0)
     cbf.select_datablock(0)
     g = cbf.construct_goniometer()
     print(("Rotation axis is", g.get_rotation_axis()))

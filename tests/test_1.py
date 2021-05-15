@@ -5,10 +5,11 @@ import pycbf
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 
-def test_1():
+def test_1(dials_data):
+    data_dir = dials_data("pycbf", pathlib=True)
     object = pycbf.cbf_handle_struct()  # FIXME
     # Expect this in the root pycbf folder
-    object.read_file(str(DATA_DIR / "img2cif_packed.cif"), pycbf.MSG_DIGEST)
+    object.read_file(str(data_dir / "img2cif_packed.cif"), pycbf.MSG_DIGEST)
     object.rewind_datablock()
     print("Found", object.count_datablocks(), "blocks")
     object.select_datablock(0)
