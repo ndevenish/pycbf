@@ -3177,6 +3177,7 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
 
   // Here is the c code needed to compile the wrappers, but not 
     // to be wrapped 
+#include <stdbool.h>
 
 #include "cbf.h"          
 #include "cbf_simple.h"
@@ -3608,6 +3609,84 @@ SWIGINTERN cbf_goniometer cbf_handle_struct_construct_goniometer(cbf_handle_stru
     {(error_status = cbf_construct_goniometer(self,&goniometer));};
     return goniometer;
     }
+
+int PYCBF_AsCharPtrAndSize(PyObject *obj, char **cptr, size_t *psize,
+                                     int *alloc) {
+#if PY_VERSION_HEX >= 0x03000000
+  if (PyBytes_Check(obj) || PyUnicode_Check(obj))
+#else
+  if (PyString_Check(obj))
+#endif
+  {
+    char *cstr;
+    Py_ssize_t len;
+    int ret = SWIG_OK;
+    int created_obj = 0;
+#if PY_VERSION_HEX >= 0x03000000
+    // If we've been given a string, convert to bytes
+    if(PyUnicode_Check(obj)) {
+      if (!alloc && cptr) {
+        /* We can't allow converting without allocation, since the internal
+          representation of string in Python 3 is UCS-2/UCS-4 but we require
+          a UTF-8 representation.
+          TODO(bhy) More detailed explanation */
+        return SWIG_RuntimeError;
+      }
+      obj = PyUnicode_AsUTF8String(obj);
+      if (!obj)
+        return SWIG_TypeError;
+      created_obj = 1;
+      if (alloc)
+        *alloc = SWIG_NEWOBJ;
+    }
+    if (PyBytes_AsStringAndSize(obj, &cstr, &len) == -1)
+      return SWIG_TypeError;
+#else
+    if (PyString_AsStringAndSize(obj, &cstr, &len) == -1)
+      return SWIG_TypeError;
+#endif
+    // Now we have a bytes object. If we allocated it, *alloc==SWIG_NEWOBJ
+    // ...
+    if (cptr) {
+      if (alloc) {
+        if (*alloc == SWIG_NEWOBJ) {
+          // We created a new object, so copy the memory so we own it
+          *cptr = (char *)memcpy(malloc((len + 1) * sizeof(char)), cstr,
+                                 sizeof(char) * (len + 1));
+          *alloc = SWIG_NEWOBJ;
+        } else {
+          // We're just pointing inside the bytes object
+          *cptr = cstr;
+          *alloc = SWIG_OLDOBJ;
+        }
+      } else {
+        // alloc hasn't been passed in - use the internal object buffer instead
+#if PY_VERSION_HEX >= 0x03000000
+        assert(0); /* Should never reach here with Unicode strings in Python 3, as we must convert*/
+#else
+        *cptr = SWIG_Python_str_AsChar(obj);
+        if (!*cptr)
+          ret = SWIG_TypeError;
+#endif
+      }
+    }
+    // Have we asked to get the size?
+    if (psize)
+      *psize = len + 1;
+#if PY_VERSION_HEX >= 0x03000000
+    // We might, or might not have created an object in py3 (we didn't, if python2)
+    if (created_obj > 0) {
+      Py_XDECREF(obj);
+    }
+#endif
+    return ret;
+  } else {
+    // Full SWIG does stuff here - but we aren't
+    return SWIG_RuntimeError;
+  }
+  return SWIG_TypeError;
+}
+
 
 SWIGINTERN int
 SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
@@ -5182,6 +5261,13 @@ SWIGINTERN void cbf_handle_struct_write_widefile(cbf_handle_struct *self,char co
 
         }
        }
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9623,7 +9709,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_construct_positioner(PyObject *SWIG
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_construct_positioner" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_construct_positioner" "', argument " "2"" of type '" "char const *""'");
   }
@@ -9702,7 +9788,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_construct_reference_positioner(PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_construct_reference_positioner" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_construct_reference_positioner" "', argument " "2"" of type '" "char const *""'");
   }
@@ -9746,7 +9832,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_count_axis_ancestors(PyObject *SWIG
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_count_axis_ancestors" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_count_axis_ancestors" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10015,7 +10101,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_category(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_category" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10056,7 +10142,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_category_root(PyObject *SWIGUN
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_category_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_category_root" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10096,7 +10182,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_column(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_column" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_column" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10136,7 +10222,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_datablock(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_datablock" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_datablock" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10176,7 +10262,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_nextrow(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_nextrow" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_nextrow" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10216,7 +10302,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_row(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_row" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_row" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10257,7 +10343,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_tag_category(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_tag_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_tag_category" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10298,7 +10384,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_find_tag_root(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_find_tag_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_find_tag_root" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10338,7 +10424,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_force_new_category(PyObject *SWIGUN
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_force_new_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_force_new_category" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10378,7 +10464,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_force_new_datablock(PyObject *SWIGU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_force_new_datablock" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_force_new_datablock" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10418,7 +10504,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_force_new_saveframe(PyObject *SWIGU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_force_new_saveframe" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_force_new_saveframe" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10921,7 +11007,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_ancestor(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_ancestor" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_ancestor" "', argument " "2"" of type '" "char const *""'");
   }
@@ -10967,7 +11053,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_depends_on(PyObject *SWIGU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_depends_on" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_depends_on" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11008,7 +11094,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_equipment(PyObject *SWIGUN
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_equipment" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_equipment" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11049,7 +11135,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_equipment_component(PyObje
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_equipment_component" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_equipment_component" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11101,7 +11187,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_offset(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_offset" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_offset" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11199,12 +11285,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_poise(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "cbf_handle_struct_get_axis_poise" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = (double)(val2);
-  res10 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf10, NULL, &alloc10);
+  res10 = PYCBF_AsCharPtrAndSize(swig_obj[2], &buf10, NULL, &alloc10);
   if (!SWIG_IsOK(res10)) {
     SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "cbf_handle_struct_get_axis_poise" "', argument " "10"" of type '" "char const *""'");
   }
   arg10 = (char *)(buf10);
-  res11 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf11, NULL, &alloc11);
+  res11 = PYCBF_AsCharPtrAndSize(swig_obj[3], &buf11, NULL, &alloc11);
   if (!SWIG_IsOK(res11)) {
     SWIG_exception_fail(SWIG_ArgError(res11), "in method '" "cbf_handle_struct_get_axis_poise" "', argument " "11"" of type '" "char const *""'");
   }
@@ -11312,7 +11398,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_reference_poise(PyObject *
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_reference_poise" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res8 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf8, NULL, &alloc8);
+  res8 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf8, NULL, &alloc8);
   if (!SWIG_IsOK(res8)) {
     SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "cbf_handle_struct_get_axis_reference_poise" "', argument " "8"" of type '" "char const *""'");
   }
@@ -11392,7 +11478,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_rotation(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_rotation" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_rotation" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11439,7 +11525,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_rotation_axis(PyObject *SW
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_rotation_axis" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_rotation_axis" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11487,7 +11573,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_setting(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_setting" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_setting" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11540,7 +11626,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_type(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_type" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_type" "', argument " "2"" of type '" "char const *""'");
   }
@@ -11592,7 +11678,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_axis_vector(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_get_axis_vector" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_get_axis_vector" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15050,7 +15136,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_new_category(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_new_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_new_category" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15090,7 +15176,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_new_column(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_new_column" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_new_column" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15130,7 +15216,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_new_datablock(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_new_datablock" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_new_datablock" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15200,7 +15286,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_new_saveframe(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_new_saveframe" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_new_saveframe" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15401,7 +15487,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_read_file(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_read_file" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_read_file" "', argument " "2"" of type '" "char *""'");
   }
@@ -15446,7 +15532,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_read_template(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_read_template" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_read_template" "', argument " "2"" of type '" "char *""'");
   }
@@ -15489,7 +15575,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_read_widefile(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_read_widefile" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_read_widefile" "', argument " "2"" of type '" "char *""'");
   }
@@ -15684,7 +15770,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_category(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_category" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15725,7 +15811,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_category_root(PyObject *SWI
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_category_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_category_root" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15765,7 +15851,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_column(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_column" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_column" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15812,7 +15898,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_column_doublevalue(PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_column_doublevalue" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_column_doublevalue" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15870,7 +15956,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_column_integervalue(PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_column_integervalue" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_column_integervalue" "', argument " "2"" of type '" "char const *""'");
   }
@@ -15926,12 +16012,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_column_value(PyObject *SWIG
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_column_value" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_column_value" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = (char *)(buf2);
-  res3 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
+  res3 = PYCBF_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "cbf_handle_struct_require_column_value" "', argument " "3"" of type '" "char const *""'");
   }
@@ -15973,7 +16059,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_datablock(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_datablock" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_datablock" "', argument " "2"" of type '" "char const *""'");
   }
@@ -16146,7 +16232,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_tag_root(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_tag_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_tag_root" "', argument " "2"" of type '" "char const *""'");
   }
@@ -16187,7 +16273,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_require_value(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_require_value" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_require_value" "', argument " "2"" of type '" "char const *""'");
   }
@@ -17010,7 +17096,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_axis_setting(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_axis_setting" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_axis_setting" "', argument " "2"" of type '" "char const *""'");
   }
@@ -17117,12 +17203,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_category_root(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_category_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_category_root" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = (char *)(buf2);
-  res3 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
+  res3 = PYCBF_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "cbf_handle_struct_set_category_root" "', argument " "3"" of type '" "char const *""'");
   }
@@ -17164,7 +17250,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_crystal_id(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_crystal_id" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_crystal_id" "', argument " "2"" of type '" "char const *""'");
   }
@@ -17241,7 +17327,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_datablockname(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_datablockname" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_datablockname" "', argument " "2"" of type '" "char const *""'");
   }
@@ -17411,7 +17497,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_diffrn_id(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_diffrn_id" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_diffrn_id" "', argument " "2"" of type '" "char const *""'");
   }
@@ -17507,7 +17593,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_doublevalue(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_doublevalue" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_doublevalue" "', argument " "2"" of type '" "char const *""'");
   }
@@ -19810,7 +19896,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_saveframename(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_saveframename" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_saveframename" "', argument " "2"" of type '" "char const *""'");
   }
@@ -19854,12 +19940,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_tag_category(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_tag_category" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_tag_category" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = (char *)(buf2);
-  res3 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
+  res3 = PYCBF_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "cbf_handle_struct_set_tag_category" "', argument " "3"" of type '" "char const *""'");
   }
@@ -19905,12 +19991,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_tag_root(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_tag_root" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_tag_root" "', argument " "2"" of type '" "char const *""'");
   }
   arg2 = (char *)(buf2);
-  res3 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
+  res3 = PYCBF_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "cbf_handle_struct_set_tag_root" "', argument " "3"" of type '" "char const *""'");
   }
@@ -20005,7 +20091,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_typeofvalue(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_typeofvalue" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_typeofvalue" "', argument " "2"" of type '" "char const *""'");
   }
@@ -20123,7 +20209,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_value(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_set_value" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_set_value" "', argument " "2"" of type '" "char const *""'");
   }
@@ -20209,7 +20295,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_write_file(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_write_file" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_write_file" "', argument " "2"" of type '" "char const *""'");
   }
@@ -20273,7 +20359,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_write_widefile(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_write_widefile" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
   }
   arg1 = (cbf_handle_struct *)(argp1);
-  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  res2 = PYCBF_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
   if (!SWIG_IsOK(res2)) {
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "cbf_handle_struct_write_widefile" "', argument " "2"" of type '" "char const *""'");
   }
@@ -20321,6 +20407,20 @@ SWIGINTERN PyObject *cbf_handle_struct_swigregister(PyObject *SWIGUNUSEDPARM(sel
 SWIGINTERN PyObject *cbf_handle_struct_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
+
+SWIGINTERN int Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable SWIG_PYTHON_STRICT_BYTE_CHAR is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_From_bool((bool)(SWIG_PYTHON_STRICT_BYTE_CHAR));
+  return pyobj;
+}
+
 
 static PyMethodDef SwigMethods[] = {
 	 { "SWIG_PyInstanceMethod_New", SWIG_PyInstanceMethod_New, METH_O, NULL},
@@ -29262,6 +29362,18 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CBF_SAVEFRAME",SWIG_From_int((int)(CBF_SAVEFRAME)));
   SWIG_Python_SetConstant(d, "CBF_CATEGORY",SWIG_From_int((int)(CBF_CATEGORY)));
   SWIG_Python_SetConstant(d, "CBF_COLUMN",SWIG_From_int((int)(CBF_COLUMN)));
+  globals = SWIG_globals();
+  if (!globals) {
+    PyErr_SetString(PyExc_TypeError, "Failure to create SWIG globals.");
+#if PY_VERSION_HEX >= 0x03000000
+    return NULL;
+#else
+    return;
+#endif
+  }
+  PyDict_SetItemString(md, "cvar", globals);
+  Py_DECREF(globals);
+  SWIG_addvarlink(globals, "SWIG_PYTHON_STRICT_BYTE_CHAR", Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get, Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else
