@@ -24,7 +24,7 @@ jobs:
               env:
                   CIBW_SKIP: cp2* cp35* pp27*
                   CIBW_TEST_COMMAND: pytest {package}/tests
-                  CIBW_BEFORE_TEST: pip install pytest
+                  CIBW_BEFORE_TEST: pip install pytest git+https://github.com/ndevenish/data@pycbf
 
             # to supply options, put them in 'env', like:
             # env:
