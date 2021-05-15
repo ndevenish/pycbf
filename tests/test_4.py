@@ -50,7 +50,7 @@ def test_4(dials_data, tmp_path):
                 print("col:", name, end=" ")
                 object.select_column(k)
                 newobject.select_column(k)
-                typeofvalue = object.get_typeofvalue()
+                typeofvalue = pycbf.cbf2str(object.get_typeofvalue())
                 print("type:", typeofvalue)
                 if typeofvalue.find("bnry") > -1:
                     print("Found the binary!!", end=" ")
@@ -124,7 +124,7 @@ def test_4(dials_data, tmp_path):
                     print("Val:", value, i)
         print()
     del object
-    os.cd(tmp_path)
+    os.chdir(tmp_path)
     newobject.write_widefile(
         "newtest1.cbf",
         pycbf.CBF,
