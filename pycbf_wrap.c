@@ -4621,6 +4621,20 @@ SWIGINTERN void cbf_handle_struct_next_datablock(cbf_handle_struct *self){
       {(error_status = cbf_next_datablock(self));};}
 SWIGINTERN void cbf_handle_struct_next_row(cbf_handle_struct *self){
       {(error_status = cbf_next_row(self));};}
+SWIGINTERN void cbf_handle_struct_read_buffer(cbf_handle_struct *self,PyObject *buffer,int flags){
+        if (!PyBytes_Check(buffer)) {
+            PyErr_SetString(PyExc_ValueError, "buffer must be a bytes-like object");
+        }
+
+        Py_ssize_t buffer_length = PyBytes_Size(buffer);
+        char *cbuffer = PyBytes_AsString(buffer);
+
+        int err = cbf_read_buffered_file(self, NULL /*nullptr*/, flags, cbuffer, buffer_length);
+
+        if (err) {
+            PyErr_Format(PyExc_RuntimeError, "cbflib read_file returned error %d", err);
+        }
+    }
 SWIGINTERN void cbf_handle_struct_read_file(cbf_handle_struct *self,char *filename,int headers){
        /* CBFlib needs a stream that will remain open 
           hence DO NOT open from python */
@@ -15415,6 +15429,44 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_cbf_handle_struct_read_buffer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  cbf_handle_struct *arg1 = (cbf_handle_struct *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  int arg3 = (int) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  PyObject *swig_obj[3] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "cbf_handle_struct_read_buffer", 2, 3, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_cbf_handle_struct, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "cbf_handle_struct_read_buffer" "', argument " "1"" of type '" "cbf_handle_struct *""'"); 
+  }
+  arg1 = (cbf_handle_struct *)(argp1);
+  arg2 = swig_obj[1];
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_read_buffer" "', argument " "3"" of type '" "int""'");
+    } 
+    arg3 = (int)(val3);
+  }
+  {
+    cbf_handle_struct_read_buffer(arg1,arg2,arg3);
+    if (PyErr_Occurred()) {
+      return NULL;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_cbf_handle_struct_read_file(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   cbf_handle_struct *arg1 = (cbf_handle_struct *) 0 ;
@@ -25378,6 +25430,21 @@ static PyMethodDef SwigMethods[] = {
 		"RETURN VALUE\n"
 		"Returns an error code on failure or 0 for success.\n"
 		"SEE ALSO\n"
+		"\n"
+		""},
+	 { "cbf_handle_struct_read_buffer", _wrap_cbf_handle_struct_read_buffer, METH_VARARGS, "\n"
+		"\n"
+		"Returns : \n"
+		"*args   : Bytes object,Integer Flags\n"
+		"\n"
+		"C prototype: int cbf_read_buffered_file (cbf_handle handle, FILE *stream,\n"
+		"                 int flags, const char * buffer, size_t buffer_len)\n"
+		"\n"
+		"CBFLib documentation:\n"
+		"Read from a bytes buffer instead of a file.\n"
+		"Args:\n"
+		"   buffer (bytes): The python bytes-buffer to read from.\n"
+		"   flags (int): Same meaning as for read_file\n"
 		"\n"
 		""},
 	 { "cbf_handle_struct_read_file", _wrap_cbf_handle_struct_read_file, METH_VARARGS, "\n"
