@@ -21,20 +21,15 @@ classifiers = [
 
 
 [tool.poetry.dependencies]
-python = ">=2.7,<3.0.0 || >=3.6.0"
-numpy = [
-    { version="^1.15.0", python="^2.7" },
-    { version="^1.17", python=">=3.6"},
-]
+python = ">=3.6.0"
+numpy = "^1.17"
 
 [tool.poetry.dev-dependencies]
-pytest = [
-    { version="^4.6", python="^2.7" },
-    { version=">6", python=">=3.6"},
-]
 setuptools = "^56.1.0"
 Cython = "^0.29.23"
 toml = "^0.10.2"
+pytest = "^6.2.4"
+dials-data = {git = "https://github.com/ndevenish/data", rev = "pycbf"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23", "numpy>=1.17"]
