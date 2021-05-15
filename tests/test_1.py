@@ -43,7 +43,7 @@ def test_1(dials_data):
                 name = object.column_name()
                 print("col:", name, end=" ")
                 object.select_column(k)
-                typeofvalue = object.get_typeofvalue()
+                typeofvalue = pycbf.cbf2str(object.get_typeofvalue())
                 print("type:", typeofvalue)
                 if typeofvalue.find("bnry") > -1:
                     print("Found the binary!!", end=" ")
