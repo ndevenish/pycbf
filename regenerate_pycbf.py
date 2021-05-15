@@ -119,9 +119,7 @@ if __name__ == "__main__":
 
     print("Applying patches from patches/")
     patch_dir = ROOT_DIR / "patches"
-    for patch in sorted(
-        patch_dir.glob("[0123456789][0123456789][0123456789][0123456789][-_]*")
-    ):
+    for patch in sorted(x for x in patch_dir.iterdir() if re.match(r"\d+[-_]", x.name)):
         print("Applying patch", patch)
         with open(patch, "rb") as f:
             subprocess.check_call(["patch", "-p1"], stdin=f, cwd=CBFLIB_DIR)
