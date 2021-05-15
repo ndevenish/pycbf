@@ -1,13 +1,10 @@
-from pathlib import Path
-
 import pycbf
 
-DATA_DIR = Path(__file__).parent.parent / "data"
 
-
-def test_2():
+def test_2(dials_data):
+    data_dir = dials_data("pycbf", pathlib=True)
     obj = pycbf.cbf_handle_struct()
-    obj.read_file(str(DATA_DIR / "adscconverted.cbf"), 0)
+    obj.read_file(str(data_dir / "adscconverted.cbf"), 0)
     obj.select_datablock(0)
     g = obj.construct_goniometer()
     print(("Rotation axis is", g.get_rotation_axis()))

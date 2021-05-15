@@ -27,6 +27,7 @@ python = ">=3.6.0"
 setuptools = "^56.1.0"
 toml = "^0.10.2"
 pytest = "^6.2.4"
+dials-data = {git = "https://github.com/ndevenish/data", rev = "pycbf"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]
