@@ -1,39 +1,4 @@
-print("\\begin{verbatim}")
-print("This output comes from make_pycbf.py which generates the wrappers")
-print("pycbf Copyright (C) 2005  Jonathan Wright, no warranty, LGPL")
-
-
-######################################################################
-#                                                                    #
-# YOU MAY REDISTRIBUTE THE CBFLIB PACKAGE INCLUDING PYCBF UNDER THE  #
-# TERMS OF THE GPL                                                   #
-#                                                                    #
-# ALTERNATIVELY YOU MAY REDISTRIBUTE THE CBFLIB API INCLUDING PYCBF  #
-# UNDER THE TERMS OF THE LGPL                                        #
-#                                                                    #
-######################################################################
-
-
-########################### GPL NOTICES ##############################
-#                                                                    #
-# This program is free software; you can redistribute it and/or      #
-# modify it under the terms of the GNU General Public License as     #
-# published by the Free Software Foundation; either version 2 of     #
-# (the License, or (at your option) any later version.               #
-#                                                                    #
-# This program is distributed in the hope that it will be useful,    #
-# but WITHOUT ANY WARRANTY; without even the implied warranty of     #
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the      #
-# GNU General Public License for more details.                       #
-#                                                                    #
-# You should have received a copy of the GNU General Public License  #
-# along with this program; if not, write to the Free Software        #
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA           #
-# 02111-1307  USA                                                    #
-#                                                                    #
-######################################################################
-
-
+#!/usr/bin/env python3
 ######################### LGPL NOTICES ###############################
 #                                                                    #
 # This library is free software; you can redistribute it and/or      #
@@ -53,9 +18,42 @@ print("pycbf Copyright (C) 2005  Jonathan Wright, no warranty, LGPL")
 #                                                                    #
 ######################################################################
 
+import argparse
+import sys
+from pathlib import Path
+
+# Look for CBFlib.txt
+candidate_cbflib = Path(__file__).parent.parent / "cbflib" / "pycbf" / "CBFlib.txt"
+if not candidate_cbflib.is_file():
+    candidate_cbflib = None
+
+parser = argparse.ArgumentParser(description="Regenerate pycbf SWIG bindings")
+parser.add_argument(
+    "cbflib_txt",
+    help="Path to CBFlib.txt file. Defaults to bundled cbflib.",
+    nargs="?",
+    type=Path,
+    default=candidate_cbflib,
+)
+parser.add_argument(
+    "-o",
+    help="Output Folder. Defaults to same location as this script.",
+    default=Path(__file__).parent,
+    type=Path,
+    dest="output",
+)
+
+args = parser.parse_args()
+
+if not args.cbflib_txt:
+    sys.exit("Error: could not find default CBFlib.txt, please provide path")
+if not args.cbflib_txt.is_file():
+    sys.exit(f"Error: Could {args.cbflib_doc} appears not to be a valid file")
+
+print(f"Generating SWIG wrappers from {args.cbflib_txt}")
 
 # Get the ascii text as a list of strings
-lines = open("CBFlib.txt", "r").readlines()
+lines = args.cbflib_txt.read_text().splitlines()
 
 # Variables to hold the useful things we find in the file
 docstring = "\n"
@@ -141,7 +139,7 @@ while i < len(lines) - 1:
 # End of CBFlib.txt file - now generate wrapper code for swig
 
 
-def myformat(s, l, indent=0, breakon=" "):
+def myformat(s, lin, indent=0, breakon=" "):
     """
     Try to pretty print lines - this is a pain...
     """
@@ -150,12 +148,12 @@ def myformat(s, l, indent=0, breakon=" "):
     for line in lines:
         if len(line) == 0:
             continue  # skip blank lines
-        if len(line) > l:
+        if len(line) > lin:
             words = line.split(breakon)
             newline = words[0]
             if len(words) > 1:
                 for word in words[1:]:
-                    if len(newline) + len(word) + 1 < l:
+                    if len(newline) + len(word) + 1 < lin:
                         newline = newline + breakon + word
                     else:
                         out = out + newline + breakon + "\n" + indent * " "
@@ -4149,16 +4147,14 @@ class genericwrapper:
         code += "*/\n\n"
         self.code += code
         code = ""
-        not_found = 0
         try:
             code, pyname, input, output = cbfgeneric_specials[cfunc]
             self.code += (
                 docstringwrite(pyname, input, output, prototype, docstring) + code
             )
             return
-        except KeyError:
-            not_found = 1
-            # print "KeyError"
+        except KeyError as e:
+            print(f"Got error reading key: {cfunc} - {e}")
         except ValueError:
             print("problem in generic", cfunc)
             for item in cbfgeneric_specials[cfunc]:
@@ -4202,14 +4198,8 @@ def generate_wrappers(name_dict):
         if prototype.find("int cbf_") != 0:
             print("problem with:", prototype)
         # Get arguments from prototypes
-        try:
-            args = prototype.split("(")[1].split(")")[0].split(",")
-            args = [s.lstrip().rstrip() for s in args]  # strip spaces off ends
-            # print "Args: ", args
-        except:
-            # print cname
-            # print prototype
-            raise
+        args = prototype.split("(")[1].split(")")[0].split(",")
+        args = [s.lstrip().rstrip() for s in args]  # strip spaces off ends
         if args[0].find("cbf_handle") >= 0:  # This is for the cbfhandle object
             cbf_handle_wrapper.wrap(cname, prototype, args, docstring)
             if cname == "cbf_get_unit_cell":
@@ -4242,11 +4232,20 @@ def generate_wrappers(name_dict):
 
 
 generate_wrappers(name_dict)
-open("cbfgoniometerwrappers.i", "w").write(cbf_goniometer_wrapper.get_code())
-open("cbfdetectorwrappers.i", "w").write(cbf_detector_wrapper.get_code())
-open("cbfpositionerwrappers.i", "w").write(cbf_positioner_wrapper.get_code())
-open("cbfhandlewrappers.i", "w").write(cbf_handle_wrapper.get_code())
-open("cbfgenericwrappers.i", "w").write(generic_wrapper.get_code())
+header = """
+// THIS FILE IS AUTOGENERATED BY make_pycbf.py
+//
+// DO NOT MAKE CHANGES DIRECTLY TO THIS FILE
 
-print("End of output from make_pycbf.py")
-print("\\end{verbatim}")
+""".lstrip()
+
+for name, wrapper in {
+    "cbfgoniometerwrappers": cbf_goniometer_wrapper,
+    "cbfdetectorwrappers": cbf_detector_wrapper,
+    "cbfpositionerwrappers": cbf_positioner_wrapper,
+    "cbfhandlewrappers": cbf_handle_wrapper,
+    "cbfgenericwrappers": generic_wrapper,
+}.items():
+    print(f"Writing {name}.i")
+    output = "\n".join(line.rstrip() for line in wrapper.get_code().splitlines())
+    args.output.joinpath(f"{name}.i").write_text(header + output)
