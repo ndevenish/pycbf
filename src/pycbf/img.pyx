@@ -67,21 +67,19 @@ cdef class ImageData:
         buffer.len = self.shape[0] * self.shape[1] * sizeof(int)
         buffer.itemsize = sizeof(int)
         buffer.ndim = 2
-
         buffer.format = "i"
         buffer.readonly = 0
         buffer.shape = self.shape
         buffer.strides = NULL
-        # self.strides
         buffer.suboffsets = NULL
-        self.image_container.active_views += 1
+        self.image_container._active_views += 1
 
         print("Increasing ID to:", sys.getrefcount(self))
-        print("Active Views:   ", self.image_container.active_views)
+        print("Active Views:   ", self.image_container._active_views)
 
     def __releasebuffer__(self, Py_buffer *buffer):
-        self.image_container.active_views -= 1
-        print("Decref Active Views: ", self.image_container.active_views)
+        self.image_container._active_views -= 1
+        print("Decref Active Views: ", self.image_container._active_views)
 
 cdef class Img:
     cdef img.img_object * _img_handle;
@@ -162,13 +160,14 @@ cdef class Img:
         return self._img_handle.rowmajor
 
     def active_views(self):
-        return self.active_views
+        return self._active_views
 
     @property
     def fields(self):
         tags = {}
         cdef int index = 0
-        cdef char *tag, *data;
+        cdef const char *tag
+        cdef const char *data
         while img_get_next_field(self._img_handle, &tag, &data, &index) != ImageError.BAD_ARGUMENT:
             tags[tag.decode()] = data.decode()
 
