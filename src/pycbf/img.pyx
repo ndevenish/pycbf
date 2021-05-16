@@ -3,6 +3,7 @@
 # distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
 # cython: c_string_encoding=utf8
 
+import os
 # img_set_dimensions
 # img_set_tags
 import sys
@@ -103,6 +104,10 @@ cdef class Img:
     def get_number(self, str name):
         return img.img_get_number(self._img_handle, name)
 
+    def read_mar345(self, object filename):
+        strpath = os.fspath(filename)
+        cdef char *filen = strpath
+        check_error(img_read_mar345(self._img_handle, strpath))
 
     def read_mar345header(self, object fileobject):
         # Make sure that we don't rewire memory while references are handed out
