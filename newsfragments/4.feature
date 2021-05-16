@@ -1,0 +1,1 @@
+Functions that accept string arguments will accept both ``bytes`` and ``str``, for easier transition away from ``SWIG_PYTHON_BYTE_CHAR``. In addition, the ``pycbf.cbf2str`` utility function has been added to convert CBF string returns to str, no matter what is used in the SWIG bindings.
