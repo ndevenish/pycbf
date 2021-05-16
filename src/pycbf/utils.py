@@ -18,7 +18,7 @@ def cbf2str(string: Union[str, bytes]) -> str:
     if not isinstance(string, (str, bytes)):
         raise ValueError(f"Unrecognised pycbf string type: {type(string)}")
 
-    if pycbf.SWIG_PYTHON_STRICT_BYTE_CHAR:
+    if pycbf.HAS_SWIG_PYTHON_STRICT_BYTE_CHAR:
         if isinstance(string, bytes):
             return string.decode()
         return string
