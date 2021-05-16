@@ -156,7 +156,6 @@ cdef class Img:
         self.shape[1] = self._img_handle.size[0]
         self.strides[1] = sizeof(int)
 
-
         # Note: self is automatically incref'd by cython
         buffer.obj = self
         buffer.buf = self._img_handle.image
@@ -170,8 +169,7 @@ cdef class Img:
         buffer.suboffsets = NULL
 
         self._active_views += 1
-        # print("Active Views:   ", self._active_views)
 
     def __releasebuffer__(self, Py_buffer *buffer):
         self._active_views -= 1
-        # print("Decref Active Views: ", self._active_views)
+        assert self._active_views >= 1
