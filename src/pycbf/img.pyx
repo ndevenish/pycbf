@@ -8,10 +8,8 @@
 import sys
 
 cimport cpython.buffer as buf
-from cpython cimport Py_buffer, array
+from cpython cimport Py_buffer
 from cpython.ref cimport PyObject
-from cython.view cimport array as arrayview
-from cython.view cimport array as cvarray
 from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
@@ -132,16 +130,19 @@ cdef class Img:
         # - Since the code we are replacing explicitly winds the file
         # back to the .tell() position, make that work here.
         fileobject.seek(ftell(file))
-        return array.array('i', mardata)
+        return tuple(mardata)
 
-    def read_mar345data(self, object fileobject, array.array org_data):
+    def read_mar345data(self, object fileobject, object org_data):
         # Make sure that we don't rewire memory while references are handed out
         if self._active_views > 0:
             raise ValueError("Cannot reload data: There are unfreed references to the image data")
+        if len(org_data) != 4:
+            raise ValueError("org_data appears to be in incorrect form for header data")
+        cdef int[4] mardata = org_data
         cdef int fd = PyObject_AsFileDescriptor(fileobject)
         cdef FILE* file = fdopen(fd, "r")
         check_error(
-            img.img_read_mar345data(self._img_handle, file, org_data.data.as_ints)
+            img.img_read_mar345data(self._img_handle, file, mardata)
         )
 
     def set_dimensions(self, int columns, int rows):
