@@ -168,8 +168,8 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
 %{  // Here is the c code needed to compile the wrappers, but not
     // to be wrapped
 
-#include "../include/cbf.h"
-#include "../include/cbf_simple.h"
+#include "cbf.h"
+#include "cbf_simple.h"
 
 // Helper functions to generate error message
 
