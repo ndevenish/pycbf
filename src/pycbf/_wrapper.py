@@ -5686,6 +5686,24 @@ class cbf_handle_struct(object):
         """
         return _pycbf.cbf_handle_struct_next_row(self)
 
+    def read_buffer(self, buffer, flags=0):
+        r"""
+
+        Returns :
+        *args   : Bytes object,Integer Flags
+
+        C prototype: int cbf_read_buffered_file (cbf_handle handle, FILE *stream,
+                         int flags, const char * buffer, size_t buffer_len)
+
+        CBFLib documentation:
+        Read from a bytes buffer instead of a file.
+        Args:
+           buffer (bytes): The python bytes-buffer to read from.
+           flags (int): Same meaning as for read_file
+
+        """
+        return _pycbf.cbf_handle_struct_read_buffer(self, buffer, flags)
+
     def read_file(self, filename, headers):
         r"""
 

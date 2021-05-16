@@ -164,6 +164,102 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
     $1 = &temp[0];
 }
 
+// Define an alternate str->char * input conversion
+//
+// This version conversion accepts both str and bytes objects, and
+// passes them through to the CBFlib function as a char *. This is
+// intended to make it easier to transition from SWIG_PYTHON_STRICT_BYTE_CHAR
+%fragment("PYCBF_AsCharPtrAndSize", "header") {
+int PYCBF_AsCharPtrAndSize(PyObject *obj, char **cptr, size_t *psize,
+                                     int *alloc) {
+%#if PY_VERSION_HEX >= 0x03000000
+  if (PyBytes_Check(obj) || PyUnicode_Check(obj))
+%#else
+  if (PyString_Check(obj))
+%#endif
+  {
+    char *cstr;
+    Py_ssize_t len;
+    int ret = SWIG_OK;
+    int created_obj = 0;
+%#if PY_VERSION_HEX >= 0x03000000
+    // If we've been given a string, convert to bytes
+    if(PyUnicode_Check(obj)) {
+      if (!alloc && cptr) {
+        /* We can't allow converting without allocation, since the internal
+          representation of string in Python 3 is UCS-2/UCS-4 but we require
+          a UTF-8 representation.
+          TODO(bhy) More detailed explanation */
+        return SWIG_RuntimeError;
+      }
+      obj = PyUnicode_AsUTF8String(obj);
+      if (!obj)
+        return SWIG_TypeError;
+      created_obj = 1;
+      if (alloc)
+        *alloc = SWIG_NEWOBJ;
+    }
+    if (PyBytes_AsStringAndSize(obj, &cstr, &len) == -1)
+      return SWIG_TypeError;
+%#else
+    if (PyString_AsStringAndSize(obj, &cstr, &len) == -1)
+      return SWIG_TypeError;
+%#endif
+    // Now we have a bytes object. If we allocated it, *alloc==SWIG_NEWOBJ
+    // ...
+    if (cptr) {
+      if (alloc) {
+        if (*alloc == SWIG_NEWOBJ) {
+          // We created a new object, so copy the memory so we own it
+          *cptr = (char *)memcpy(malloc((len + 1) * sizeof(char)), cstr,
+                                 sizeof(char) * (len + 1));
+          *alloc = SWIG_NEWOBJ;
+        } else {
+          // We're just pointing inside the bytes object
+          *cptr = cstr;
+          *alloc = SWIG_OLDOBJ;
+        }
+      } else {
+        // alloc hasn't been passed in - use the internal object buffer instead
+%#if PY_VERSION_HEX >= 0x03000000
+        assert(0); /* Should never reach here with Unicode strings in Python 3, as we must convert*/
+%#else
+        *cptr = SWIG_Python_str_AsChar(obj);
+        if (!*cptr)
+          ret = SWIG_TypeError;
+%#endif
+      }
+    }
+    // Have we asked to get the size?
+    if (psize)
+      *psize = len + 1;
+%#if PY_VERSION_HEX >= 0x03000000
+    // We might, or might not have created an object in py3 (we didn't, if python2)
+    if (created_obj > 0) {
+      Py_XDECREF(obj);
+    }
+%#endif
+    return ret;
+  } else {
+    // Full SWIG does stuff here - but we aren't
+    return SWIG_RuntimeError;
+  }
+  return SWIG_TypeError;
+}
+} // fragment end
+
+// Anything that is a char* or const char*, that isn't overridden
+// by further typemaps (e.g. DATASTRING), should use our new custom
+// conversion function.
+%typemap(in,noblock=1,fragment="PYCBF_AsCharPtrAndSize")
+  char * (int res, char *buf = 0, int alloc = 0),
+  const char * (int res, char *buf = 0, int alloc = 0) {
+  res = PYCBF_AsCharPtrAndSize($input, &buf, NULL, &alloc);
+  if (!SWIG_IsOK(res)) {
+    %argument_fail(res,"$type",$symname, $argnum);
+  }
+  $1 = %reinterpret_cast(buf, $1_ltype);
+}
 
 %{  // Here is the c code needed to compile the wrappers, but not
     // to be wrapped

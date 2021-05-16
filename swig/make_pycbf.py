@@ -138,6 +138,18 @@ while i < len(lines) - 1:
 
 # End of CBFlib.txt file - now generate wrapper code for swig
 
+# Inject functions directly, bypassing the "write to CBFlib.html" stage
+name_dict["cbf_read_buffered_file"] = [
+    "int cbf_read_buffered_file (cbf_handle handle, FILE *stream, int flags, const char * buffer, size_t buffer_len)",
+    """
+Read from a bytes buffer instead of a file.
+
+Args:
+   buffer (bytes): The python bytes-buffer to read from.
+   flags (int): Same meaning as for read_file
+""",
+]
+
 
 def myformat(s, lin, indent=0, breakon=" "):
     """
@@ -2104,6 +2116,34 @@ cbfhandle_specials = {
 """,
         "read_file",
         ["String filename", "Integer headers"],
+        [],
+    ],
+    "cbf_read_buffered_file": [
+        """
+    %exception read_buffer {
+        $function
+        if (PyErr_Occurred()) {
+            return NULL;
+        }
+    }
+
+    void read_buffer(PyObject *buffer, int flags = 0) {
+        if (!PyBytes_Check(buffer)) {
+            PyErr_SetString(PyExc_ValueError, "buffer must be a bytes-like object");
+        }
+
+        Py_ssize_t buffer_length = PyBytes_Size(buffer);
+        char *cbuffer = PyBytes_AsString(buffer);
+
+        int err = cbf_read_buffered_file(self, NULL /*nullptr*/, flags, cbuffer, buffer_length);
+
+        if (err) {
+            PyErr_Format(PyExc_RuntimeError, "cbflib read_file returned error %d", err);
+        }
+    }
+""",
+        "read_buffer",
+        ["Bytes object", "Integer Flags"],
         [],
     ],
     "cbf_read_widefile": [

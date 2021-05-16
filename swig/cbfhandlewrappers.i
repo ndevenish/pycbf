@@ -4601,6 +4601,41 @@ SEE ALSO
       cbf_failnez(cbf_next_row(self));}
 %feature("autodoc", "
 Returns :
+*args   : Bytes object,Integer Flags
+
+C prototype: int cbf_read_buffered_file (cbf_handle handle, FILE *stream,
+                 int flags, const char * buffer, size_t buffer_len)
+
+CBFLib documentation:
+Read from a bytes buffer instead of a file.
+Args:
+   buffer (bytes): The python bytes-buffer to read from.
+   flags (int): Same meaning as for read_file
+")read_buffer;
+
+    %exception read_buffer {
+        $function
+        if (PyErr_Occurred()) {
+            return NULL;
+        }
+    }
+
+    void read_buffer(PyObject *buffer, int flags = 0) {
+        if (!PyBytes_Check(buffer)) {
+            PyErr_SetString(PyExc_ValueError, "buffer must be a bytes-like object");
+        }
+
+        Py_ssize_t buffer_length = PyBytes_Size(buffer);
+        char *cbuffer = PyBytes_AsString(buffer);
+
+        int err = cbf_read_buffered_file(self, NULL /*nullptr*/, flags, cbuffer, buffer_length);
+
+        if (err) {
+            PyErr_Format(PyExc_RuntimeError, "cbflib read_file returned error %d", err);
+        }
+    }
+%feature("autodoc", "
+Returns :
 *args   : String filename,Integer headers
 
 C prototype: int cbf_read_file (cbf_handle handle, FILE *file, int flags);
