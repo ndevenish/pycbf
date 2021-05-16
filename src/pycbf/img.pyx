@@ -14,21 +14,10 @@ from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
 
-import numpy as np
-
-# img_BAD_ARGUMENT
-# img_BAD_OPEN
-
-# img_columns and img_rows are defines
-# img_columns
-# img_rows
-
-# img_get_number
-# img_handle
-# img_get_field
-# img_read_mar345data
-# img_read_mar345header
-
+try:
+    import numpy as np
+except ModuleNotFoundError:
+    np = None
 
 cdef extern from "Python.h":
     int PyObject_AsFileDescriptor(object fileobject) except -1
@@ -173,6 +162,9 @@ cdef class Img:
         """Return the raw image data array pointer"""
         if self._img_handle.image == NULL:
             return None
+        if np == None:
+            raise ImportError("Missing runtime dependency numpy - cannot generate image arrays")
+
         assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"
 
         # Work out the proper way to convert this data e.g. orientation:
