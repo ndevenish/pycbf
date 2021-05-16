@@ -104,10 +104,12 @@ cdef class Img:
     def get_number(self, str name):
         return img.img_get_number(self._img_handle, name)
 
-    def read_mar345(self, object filename):
+    @classmethod
+    def read_mar345(cls, object filename):
+        img = Img()
         strpath = os.fspath(filename)
         cdef char *filen = strpath
-        check_error(img_read_mar345(self._img_handle, strpath))
+        check_error(img_read_mar345(img._img_handle, strpath))
 
     def read_mar345header(self, object fileobject):
         # Make sure that we don't rewire memory while references are handed out

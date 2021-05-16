@@ -47,5 +47,4 @@ def test_regression_image(mar_image):
 def test_image_reading(mar_image):
     np = pytest.importorskip("numpy")
 
-    img = Img()
-    img.read_mar345(mar_image)
+    img = Img.read_mar345(mar_image)
