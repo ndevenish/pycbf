@@ -107,6 +107,7 @@ cdef class Img:
         strpath = os.fspath(filename)
         cdef char *filen = strpath
         check_error(img_read_mar345(img._img_handle, strpath))
+        return img
 
     def read_mar345header(self, object fileobject):
         # Make sure that we don't rewire memory while references are handed out
