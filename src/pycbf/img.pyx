@@ -158,6 +158,16 @@ cdef class Img:
         return self.active_views
 
     @property
+    def fields(self):
+        tags = {}
+        cdef int index = 0
+        cdef char *tag, *data;
+        while img_get_next_field(self._img_handle, &tag, &data, &index) != ImageError.BAD_ARGUMENT:
+            tags[tag.decode()] = data.decode()
+
+        return tags
+
+    @property
     def image(self):
         """Return the raw image data array pointer"""
         if self._img_handle.image == NULL:
