@@ -8984,5 +8984,5 @@ _pycbf.cbf_handle_struct_swigregister(cbf_handle_struct)
 
 
 cvar = _pycbf.cvar
-SWIG_PYTHON_STRICT_BYTE_CHAR = cvar.SWIG_PYTHON_STRICT_BYTE_CHAR
+HAS_SWIG_PYTHON_STRICT_BYTE_CHAR = cvar.HAS_SWIG_PYTHON_STRICT_BYTE_CHAR
 

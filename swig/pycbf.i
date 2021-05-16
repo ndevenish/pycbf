@@ -320,6 +320,11 @@ void get_error_message(){
     sprintf(error_message,"%s %s",error_message,"CBF_NOCOMPRESSION");
 }
 
+#ifdef SWIG_PYTHON_STRICT_BYTE_CHAR
+const bool HAS_SWIG_PYTHON_STRICT_BYTE_CHAR = true;
+#else
+const bool HAS_SWIG_PYTHON_STRICT_BYTE_CHAR = false;
+#endif
 
 %} // End of code which is not wrapped but needed to compile
 
@@ -452,9 +457,5 @@ void get_error_message(){
 // cbfhandle object
 %include "cbfhandlewrappers.i"
 
-// Expose the SWIG_PYTHON_STRICT_BYTE_CHAR build variable as a global
-%#ifdef SWIG_PYTHON_STRICT_BYTE_CHAR
-const bool SWIG_PYTHON_STRICT_BYTE_CHAR = true;
-%#else
-const bool SWIG_PYTHON_STRICT_BYTE_CHAR = false;
-%#endif
+%immutable;
+extern bool HAS_SWIG_PYTHON_STRICT_BYTE_CHAR;

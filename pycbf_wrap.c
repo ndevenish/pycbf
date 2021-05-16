@@ -3234,6 +3234,11 @@ void get_error_message(){
     sprintf(error_message,"%s %s",error_message,"CBF_NOCOMPRESSION");
 }
 
+#ifdef SWIG_PYTHON_STRICT_BYTE_CHAR
+const bool HAS_SWIG_PYTHON_STRICT_BYTE_CHAR = true;
+#else
+const bool HAS_SWIG_PYTHON_STRICT_BYTE_CHAR = false;
+#endif
 
 
 
@@ -20409,16 +20414,16 @@ SWIGINTERN PyObject *cbf_handle_struct_swiginit(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN int Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set(PyObject *_val SWIGUNUSED) {
-  SWIG_Error(SWIG_AttributeError,"Variable SWIG_PYTHON_STRICT_BYTE_CHAR is read-only.");
+SWIGINTERN int Swig_var_HAS_SWIG_PYTHON_STRICT_BYTE_CHAR_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable HAS_SWIG_PYTHON_STRICT_BYTE_CHAR is read-only.");
   return 1;
 }
 
 
-SWIGINTERN PyObject *Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get(void) {
+SWIGINTERN PyObject *Swig_var_HAS_SWIG_PYTHON_STRICT_BYTE_CHAR_get(void) {
   PyObject *pyobj = 0;
   
-  pyobj = SWIG_From_bool((bool)(SWIG_PYTHON_STRICT_BYTE_CHAR));
+  pyobj = SWIG_From_bool((bool)(HAS_SWIG_PYTHON_STRICT_BYTE_CHAR));
   return pyobj;
 }
 
@@ -29374,7 +29379,7 @@ SWIG_init(void) {
   }
   PyDict_SetItemString(md, "cvar", globals);
   Py_DECREF(globals);
-  SWIG_addvarlink(globals, "SWIG_PYTHON_STRICT_BYTE_CHAR", Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get, Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set);
+  SWIG_addvarlink(globals, "HAS_SWIG_PYTHON_STRICT_BYTE_CHAR", Swig_var_HAS_SWIG_PYTHON_STRICT_BYTE_CHAR_get, Swig_var_HAS_SWIG_PYTHON_STRICT_BYTE_CHAR_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else
