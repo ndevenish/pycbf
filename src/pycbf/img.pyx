@@ -41,48 +41,11 @@ cdef check_error(int err):
     elif err == ImageError.BAD_WRITE:
         raise IOError("Bad Write")
 
-cdef class ImageData:
-    """Image Data class to help with refcounting the image array"""
-    cdef Img image_container
-    cdef img.img_object * _img_handle
-    cdef Py_ssize_t shape[2]
-    cdef Py_ssize_t strides[2]
-
-    def __cinit__(self, Img image_container):
-        self.image_container = image_container
-        self._img_handle = image_container._img_handle
-
-
-    def __getbuffer__(self, Py_buffer *buffer, int flags):
-        # rows
-        self.shape[0] = self._img_handle.size[1]
-        self.strides[0] = sizeof(int)*self.shape[1]
-        # cols
-        self.shape[1] = self._img_handle.size[0]
-        self.strides[1] = sizeof(int)
-
-        # Note: self is automatically incref'd by cython
-        buffer.obj = self
-        buffer.buf = self._img_handle.image
-        buffer.len = self.shape[0] * self.shape[1] * sizeof(int)
-        buffer.itemsize = sizeof(int)
-        buffer.ndim = 2
-        buffer.format = "i"
-        buffer.readonly = 0
-        buffer.shape = self.shape
-        buffer.strides = NULL
-        buffer.suboffsets = NULL
-        self.image_container._active_views += 1
-
-        print("Active Views:   ", self.image_container._active_views)
-
-    def __releasebuffer__(self, Py_buffer *buffer):
-        self.image_container._active_views -= 1
-        print("Decref Active Views: ", self.image_container._active_views)
-
 cdef class Img:
     cdef img.img_object * _img_handle;
     cdef int _active_views
+    cdef Py_ssize_t shape[2]
+    cdef Py_ssize_t strides[2]
 
     def __cinit__(self):
         self._img_handle = img.img_make_handle()
@@ -179,39 +142,47 @@ cdef class Img:
         if self._img_handle.image == NULL:
             raise RuntimeError("No image data - cannot generate image data")
         if np == None:
-            raise ImportError("Missing runtime dependency numpy - cannot generate image arrays")
+            raise ImportError("Missing numpy. You can access image data as a memoryview.")
 
+        # # for testing - allocate data
+        # cdef int i = 0
+        # for y in range(3):
+        #     for x in range(self.columns):
+        #         self._img_handle.image[y * self._img_handle.size[0] + x] = i
+        #         i += 1
+
+        return np.asarray(self)
+
+    def __getbuffer__(self, Py_buffer *buffer, int flags):
+        if self._img_handle.image == NULL:
+            raise RuntimeError("No image data yet - cannot generate image data")
         assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"
 
-        # Work out the proper way to convert this data e.g. orientation:
         # Internally between flex/libimg:
         #       size1 == img_org_data[0] == cols, size2 == img_org_data[1] == rows
-        # We constructed a flex array from:
-        #       af::flex_int z(af::flex_grid<>((long)size1(), (long)size2()));
-        # And wrote to the 2d-ized flex array with:
-        #       begin[r * side + c] = img->image[r * side + c];
-        # And inside libimg get_pixel(r, c):
-        #       return img->image[r * img->size[1] + c];
-        # Flex itself uses the lookup all[1, 2] => (r, c) / (row, col) ->:
-        #        return r * all_[1] + c;
+        # rows
+        self.shape[0] = self._img_handle.size[1]
+        self.strides[0] = sizeof(int)*self.shape[1]
+        # cols
+        self.shape[1] = self._img_handle.size[0]
+        self.strides[1] = sizeof(int)
 
-        # e.g....
-        # rowmajor = False: Normal c-style e.g. what's normally called _Row Major_
-        #   [[0,1,2],
-        #    [3,4,5],
-        #    [6,7,8]]
-        # i.e. what the default numpy is. This matches flex, so we should
-        # be able to convert without an issue.
-        shape = (self._img_handle.size[1], self._img_handle.size[0])
 
-        # for testing - allocate data
-        cdef int i = 0
-        for y in range(3):
-            for x in range(shape[0]):
-                self._img_handle.image[y * self._img_handle.size[0] + x] = i
-                i += 1
+        # Note: self is automatically incref'd by cython
+        buffer.obj = self
+        buffer.buf = self._img_handle.image
+        buffer.len = self.shape[0] * self.shape[1] * sizeof(int)
+        buffer.itemsize = sizeof(int)
+        buffer.ndim = 2
+        buffer.format = "i"
+        buffer.readonly = 0
+        buffer.shape = self.shape
+        buffer.strides = NULL
+        buffer.suboffsets = NULL
 
-        imd = ImageData(self)
+        self._active_views += 1
+        # print("Active Views:   ", self._active_views)
 
-        # return imd
-        return np.asarray(imd)
+    def __releasebuffer__(self, Py_buffer *buffer):
+        self._active_views -= 1
+        # print("Decref Active Views: ", self._active_views)

@@ -45,6 +45,9 @@ def test_regression_image(mar_image):
 
 
 def test_image_reading(mar_image):
+    # Currently, problems building numpy on mac-arm, so don't require
     np = pytest.importorskip("numpy")
 
-    img = Img.read_mar345(mar_image)
+    img = np.asarray(Img.read_mar345(mar_image))
+    assert img.shape == (2300, 2300)
+    assert img[img == 0].sum() == 1131017
