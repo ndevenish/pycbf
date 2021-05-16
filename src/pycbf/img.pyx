@@ -8,8 +8,8 @@ import sys
 
 cimport cpython.buffer as buf
 from cpython cimport Py_buffer
+from cpython.object cimport PyObject_AsFileDescriptor
 from cpython.ref cimport PyObject
-from cpython.object import PyObject_AsFileDescriptor
 from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
