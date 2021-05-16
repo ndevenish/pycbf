@@ -172,4 +172,4 @@ cdef class Img:
 
     def __releasebuffer__(self, Py_buffer *buffer):
         self._active_views -= 1
-        assert self._active_views >= 1
+        assert self._active_views >= 0
