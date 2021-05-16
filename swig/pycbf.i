@@ -168,6 +168,8 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
 %{  // Here is the c code needed to compile the wrappers, but not
     // to be wrapped
 
+#include <stdbool.h>
+
 #include "cbf.h"
 #include "cbf_simple.h"
 
@@ -354,3 +356,9 @@ void get_error_message(){
 // cbfhandle object
 %include "cbfhandlewrappers.i"
 
+// Expose the SWIG_PYTHON_STRICT_BYTE_CHAR build variable as a global
+%#ifdef SWIG_PYTHON_STRICT_BYTE_CHAR
+const bool SWIG_PYTHON_STRICT_BYTE_CHAR = true;
+%#else
+const bool SWIG_PYTHON_STRICT_BYTE_CHAR = false;
+%#endif

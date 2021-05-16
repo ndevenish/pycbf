@@ -3178,6 +3178,8 @@ static int convert_darray(PyObject *input, double *ptr, int size) {
   // Here is the c code needed to compile the wrappers, but not
     // to be wrapped
 
+#include <stdbool.h>
+
 #include "cbf.h"
 #include "cbf_simple.h"
 
@@ -5168,6 +5170,13 @@ SWIGINTERN void cbf_handle_struct_write_widefile(cbf_handle_struct *self,char co
 
         }
        }
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_bool  (bool value)
+{
+  return PyBool_FromLong(value ? 1 : 0);
+}
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20270,6 +20279,20 @@ SWIGINTERN PyObject *cbf_handle_struct_swiginit(PyObject *SWIGUNUSEDPARM(self), 
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN int Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set(PyObject *_val SWIGUNUSED) {
+  SWIG_Error(SWIG_AttributeError,"Variable SWIG_PYTHON_STRICT_BYTE_CHAR is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_From_bool((bool)(SWIG_PYTHON_STRICT_BYTE_CHAR));
+  return pyobj;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { "SWIG_PyInstanceMethod_New", SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { "new_doubleArray", _wrap_new_doubleArray, METH_O, NULL},
@@ -29195,6 +29218,18 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CBF_SAVEFRAME",SWIG_From_int((int)(CBF_SAVEFRAME)));
   SWIG_Python_SetConstant(d, "CBF_CATEGORY",SWIG_From_int((int)(CBF_CATEGORY)));
   SWIG_Python_SetConstant(d, "CBF_COLUMN",SWIG_From_int((int)(CBF_COLUMN)));
+  globals = SWIG_globals();
+  if (!globals) {
+    PyErr_SetString(PyExc_TypeError, "Failure to create SWIG globals.");
+#if PY_VERSION_HEX >= 0x03000000
+    return NULL;
+#else
+    return;
+#endif
+  }
+  PyDict_SetItemString(md, "cvar", globals);
+  Py_DECREF(globals);
+  SWIG_addvarlink(globals, "SWIG_PYTHON_STRICT_BYTE_CHAR", Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_get, Swig_var_SWIG_PYTHON_STRICT_BYTE_CHAR_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else
