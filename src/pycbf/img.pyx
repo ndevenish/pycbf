@@ -74,7 +74,6 @@ cdef class ImageData:
         buffer.suboffsets = NULL
         self.image_container._active_views += 1
 
-        print("Increasing ID to:", sys.getrefcount(self))
         print("Active Views:   ", self.image_container._active_views)
 
     def __releasebuffer__(self, Py_buffer *buffer):
@@ -178,7 +177,6 @@ cdef class Img:
         """Return the raw image data array pointer"""
         if self._img_handle.image == NULL:
             raise RuntimeError("No image data - cannot generate image data")
-            return None
         if np == None:
             raise ImportError("Missing runtime dependency numpy - cannot generate image arrays")
 
@@ -203,20 +201,16 @@ cdef class Img:
         #    [6,7,8]]
         # i.e. what the default numpy is. This matches flex, so we should
         # be able to convert without an issue.
-
-        # cdef np.npy_intp shape[2];
         shape = (self._img_handle.size[1], self._img_handle.size[0])
-        # shape[0] = self._img_handle.size[1]
-        # shape[1] =  self._img_handle.size[0]
-        print("Getting image")
+
+        # for testing - allocate data
         cdef int i = 0
         for y in range(3):
             for x in range(shape[0]):
-                print("Setting", x, y, i)
                 self._img_handle.image[y * self._img_handle.size[0] + x] = i
                 i += 1
 
-        print("ref", sys.getrefcount(self))
         imd = ImageData(self)
 
+        # return imd
         return np.asarray(imd)
