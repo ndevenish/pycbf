@@ -4,8 +4,6 @@
 # cython: c_string_encoding=utf8
 
 import os
-# img_set_dimensions
-# img_set_tags
 import sys
 
 cimport cpython.buffer as buf
@@ -136,18 +134,11 @@ cdef class Img:
 
     @property
     def image(self):
-        """Return the raw image data array pointer"""
+        """Return the image data"""
         if self._img_handle.image == NULL:
             raise RuntimeError("No image data - cannot generate image data")
         if np == None:
             raise ImportError("Missing numpy. You can access image data as a memoryview.")
-
-        # # for testing - allocate data
-        # cdef int i = 0
-        # for y in range(3):
-        #     for x in range(self.columns):
-        #         self._img_handle.image[y * self._img_handle.size[0] + x] = i
-        #         i += 1
 
         return np.asarray(self)
 
