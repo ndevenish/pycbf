@@ -1,30 +1,17 @@
 import pycbf
-
-if pycbf.SWIG_PYTHON_STRICT_BYTE_CHAR:
-    print("IS STRICT")
-
-    def pycbfstr(string: str) -> bytes:
-        """Shim to convert to representation of string natively handled by pycbf"""
-        return string.encode()
-
-
-else:
-
-    def pycbfstr(string: str) -> str:
-        """Shim to convert to representation of string natively handled by pycbf"""
-        return string
+from pycbf.utils import cbf2str
 
 
 def test_get_local_integer_byte_order():
-    assert pycbf.get_local_integer_byte_order() == pycbfstr("little_endian")
+    assert cbf2str(pycbf.get_local_integer_byte_order()) == "little_endian"
 
 
 def test_get_local_real_byte_order():
-    assert pycbf.get_local_real_byte_order() == pycbfstr("little_endian")
+    assert cbf2str(pycbf.get_local_real_byte_order()) == "little_endian"
 
 
 def test_get_local_real_format():
-    assert pycbf.get_local_real_format() == pycbfstr("ieee 754-1985")
+    assert cbf2str(pycbf.get_local_real_format()) == "ieee 754-1985"
 
 
 def test_compute_cell_volume():
