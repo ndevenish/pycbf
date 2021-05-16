@@ -86,9 +86,6 @@ if __name__ == "__main__":
 
     # Verify that we have the right versions of everything to regenerate
     tools_available = {
-        "nuweb": check_tool("nuweb", expect_fail=True),
-        "latex": check_tool("latex", ["-v"]),
-        "dvipdfm": check_tool("dvipdfm", ["--version"]),
         "git": check_tool("git", ["--version"]),
         "patch": check_tool("patch", ["-v"]),
         "swig": check_tool(
@@ -117,33 +114,24 @@ if __name__ == "__main__":
     else:
         print("\nNo changes - OK to continue\n")
 
-    print("Applying patches from patches/")
-    patch_dir = ROOT_DIR / "patches"
-    for patch in sorted(x for x in patch_dir.iterdir() if re.match(r"\d+[-_]", x.name)):
-        print("Applying patch", patch)
-        with open(patch, "rb") as f:
-            subprocess.check_call(["patch", "-p1"], stdin=f, cwd=CBFLIB_DIR)
+    # print("Applying patches from patches/")
+    # patch_dir = ROOT_DIR / "patches"
+    # for patch in sorted(x for x in patch_dir.iterdir() if re.match(r"\d+[-_]", x.name)):
+    #    print("Applying patch", patch)
+    #    with open(patch, "rb") as f:
+    #        subprocess.check_call(["patch", "-p1"], stdin=f, cwd=CBFLIB_DIR)
 
     print("Applying version specifier patch")
 
     print("Starting regeneration")
-    regen_dir = CBFLIB_DIR / "pycbf"
+    regen_dir = Path(__file__).parent / "swig"
     html_file = CBFLIB_DIR / "doc" / "CBFlib.html"
+    pycbf_dir = CBFLIB_DIR / "pycbf"
 
-    check_call(["nuweb", "pycbf"], cwd=regen_dir)
-    check_call(["latex", "pycbf"], cwd=regen_dir)
-    check_call(["nuweb", "pycbf"], cwd=regen_dir)
-    check_call(["latex", "pycbf"], cwd=regen_dir)
-    check_call(["dvipdfm", "pycbf"], cwd=regen_dir)
-    check_call(["nuweb", "pycbf"], cwd=regen_dir)
     dumped_html = check_output([browser_dump_tool, "-dump", str(html_file)])
-    with open(regen_dir / "CBFlib.txt", "wb") as f:
-        f.write(dumped_html)
+    (pycbf_dir / "CBFlib.txt").write_bytes(dumped_html)
 
-    # Run 2to3 on make_pycbf.py so we can run it
-    make_pycbf = (regen_dir / "make_pycbf.py").absolute()
-    check_call(["2to3", "-w", str(make_pycbf)], cwd=regen_dir)
-    check_call([sys.executable, str(make_pycbf)], cwd=regen_dir)
+    check_output([sys.executable, str(regen_dir / "make_pycbf.py")])
 
     # Finally, regenerate with swig
     check_call(["swig", "-v", "-python", "pycbf.i"], cwd=regen_dir)
