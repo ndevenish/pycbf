@@ -171,6 +171,7 @@ cdef class Img:
     def image(self):
         """Return the raw image data array pointer"""
         if self._img_handle.image == NULL:
+            raise RuntimeError("No image data - cannot generate image data")
             return None
         if np == None:
             raise ImportError("Missing runtime dependency numpy - cannot generate image arrays")
