@@ -11,6 +11,7 @@ import sys
 cimport cpython.buffer as buf
 from cpython cimport Py_buffer
 from cpython.ref cimport PyObject
+from cpython.object import PyObject_AsFileDescriptor
 from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
@@ -19,9 +20,6 @@ try:
     import numpy as np
 except ModuleNotFoundError:
     np = None
-
-cdef extern from "Python.h":
-    int PyObject_AsFileDescriptor(object fileobject) except -1
 
 cdef check_error(int err):
     if err == 0:
