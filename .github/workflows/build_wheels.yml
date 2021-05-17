@@ -26,7 +26,7 @@ jobs:
             - name: Build wheel
               uses: joerick/cibuildwheel@v1.11.0
               env:
-                  CIBW_SKIP: cp2* cp35* pp27* pp36-macosx*
+                  CIBW_SKIP: cp2* cp35* pp27* pp*-macosx*
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
                   CIBW_BEFORE_TEST: pip install pytest git+https://github.com/ndevenish/data@pycbf
 
