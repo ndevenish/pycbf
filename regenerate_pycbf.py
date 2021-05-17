@@ -14,9 +14,17 @@ ROOT_DIR = Path(__file__).parent
 CBFLIB_DIR = ROOT_DIR / "cbflib"
 
 
-def hash_files(filelist):
+def hash_files(*files):
+    """
+    Generate a combined checksum for a list of files.
+
+    For validating the the generated output file is the latest generated
+    from the input sources. Equivalent to running the command:
+
+        sha256sum <files> | sort | sha256sum
+    """
     hashes = []
-    for filename in sorted(filelist):
+    for filename in sorted(files):
         h = sha256()
         h.update(filename.read_bytes())
         hashes.append(h.hexdigest() + "  " + filename.name)
@@ -149,8 +157,8 @@ if __name__ == "__main__":
 
     # Calculate the combined hash so we know if the source have changed
     swigdir = Path(__file__).parent / "swig"
-    gen_files = list(swigdir.glob("*.i")) + list(swigdir.glob("make_pycbf.py"))
-    swig_combined_hash = hash_files(gen_files)
+    gen_files = [swigdir / "make_pycbf.py", *swigdir.glob("*.i")]
+    swig_combined_hash = hash_files(*gen_files)
     hash_header = (
         "# Generated from:\n"
         + "\n".join("# - " + x.name for x in sorted(gen_files, key=lambda x: x.name))
