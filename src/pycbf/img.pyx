@@ -14,6 +14,8 @@ from libc.stdio cimport FILE, fdopen, ftell
 
 cimport pycbf.img as img
 
+from typing import IO, Any, Dict, Tuple, Union
+
 try:
     import numpy as np
 except ModuleNotFoundError:
@@ -38,6 +40,9 @@ cdef check_error(int err):
         raise IOError("Bad Write")
 
 cdef class Img:
+    """
+    Interface to CBFlib's libimg API
+    """
     cdef img.img_object * _img_handle;
     cdef int _active_views
     cdef Py_ssize_t shape[2]
@@ -51,24 +56,63 @@ cdef class Img:
         if self._img_handle is not NULL:
             img.img_free_handle(self._img_handle)
 
-    def get_field(self, str name):
+    def get_field(self, str name : str) -> str:
+        """Get a single field by name."""
         cdef const char * ret = img_get_field(self._img_handle, name);
         if ret == NULL:
             raise KeyError("No field named " + name)
         return ret.decode()
 
-    def get_number(self, str name):
+    def get_number(self, str name : str) -> float:
+        """
+        Retrieve a single field as a floating point number.
+
+        Note that due to the underlying implementation, this will only
+        return the _first_ number, for fields that contain multiple
+        space-separated numbers.
+        """
         return img.img_get_number(self._img_handle, name)
 
     @classmethod
-    def read_mar345(cls, object filename):
+    def read_mar345(cls, object filename : Union[str, bytes, os.PathLike]) -> Img:
+        """
+        Read a mar345 image from filename
+
+        This opens, reads the header, and reads the data, meaning that
+        you don't have to call Img.read_mar345header or read_mar245data
+        explicitly.
+
+        Args:
+            filename: The mar245 file to open
+
+        Returns:
+            A new Img object.
+        """
         img = Img()
         strpath = os.fspath(filename)
-        cdef char *filen = strpath
         check_error(img_read_mar345(img._img_handle, strpath))
         return img
 
-    def read_mar345header(self, object fileobject):
+    def read_mar345header(self, object fileobject : IO) -> Any:
+        """
+        Read only the header of a mar345 file.
+
+        Returns an internal object that can be passed through to
+        read_mar345data. Normally, you should instead use Img.read_mar345
+        to construct an Img object directly.
+
+        Args:
+            fileobject:
+                A file object, as returned by open. This must be backed
+                by a physical file object, as the underlying OS file
+                descriptor is extracted.
+
+        Raises:
+            ValueError:
+                The internal data buffer is referenced by other objects
+                (e.g. numpy arrays or memory views) and so cannot be
+                altered.
+        """
         # Make sure that we don't rewire memory while references are handed out
         if self._active_views > 0:
             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -85,7 +129,33 @@ cdef class Img:
         fileobject.seek(ftell(file))
         return tuple(mardata)
 
-    def read_mar345data(self, object fileobject, object org_data):
+    def read_mar345data(
+            self,
+            object fileobject : IO,
+            object org_data : Any,
+        ) -> None:
+        """
+        Read the data out of a file positioned after the header segment.
+
+        Normally, you should use Img.read_mar245data instead.
+
+        Args:
+            fileobject:
+                A file object, as returned by open. This must be backed
+                by a physical file object, as the underlying OS file
+                descriptor is extracted. This files position (as reported
+                by fileobject.tell()) must be at the position it was
+                left in after the call to read_mar245header.
+            org_data:
+                The internal object returned by the previous call to
+                read_mar345header.
+
+        Raises:
+            ValueError:
+                The internal data buffer is referenced by other objects
+                (e.g. numpy arrays or memory views) and so cannot be
+                altered.
+        """
         # Make sure that we don't rewire memory while references are handed out
         if self._active_views > 0:
             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -98,7 +168,17 @@ cdef class Img:
             img.img_read_mar345data(self._img_handle, file, mardata)
         )
 
-    def set_dimensions(self, int columns, int rows):
+    def set_dimensions(self, int columns, int rows) -> None:
+        """
+        Resize the internal image data object.
+
+        Raises:
+            ValueError:
+                The internal data buffer is referenced by other objects
+                (e.g. numpy arrays or memory views) and so cannot be
+                altered.
+        """
+
         if self._active_views > 0:
             raise ValueError("Cannot resize data: There are unfreed references to the image data")
         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
@@ -115,14 +195,16 @@ cdef class Img:
         return self._img_handle.size[0]
 
     @property
-    def rowmajor(self):
+    def rowmajor(self) -> bool:
+        """Is the internal data object row_major order?"""
         return self._img_handle.rowmajor
 
     def active_views(self):
         return self._active_views
 
     @property
-    def fields(self):
+    def fields(self) -> Dict[str, str]:
+        """Retrieve a dictionary of every field on the Img object"""
         tags = {}
         cdef int index = 0
         cdef const char *tag
@@ -134,7 +216,11 @@ cdef class Img:
 
     @property
     def image(self):
-        """Return the image data"""
+        """
+        Return the image data, as a numpy array.
+
+        You can also convert the Img object directly via np.asarray(obj).
+        """
         if self._img_handle.image == NULL:
             raise RuntimeError("No image data - cannot generate image data")
         if np == None:

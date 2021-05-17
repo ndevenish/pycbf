@@ -848,9 +848,9 @@ static const char *__pyx_filename;
 static const char *__pyx_f[] = {
   "src/pycbf/img.pyx",
   "stringsource",
-  "type.pxd",
-  "bool.pxd",
-  "complex.pxd",
+  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/type.pxd",
+  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/bool.pxd",
+  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/complex.pxd",
 };
 
 /*--- Type declarations ---*/
@@ -873,12 +873,12 @@ enum __pyx_t_5pycbf_3img_ImageError {
   __pyx_e_5pycbf_3img_BAD_WRITE = 0x40
 };
 
-/* "pycbf/img.pyx":40
+/* "pycbf/img.pyx":42
  *         raise IOError("Bad Write")
  * 
  * cdef class Img:             # <<<<<<<<<<<<<<
- *     cdef img.img_object * _img_handle;
- *     cdef int _active_views
+ *     """
+ *     Interface to CBFlib's libimg API
  */
 struct __pyx_obj_5pycbf_3img_Img {
   PyObject_HEAD
@@ -1211,6 +1211,9 @@ static PyTypeObject *__Pyx_ImportType(PyObject* module, const char *module_name,
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
 
+/* ImportFrom.proto */
+static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
+
 /* FastTypeChecks.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
 #define __Pyx_TypeCheck(obj, type) __Pyx_IsSubtype(Py_TYPE(obj), (PyTypeObject *)type)
@@ -1399,20 +1402,26 @@ static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_OverflowError;
 static PyObject *__pyx_builtin_enumerate;
 static PyObject *__pyx_builtin_IndexError;
+static const char __pyx_k_IO[] = "IO";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_os[] = "os";
+static const char __pyx_k_Any[] = "Any";
 static const char __pyx_k_Img[] = "Img";
 static const char __pyx_k_sys[] = "sys";
+static const char __pyx_k_Dict[] = "Dict";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_rows[] = "rows";
 static const char __pyx_k_seek[] = "seek";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_Tuple[] = "Tuple";
+static const char __pyx_k_Union[] = "Union";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_fspath[] = "fspath";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_reduce[] = "__reduce__";
+static const char __pyx_k_typing[] = "typing";
 static const char __pyx_k_IOError[] = "IOError";
 static const char __pyx_k_asarray[] = "asarray";
 static const char __pyx_k_columns[] = "columns";
@@ -1449,6 +1458,7 @@ static const char __pyx_k_No_image_data_cannot_generate_im[] = "No image data - 
 static const char __pyx_k_No_image_data_yet_cannot_generat[] = "No image data yet - cannot generate image data";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static const char __pyx_k_org_data_appears_to_be_in_incorr[] = "org_data appears to be in incorrect form for header data";
+static PyObject *__pyx_n_s_Any;
 static PyObject *__pyx_kp_u_Bad_Format;
 static PyObject *__pyx_kp_u_Bad_Write;
 static PyObject *__pyx_kp_u_Bad_field;
@@ -1456,6 +1466,8 @@ static PyObject *__pyx_kp_u_Bad_open;
 static PyObject *__pyx_kp_u_Bad_read;
 static PyObject *__pyx_kp_u_Cannot_reload_data_There_are_unf;
 static PyObject *__pyx_kp_u_Cannot_resize_data_There_are_unf;
+static PyObject *__pyx_n_s_Dict;
+static PyObject *__pyx_n_s_IO;
 static PyObject *__pyx_n_s_IOError;
 static PyObject *__pyx_n_s_Img;
 static PyObject *__pyx_n_s_ImportError;
@@ -1470,7 +1482,9 @@ static PyObject *__pyx_kp_u_No_image_data_yet_cannot_generat;
 static PyObject *__pyx_n_s_OverflowError;
 static PyObject *__pyx_kp_u_Rowmajor_appears_only_used_with;
 static PyObject *__pyx_n_s_RuntimeError;
+static PyObject *__pyx_n_s_Tuple;
 static PyObject *__pyx_n_s_TypeError;
+static PyObject *__pyx_n_s_Union;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_n_s_asarray;
 static PyObject *__pyx_n_s_cline_in_traceback;
@@ -1499,11 +1513,12 @@ static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
 static PyObject *__pyx_n_s_sys;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_n_s_typing;
 static int __pyx_pf_5pycbf_3img_3Img___cinit__(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self); /* proto */
 static void __pyx_pf_5pycbf_3img_3Img_2__dealloc__(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5pycbf_3img_3Img_4get_field(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self, PyObject *__pyx_v_name); /* proto */
 static PyObject *__pyx_pf_5pycbf_3img_3Img_6get_number(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self, PyObject *__pyx_v_name); /* proto */
-static PyObject *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObject *__pyx_v_cls, PyObject *__pyx_v_filename); /* proto */
+static struct __pyx_obj_5pycbf_3img_Img *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObject *__pyx_v_cls, PyObject *__pyx_v_filename); /* proto */
 static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self, PyObject *__pyx_v_fileobject); /* proto */
 static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self, PyObject *__pyx_v_fileobject, PyObject *__pyx_v_org_data); /* proto */
 static PyObject *__pyx_pf_5pycbf_3img_3Img_14set_dimensions(struct __pyx_obj_5pycbf_3img_Img *__pyx_v_self, int __pyx_v_columns, int __pyx_v_rows); /* proto */
@@ -1534,7 +1549,7 @@ static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 /* Late includes */
 
-/* "pycbf/img.pyx":22
+/* "pycbf/img.pyx":24
  *     np = None
  * 
  * cdef check_error(int err):             # <<<<<<<<<<<<<<
@@ -1551,7 +1566,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("check_error", 0);
 
-  /* "pycbf/img.pyx":23
+  /* "pycbf/img.pyx":25
  * 
  * cdef check_error(int err):
  *     if err == 0:             # <<<<<<<<<<<<<<
@@ -1561,7 +1576,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
   switch (__pyx_v_err) {
     case 0:
 
-    /* "pycbf/img.pyx":24
+    /* "pycbf/img.pyx":26
  * cdef check_error(int err):
  *     if err == 0:
  *         return             # <<<<<<<<<<<<<<
@@ -1572,7 +1587,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "pycbf/img.pyx":23
+    /* "pycbf/img.pyx":25
  * 
  * cdef check_error(int err):
  *     if err == 0:             # <<<<<<<<<<<<<<
@@ -1582,7 +1597,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_ARGUMENT:
 
-    /* "pycbf/img.pyx":26
+    /* "pycbf/img.pyx":28
  *         return
  *     elif err == ImageError.BAD_ARGUMENT:
  *         raise ValueError             # <<<<<<<<<<<<<<
@@ -1590,9 +1605,9 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
  *         raise MemoryError
  */
     __Pyx_Raise(__pyx_builtin_ValueError, 0, 0, 0);
-    __PYX_ERR(0, 26, __pyx_L1_error)
+    __PYX_ERR(0, 28, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":25
+    /* "pycbf/img.pyx":27
  *     if err == 0:
  *         return
  *     elif err == ImageError.BAD_ARGUMENT:             # <<<<<<<<<<<<<<
@@ -1602,16 +1617,16 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_ALLOC:
 
-    /* "pycbf/img.pyx":28
+    /* "pycbf/img.pyx":30
  *         raise ValueError
  *     elif err == ImageError.BAD_ALLOC:
  *         raise MemoryError             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_OPEN:
  *         raise IOError("Bad open")
  */
-    PyErr_NoMemory(); __PYX_ERR(0, 28, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 30, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":27
+    /* "pycbf/img.pyx":29
  *     elif err == ImageError.BAD_ARGUMENT:
  *         raise ValueError
  *     elif err == ImageError.BAD_ALLOC:             # <<<<<<<<<<<<<<
@@ -1621,20 +1636,20 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_OPEN:
 
-    /* "pycbf/img.pyx":30
+    /* "pycbf/img.pyx":32
  *         raise MemoryError
  *     elif err == ImageError.BAD_OPEN:
  *         raise IOError("Bad open")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_READ:
  *         raise IOError("Bad read")
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 30, __pyx_L1_error)
+    __PYX_ERR(0, 32, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":29
+    /* "pycbf/img.pyx":31
  *     elif err == ImageError.BAD_ALLOC:
  *         raise MemoryError
  *     elif err == ImageError.BAD_OPEN:             # <<<<<<<<<<<<<<
@@ -1644,20 +1659,20 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_READ:
 
-    /* "pycbf/img.pyx":32
+    /* "pycbf/img.pyx":34
  *         raise IOError("Bad open")
  *     elif err == ImageError.BAD_READ:
  *         raise IOError("Bad read")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_FORMAT:
  *         raise RuntimeError("Bad Format")
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 32, __pyx_L1_error)
+    __PYX_ERR(0, 34, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":31
+    /* "pycbf/img.pyx":33
  *     elif err == ImageError.BAD_OPEN:
  *         raise IOError("Bad open")
  *     elif err == ImageError.BAD_READ:             # <<<<<<<<<<<<<<
@@ -1667,20 +1682,20 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_FORMAT:
 
-    /* "pycbf/img.pyx":34
+    /* "pycbf/img.pyx":36
  *         raise IOError("Bad read")
  *     elif err == ImageError.BAD_FORMAT:
  *         raise RuntimeError("Bad Format")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_FIELD:
  *         raise KeyError("Bad field")
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 34, __pyx_L1_error)
+    __PYX_ERR(0, 36, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":33
+    /* "pycbf/img.pyx":35
  *     elif err == ImageError.BAD_READ:
  *         raise IOError("Bad read")
  *     elif err == ImageError.BAD_FORMAT:             # <<<<<<<<<<<<<<
@@ -1690,20 +1705,20 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_FIELD:
 
-    /* "pycbf/img.pyx":36
+    /* "pycbf/img.pyx":38
  *         raise RuntimeError("Bad Format")
  *     elif err == ImageError.BAD_FIELD:
  *         raise KeyError("Bad field")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_WRITE:
  *         raise IOError("Bad Write")
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_KeyError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 36, __pyx_L1_error)
+    __PYX_ERR(0, 38, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":35
+    /* "pycbf/img.pyx":37
  *     elif err == ImageError.BAD_FORMAT:
  *         raise RuntimeError("Bad Format")
  *     elif err == ImageError.BAD_FIELD:             # <<<<<<<<<<<<<<
@@ -1713,20 +1728,20 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     break;
     case __pyx_e_5pycbf_3img_BAD_WRITE:
 
-    /* "pycbf/img.pyx":38
+    /* "pycbf/img.pyx":40
  *         raise KeyError("Bad field")
  *     elif err == ImageError.BAD_WRITE:
  *         raise IOError("Bad Write")             # <<<<<<<<<<<<<<
  * 
  * cdef class Img:
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_IOError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 38, __pyx_L1_error)
+    __PYX_ERR(0, 40, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":37
+    /* "pycbf/img.pyx":39
  *     elif err == ImageError.BAD_FIELD:
  *         raise KeyError("Bad field")
  *     elif err == ImageError.BAD_WRITE:             # <<<<<<<<<<<<<<
@@ -1737,7 +1752,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
     default: break;
   }
 
-  /* "pycbf/img.pyx":22
+  /* "pycbf/img.pyx":24
  *     np = None
  * 
  * cdef check_error(int err):             # <<<<<<<<<<<<<<
@@ -1758,7 +1773,7 @@ static PyObject *__pyx_f_5pycbf_3img_check_error(int __pyx_v_err) {
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":46
+/* "pycbf/img.pyx":51
  *     cdef Py_ssize_t strides[2]
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1787,7 +1802,7 @@ static int __pyx_pf_5pycbf_3img_3Img___cinit__(struct __pyx_obj_5pycbf_3img_Img 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "pycbf/img.pyx":47
+  /* "pycbf/img.pyx":52
  * 
  *     def __cinit__(self):
  *         self._img_handle = img.img_make_handle()             # <<<<<<<<<<<<<<
@@ -1796,7 +1811,7 @@ static int __pyx_pf_5pycbf_3img_3Img___cinit__(struct __pyx_obj_5pycbf_3img_Img 
  */
   __pyx_v_self->_img_handle = img_make_handle();
 
-  /* "pycbf/img.pyx":48
+  /* "pycbf/img.pyx":53
  *     def __cinit__(self):
  *         self._img_handle = img.img_make_handle()
  *         self._active_views = 0             # <<<<<<<<<<<<<<
@@ -1805,7 +1820,7 @@ static int __pyx_pf_5pycbf_3img_3Img___cinit__(struct __pyx_obj_5pycbf_3img_Img 
  */
   __pyx_v_self->_active_views = 0;
 
-  /* "pycbf/img.pyx":46
+  /* "pycbf/img.pyx":51
  *     cdef Py_ssize_t strides[2]
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -1819,7 +1834,7 @@ static int __pyx_pf_5pycbf_3img_3Img___cinit__(struct __pyx_obj_5pycbf_3img_Img 
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":50
+/* "pycbf/img.pyx":55
  *         self._active_views = 0
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1843,7 +1858,7 @@ static void __pyx_pf_5pycbf_3img_3Img_2__dealloc__(struct __pyx_obj_5pycbf_3img_
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "pycbf/img.pyx":51
+  /* "pycbf/img.pyx":56
  * 
  *     def __dealloc__(self):
  *         if self._img_handle is not NULL:             # <<<<<<<<<<<<<<
@@ -1853,16 +1868,16 @@ static void __pyx_pf_5pycbf_3img_3Img_2__dealloc__(struct __pyx_obj_5pycbf_3img_
   __pyx_t_1 = ((__pyx_v_self->_img_handle != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "pycbf/img.pyx":52
+    /* "pycbf/img.pyx":57
  *     def __dealloc__(self):
  *         if self._img_handle is not NULL:
  *             img.img_free_handle(self._img_handle)             # <<<<<<<<<<<<<<
  * 
- *     def get_field(self, str name):
+ *     def get_field(self, str name : str) -> str:
  */
     (void)(img_free_handle(__pyx_v_self->_img_handle));
 
-    /* "pycbf/img.pyx":51
+    /* "pycbf/img.pyx":56
  * 
  *     def __dealloc__(self):
  *         if self._img_handle is not NULL:             # <<<<<<<<<<<<<<
@@ -1871,7 +1886,7 @@ static void __pyx_pf_5pycbf_3img_3Img_2__dealloc__(struct __pyx_obj_5pycbf_3img_
  */
   }
 
-  /* "pycbf/img.pyx":50
+  /* "pycbf/img.pyx":55
  *         self._active_views = 0
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -1883,16 +1898,17 @@ static void __pyx_pf_5pycbf_3img_3Img_2__dealloc__(struct __pyx_obj_5pycbf_3img_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pycbf/img.pyx":54
+/* "pycbf/img.pyx":59
  *             img.img_free_handle(self._img_handle)
  * 
- *     def get_field(self, str name):             # <<<<<<<<<<<<<<
+ *     def get_field(self, str name : str) -> str:             # <<<<<<<<<<<<<<
+ *         """Get a single field by name."""
  *         cdef const char * ret = img_get_field(self._img_handle, name);
- *         if ret == NULL:
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pycbf_3img_3Img_5get_field(PyObject *__pyx_v_self, PyObject *__pyx_v_name); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_4get_field[] = "Get a single field by name.";
 static PyObject *__pyx_pw_5pycbf_3img_3Img_5get_field(PyObject *__pyx_v_self, PyObject *__pyx_v_name) {
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -1900,7 +1916,7 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_5get_field(PyObject *__pyx_v_self, Py
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_field (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 59, __pyx_L1_error)
   __pyx_r = __pyx_pf_5pycbf_3img_3Img_4get_field(((struct __pyx_obj_5pycbf_3img_Img *)__pyx_v_self), ((PyObject*)__pyx_v_name));
 
   /* function exit code */
@@ -1925,18 +1941,18 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4get_field(struct __pyx_obj_5pycbf_3i
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_field", 0);
 
-  /* "pycbf/img.pyx":55
- * 
- *     def get_field(self, str name):
+  /* "pycbf/img.pyx":61
+ *     def get_field(self, str name : str) -> str:
+ *         """Get a single field by name."""
  *         cdef const char * ret = img_get_field(self._img_handle, name);             # <<<<<<<<<<<<<<
  *         if ret == NULL:
  *             raise KeyError("No field named " + name)
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L1_error)
   __pyx_v_ret = img_get_field(__pyx_v_self->_img_handle, __pyx_t_1);
 
-  /* "pycbf/img.pyx":56
- *     def get_field(self, str name):
+  /* "pycbf/img.pyx":62
+ *         """Get a single field by name."""
  *         cdef const char * ret = img_get_field(self._img_handle, name);
  *         if ret == NULL:             # <<<<<<<<<<<<<<
  *             raise KeyError("No field named " + name)
@@ -1945,24 +1961,24 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4get_field(struct __pyx_obj_5pycbf_3i
   __pyx_t_2 = ((__pyx_v_ret == NULL) != 0);
   if (unlikely(__pyx_t_2)) {
 
-    /* "pycbf/img.pyx":57
+    /* "pycbf/img.pyx":63
  *         cdef const char * ret = img_get_field(self._img_handle, name);
  *         if ret == NULL:
  *             raise KeyError("No field named " + name)             # <<<<<<<<<<<<<<
  *         return ret.decode()
  * 
  */
-    __pyx_t_3 = __Pyx_PyUnicode_ConcatSafe(__pyx_kp_u_No_field_named, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_ConcatSafe(__pyx_kp_u_No_field_named, __pyx_v_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_KeyError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_KeyError, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 57, __pyx_L1_error)
+    __PYX_ERR(0, 63, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":56
- *     def get_field(self, str name):
+    /* "pycbf/img.pyx":62
+ *         """Get a single field by name."""
  *         cdef const char * ret = img_get_field(self._img_handle, name);
  *         if ret == NULL:             # <<<<<<<<<<<<<<
  *             raise KeyError("No field named " + name)
@@ -1970,26 +1986,26 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4get_field(struct __pyx_obj_5pycbf_3i
  */
   }
 
-  /* "pycbf/img.pyx":58
+  /* "pycbf/img.pyx":64
  *         if ret == NULL:
  *             raise KeyError("No field named " + name)
  *         return ret.decode()             # <<<<<<<<<<<<<<
  * 
- *     def get_number(self, str name):
+ *     def get_number(self, str name : str) -> float:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = __Pyx_decode_c_string(__pyx_v_ret, 0, strlen(__pyx_v_ret), NULL, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_decode_c_string(__pyx_v_ret, 0, strlen(__pyx_v_ret), NULL, NULL, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 64, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_r = __pyx_t_4;
+  __pyx_r = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":54
+  /* "pycbf/img.pyx":59
  *             img.img_free_handle(self._img_handle)
  * 
- *     def get_field(self, str name):             # <<<<<<<<<<<<<<
+ *     def get_field(self, str name : str) -> str:             # <<<<<<<<<<<<<<
+ *         """Get a single field by name."""
  *         cdef const char * ret = img_get_field(self._img_handle, name);
- *         if ret == NULL:
  */
 
   /* function exit code */
@@ -2004,16 +2020,17 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4get_field(struct __pyx_obj_5pycbf_3i
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":60
+/* "pycbf/img.pyx":66
  *         return ret.decode()
  * 
- *     def get_number(self, str name):             # <<<<<<<<<<<<<<
- *         return img.img_get_number(self._img_handle, name)
- * 
+ *     def get_number(self, str name : str) -> float:             # <<<<<<<<<<<<<<
+ *         """
+ *         Retrieve a single field as a floating point number.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pycbf_3img_3Img_7get_number(PyObject *__pyx_v_self, PyObject *__pyx_v_name); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_6get_number[] = "\n        Retrieve a single field as a floating point number.\n\n        Note that due to the underlying implementation, this will only\n        return the _first_ number, for fields that contain multiple\n        space-separated numbers.\n        ";
 static PyObject *__pyx_pw_5pycbf_3img_3Img_7get_number(PyObject *__pyx_v_self, PyObject *__pyx_v_name) {
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -2021,7 +2038,7 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_7get_number(PyObject *__pyx_v_self, P
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_number (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 60, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_name), (&PyUnicode_Type), 1, "name", 1))) __PYX_ERR(0, 66, __pyx_L1_error)
   __pyx_r = __pyx_pf_5pycbf_3img_3Img_6get_number(((struct __pyx_obj_5pycbf_3img_Img *)__pyx_v_self), ((PyObject*)__pyx_v_name));
 
   /* function exit code */
@@ -2043,27 +2060,27 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6get_number(struct __pyx_obj_5pycbf_3
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_number", 0);
 
-  /* "pycbf/img.pyx":61
- * 
- *     def get_number(self, str name):
+  /* "pycbf/img.pyx":74
+ *         space-separated numbers.
+ *         """
  *         return img.img_get_number(self._img_handle, name)             # <<<<<<<<<<<<<<
  * 
  *     @classmethod
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L1_error)
-  __pyx_t_2 = PyFloat_FromDouble(img_get_number(__pyx_v_self->_img_handle, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_name); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_2 = PyFloat_FromDouble(img_get_number(__pyx_v_self->_img_handle, __pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":60
+  /* "pycbf/img.pyx":66
  *         return ret.decode()
  * 
- *     def get_number(self, str name):             # <<<<<<<<<<<<<<
- *         return img.img_get_number(self._img_handle, name)
- * 
+ *     def get_number(self, str name : str) -> float:             # <<<<<<<<<<<<<<
+ *         """
+ *         Retrieve a single field as a floating point number.
  */
 
   /* function exit code */
@@ -2077,18 +2094,19 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6get_number(struct __pyx_obj_5pycbf_3
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":64
+/* "pycbf/img.pyx":77
  * 
  *     @classmethod
- *     def read_mar345(cls, object filename):             # <<<<<<<<<<<<<<
- *         img = Img()
- *         strpath = os.fspath(filename)
+ *     def read_mar345(cls, object filename : Union[str, bytes, os.PathLike]) -> Img:             # <<<<<<<<<<<<<<
+ *         """
+ *         Read a mar345 image from filename
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pycbf_3img_3Img_9read_mar345(PyObject *__pyx_v_cls, PyObject *__pyx_v_filename); /*proto*/
-static PyObject *__pyx_pw_5pycbf_3img_3Img_9read_mar345(PyObject *__pyx_v_cls, PyObject *__pyx_v_filename) {
-  PyObject *__pyx_r = 0;
+static struct __pyx_obj_5pycbf_3img_Img *__pyx_pw_5pycbf_3img_3Img_9read_mar345(PyObject *__pyx_v_cls, PyObject *__pyx_v_filename); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_8read_mar345[] = "\n        Read a mar345 image from filename\n\n        This opens, reads the header, and reads the data, meaning that\n        you don't have to call Img.read_mar345header or read_mar245data\n        explicitly.\n\n        Args:\n            filename: The mar245 file to open\n\n        Returns:\n            A new Img object.\n        ";
+static struct __pyx_obj_5pycbf_3img_Img *__pyx_pw_5pycbf_3img_3Img_9read_mar345(PyObject *__pyx_v_cls, PyObject *__pyx_v_filename) {
+  struct __pyx_obj_5pycbf_3img_Img *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("read_mar345 (wrapper)", 0);
   __pyx_r = __pyx_pf_5pycbf_3img_3Img_8read_mar345(((PyTypeObject*)__pyx_v_cls), ((PyObject *)__pyx_v_filename));
@@ -2098,44 +2116,42 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_9read_mar345(PyObject *__pyx_v_cls, P
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObject *__pyx_v_cls, PyObject *__pyx_v_filename) {
+static struct __pyx_obj_5pycbf_3img_Img *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObject *__pyx_v_cls, PyObject *__pyx_v_filename) {
   struct __pyx_obj_5pycbf_3img_Img *__pyx_v_img = NULL;
   PyObject *__pyx_v_strpath = NULL;
-  CYTHON_UNUSED char *__pyx_v_filen;
-  PyObject *__pyx_r = NULL;
+  struct __pyx_obj_5pycbf_3img_Img *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
-  char *__pyx_t_4;
-  char const *__pyx_t_5;
+  char const *__pyx_t_4;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("read_mar345", 0);
 
-  /* "pycbf/img.pyx":65
- *     @classmethod
- *     def read_mar345(cls, object filename):
+  /* "pycbf/img.pyx":91
+ *             A new Img object.
+ *         """
  *         img = Img()             # <<<<<<<<<<<<<<
  *         strpath = os.fspath(filename)
- *         cdef char *filen = strpath
+ *         check_error(img_read_mar345(img._img_handle, strpath))
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_5pycbf_3img_Img)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_5pycbf_3img_Img)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_img = ((struct __pyx_obj_5pycbf_3img_Img *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pycbf/img.pyx":66
- *     def read_mar345(cls, object filename):
+  /* "pycbf/img.pyx":92
+ *         """
  *         img = Img()
  *         strpath = os.fspath(filename)             # <<<<<<<<<<<<<<
- *         cdef char *filen = strpath
  *         check_error(img_read_mar345(img._img_handle, strpath))
+ *         return img
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_os); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_fspath); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_fspath); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 92, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -2150,52 +2166,42 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObje
   }
   __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_v_filename) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_filename);
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_strpath = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "pycbf/img.pyx":67
+  /* "pycbf/img.pyx":93
  *         img = Img()
  *         strpath = os.fspath(filename)
- *         cdef char *filen = strpath             # <<<<<<<<<<<<<<
- *         check_error(img_read_mar345(img._img_handle, strpath))
- *         return img
- */
-  __pyx_t_4 = __Pyx_PyObject_AsWritableString(__pyx_v_strpath); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(0, 67, __pyx_L1_error)
-  __pyx_v_filen = __pyx_t_4;
-
-  /* "pycbf/img.pyx":68
- *         strpath = os.fspath(filename)
- *         cdef char *filen = strpath
  *         check_error(img_read_mar345(img._img_handle, strpath))             # <<<<<<<<<<<<<<
  *         return img
  * 
  */
-  __pyx_t_5 = __Pyx_PyObject_AsString(__pyx_v_strpath); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 68, __pyx_L1_error)
-  __pyx_t_1 = __pyx_f_5pycbf_3img_check_error(img_read_mar345(__pyx_v_img->_img_handle, __pyx_t_5)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_AsString(__pyx_v_strpath); if (unlikely((!__pyx_t_4) && PyErr_Occurred())) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pycbf_3img_check_error(img_read_mar345(__pyx_v_img->_img_handle, __pyx_t_4)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pycbf/img.pyx":69
- *         cdef char *filen = strpath
+  /* "pycbf/img.pyx":94
+ *         strpath = os.fspath(filename)
  *         check_error(img_read_mar345(img._img_handle, strpath))
  *         return img             # <<<<<<<<<<<<<<
  * 
- *     def read_mar345header(self, object fileobject):
+ *     def read_mar345header(self, object fileobject : IO) -> Any:
  */
-  __Pyx_XDECREF(__pyx_r);
+  __Pyx_XDECREF(((PyObject *)__pyx_r));
   __Pyx_INCREF(((PyObject *)__pyx_v_img));
-  __pyx_r = ((PyObject *)__pyx_v_img);
+  __pyx_r = __pyx_v_img;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":64
+  /* "pycbf/img.pyx":77
  * 
  *     @classmethod
- *     def read_mar345(cls, object filename):             # <<<<<<<<<<<<<<
- *         img = Img()
- *         strpath = os.fspath(filename)
+ *     def read_mar345(cls, object filename : Union[str, bytes, os.PathLike]) -> Img:             # <<<<<<<<<<<<<<
+ *         """
+ *         Read a mar345 image from filename
  */
 
   /* function exit code */
@@ -2208,21 +2214,22 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_8read_mar345(CYTHON_UNUSED PyTypeObje
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_img);
   __Pyx_XDECREF(__pyx_v_strpath);
-  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_XGIVEREF((PyObject *)__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":71
+/* "pycbf/img.pyx":96
  *         return img
  * 
- *     def read_mar345header(self, object fileobject):             # <<<<<<<<<<<<<<
- *         # Make sure that we don't rewire memory while references are handed out
- *         if self._active_views > 0:
+ *     def read_mar345header(self, object fileobject : IO) -> Any:             # <<<<<<<<<<<<<<
+ *         """
+ *         Read only the header of a mar345 file.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pycbf_3img_3Img_11read_mar345header(PyObject *__pyx_v_self, PyObject *__pyx_v_fileobject); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_10read_mar345header[] = "\n        Read only the header of a mar345 file.\n\n        Returns an internal object that can be passed through to\n        read_mar345data. Normally, you should instead use Img.read_mar345\n        to construct an Img object directly.\n\n        Args:\n            fileobject:\n                A file object, as returned by open. This must be backed\n                by a physical file object, as the underlying OS file\n                descriptor is extracted.\n\n        Raises:\n            ValueError:\n                The internal data buffer is referenced by other objects\n                (e.g. numpy arrays or memory views) and so cannot be\n                altered.\n        ";
 static PyObject *__pyx_pw_5pycbf_3img_3Img_11read_mar345header(PyObject *__pyx_v_self, PyObject *__pyx_v_fileobject) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -2251,8 +2258,8 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("read_mar345header", 0);
 
-  /* "pycbf/img.pyx":73
- *     def read_mar345header(self, object fileobject):
+  /* "pycbf/img.pyx":117
+ *         """
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -2261,21 +2268,21 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_self->_active_views > 0) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":74
+    /* "pycbf/img.pyx":118
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")             # <<<<<<<<<<<<<<
  *         cdef int mardata[4];
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 74, __pyx_L1_error)
+    __PYX_ERR(0, 118, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":73
- *     def read_mar345header(self, object fileobject):
+    /* "pycbf/img.pyx":117
+ *         """
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -2283,17 +2290,17 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
  */
   }
 
-  /* "pycbf/img.pyx":76
+  /* "pycbf/img.pyx":120
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
  *         cdef int mardata[4];
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)             # <<<<<<<<<<<<<<
  *         cdef FILE* file = fdopen(fd, "r")
  *         check_error(
  */
-  __pyx_t_3 = PyObject_AsFileDescriptor(__pyx_v_fileobject); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_3 = PyObject_AsFileDescriptor(__pyx_v_fileobject); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(0, 120, __pyx_L1_error)
   __pyx_v_fd = __pyx_t_3;
 
-  /* "pycbf/img.pyx":77
+  /* "pycbf/img.pyx":121
  *         cdef int mardata[4];
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  *         cdef FILE* file = fdopen(fd, "r")             # <<<<<<<<<<<<<<
@@ -2302,27 +2309,27 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
  */
   __pyx_v_file = fdopen(__pyx_v_fd, ((char const *)"r"));
 
-  /* "pycbf/img.pyx":78
+  /* "pycbf/img.pyx":122
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  *         cdef FILE* file = fdopen(fd, "r")
  *         check_error(             # <<<<<<<<<<<<<<
  *             img.img_read_mar345header(self._img_handle, file, mardata)
  *         )
  */
-  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_read_mar345header(__pyx_v_self->_img_handle, __pyx_v_file, __pyx_v_mardata)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_read_mar345header(__pyx_v_self->_img_handle, __pyx_v_file, __pyx_v_mardata)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pycbf/img.pyx":85
+  /* "pycbf/img.pyx":129
  *         # - Since the code we are replacing explicitly winds the file
  *         # back to the .tell() position, make that work here.
  *         fileobject.seek(ftell(file))             # <<<<<<<<<<<<<<
  *         return tuple(mardata)
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_fileobject, __pyx_n_s_seek); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_fileobject, __pyx_n_s_seek); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyInt_From_long(ftell(__pyx_v_file)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_long(ftell(__pyx_v_file)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -2337,34 +2344,34 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
   __pyx_t_2 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 85, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pycbf/img.pyx":86
+  /* "pycbf/img.pyx":130
  *         # back to the .tell() position, make that work here.
  *         fileobject.seek(ftell(file))
  *         return tuple(mardata)             # <<<<<<<<<<<<<<
  * 
- *     def read_mar345data(self, object fileobject, object org_data):
+ *     def read_mar345data(
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_carray_to_py_int(__pyx_v_mardata, 4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_carray_to_py_int(__pyx_v_mardata, 4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PySequence_Tuple(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PySequence_Tuple(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":71
+  /* "pycbf/img.pyx":96
  *         return img
  * 
- *     def read_mar345header(self, object fileobject):             # <<<<<<<<<<<<<<
- *         # Make sure that we don't rewire memory while references are handed out
- *         if self._active_views > 0:
+ *     def read_mar345header(self, object fileobject : IO) -> Any:             # <<<<<<<<<<<<<<
+ *         """
+ *         Read only the header of a mar345 file.
  */
 
   /* function exit code */
@@ -2381,16 +2388,17 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_10read_mar345header(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":88
+/* "pycbf/img.pyx":132
  *         return tuple(mardata)
  * 
- *     def read_mar345data(self, object fileobject, object org_data):             # <<<<<<<<<<<<<<
- *         # Make sure that we don't rewire memory while references are handed out
- *         if self._active_views > 0:
+ *     def read_mar345data(             # <<<<<<<<<<<<<<
+ *             self,
+ *             object fileobject : IO,
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pycbf_3img_3Img_13read_mar345data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_12read_mar345data[] = "\n        Read the data out of a file positioned after the header segment.\n\n        Normally, you should use Img.read_mar245data instead.\n\n        Args:\n            fileobject:\n                A file object, as returned by open. This must be backed\n                by a physical file object, as the underlying OS file\n                descriptor is extracted. This files position (as reported\n                by fileobject.tell()) must be at the position it was\n                left in after the call to read_mar245header.\n            org_data:\n                The internal object returned by the previous call to\n                read_mar345header.\n\n        Raises:\n            ValueError:\n                The internal data buffer is referenced by other objects\n                (e.g. numpy arrays or memory views) and so cannot be\n                altered.\n        ";
 static PyObject *__pyx_pw_5pycbf_3img_3Img_13read_mar345data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_fileobject = 0;
   PyObject *__pyx_v_org_data = 0;
@@ -2423,11 +2431,11 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_13read_mar345data(PyObject *__pyx_v_s
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_org_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("read_mar345data", 1, 2, 2, 1); __PYX_ERR(0, 88, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("read_mar345data", 1, 2, 2, 1); __PYX_ERR(0, 132, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read_mar345data") < 0)) __PYX_ERR(0, 88, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read_mar345data") < 0)) __PYX_ERR(0, 132, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2440,7 +2448,7 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_13read_mar345data(PyObject *__pyx_v_s
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("read_mar345data", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 88, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("read_mar345data", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 132, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pycbf.img.Img.read_mar345data", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2469,8 +2477,8 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("read_mar345data", 0);
 
-  /* "pycbf/img.pyx":90
- *     def read_mar345data(self, object fileobject, object org_data):
+  /* "pycbf/img.pyx":160
+ *         """
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -2479,21 +2487,21 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
   __pyx_t_1 = ((__pyx_v_self->_active_views > 0) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":91
+    /* "pycbf/img.pyx":161
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")             # <<<<<<<<<<<<<<
  *         if len(org_data) != 4:
  *             raise ValueError("org_data appears to be in incorrect form for header data")
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 91, __pyx_L1_error)
+    __PYX_ERR(0, 161, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":90
- *     def read_mar345data(self, object fileobject, object org_data):
+    /* "pycbf/img.pyx":160
+ *         """
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
@@ -2501,31 +2509,31 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
  */
   }
 
-  /* "pycbf/img.pyx":92
+  /* "pycbf/img.pyx":162
  *         if self._active_views > 0:
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
  *         if len(org_data) != 4:             # <<<<<<<<<<<<<<
  *             raise ValueError("org_data appears to be in incorrect form for header data")
  *         cdef int[4] mardata = org_data
  */
-  __pyx_t_3 = PyObject_Length(__pyx_v_org_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_t_3 = PyObject_Length(__pyx_v_org_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 162, __pyx_L1_error)
   __pyx_t_1 = ((__pyx_t_3 != 4) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":93
+    /* "pycbf/img.pyx":163
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
  *         if len(org_data) != 4:
  *             raise ValueError("org_data appears to be in incorrect form for header data")             # <<<<<<<<<<<<<<
  *         cdef int[4] mardata = org_data
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 93, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 163, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 93, __pyx_L1_error)
+    __PYX_ERR(0, 163, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":92
+    /* "pycbf/img.pyx":162
  *         if self._active_views > 0:
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
  *         if len(org_data) != 4:             # <<<<<<<<<<<<<<
@@ -2534,27 +2542,27 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
  */
   }
 
-  /* "pycbf/img.pyx":94
+  /* "pycbf/img.pyx":164
  *         if len(org_data) != 4:
  *             raise ValueError("org_data appears to be in incorrect form for header data")
  *         cdef int[4] mardata = org_data             # <<<<<<<<<<<<<<
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  *         cdef FILE* file = fdopen(fd, "r")
  */
-  if (unlikely(__Pyx_carray_from_py_int(__pyx_v_org_data, __pyx_t_4, 4) < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
+  if (unlikely(__Pyx_carray_from_py_int(__pyx_v_org_data, __pyx_t_4, 4) < 0)) __PYX_ERR(0, 164, __pyx_L1_error)
   memcpy(&(__pyx_v_mardata[0]), __pyx_t_4, sizeof(__pyx_v_mardata[0]) * (4));
 
-  /* "pycbf/img.pyx":95
+  /* "pycbf/img.pyx":165
  *             raise ValueError("org_data appears to be in incorrect form for header data")
  *         cdef int[4] mardata = org_data
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)             # <<<<<<<<<<<<<<
  *         cdef FILE* file = fdopen(fd, "r")
  *         check_error(
  */
-  __pyx_t_5 = PyObject_AsFileDescriptor(__pyx_v_fileobject); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_5 = PyObject_AsFileDescriptor(__pyx_v_fileobject); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 165, __pyx_L1_error)
   __pyx_v_fd = __pyx_t_5;
 
-  /* "pycbf/img.pyx":96
+  /* "pycbf/img.pyx":166
  *         cdef int[4] mardata = org_data
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  *         cdef FILE* file = fdopen(fd, "r")             # <<<<<<<<<<<<<<
@@ -2563,23 +2571,23 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
  */
   __pyx_v_file = fdopen(__pyx_v_fd, ((char const *)"r"));
 
-  /* "pycbf/img.pyx":97
+  /* "pycbf/img.pyx":167
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  *         cdef FILE* file = fdopen(fd, "r")
  *         check_error(             # <<<<<<<<<<<<<<
  *             img.img_read_mar345data(self._img_handle, file, mardata)
  *         )
  */
-  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_read_mar345data(__pyx_v_self->_img_handle, __pyx_v_file, __pyx_v_mardata)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_read_mar345data(__pyx_v_self->_img_handle, __pyx_v_file, __pyx_v_mardata)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pycbf/img.pyx":88
+  /* "pycbf/img.pyx":132
  *         return tuple(mardata)
  * 
- *     def read_mar345data(self, object fileobject, object org_data):             # <<<<<<<<<<<<<<
- *         # Make sure that we don't rewire memory while references are handed out
- *         if self._active_views > 0:
+ *     def read_mar345data(             # <<<<<<<<<<<<<<
+ *             self,
+ *             object fileobject : IO,
  */
 
   /* function exit code */
@@ -2595,16 +2603,17 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_12read_mar345data(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":101
+/* "pycbf/img.pyx":171
  *         )
  * 
- *     def set_dimensions(self, int columns, int rows):             # <<<<<<<<<<<<<<
- *         if self._active_views > 0:
- *             raise ValueError("Cannot resize data: There are unfreed references to the image data")
+ *     def set_dimensions(self, int columns, int rows) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         Resize the internal image data object.
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pycbf_3img_3Img_15set_dimensions(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_5pycbf_3img_3Img_14set_dimensions[] = "\n        Resize the internal image data object.\n\n        Raises:\n            ValueError:\n                The internal data buffer is referenced by other objects\n                (e.g. numpy arrays or memory views) and so cannot be\n                altered.\n        ";
 static PyObject *__pyx_pw_5pycbf_3img_3Img_15set_dimensions(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_v_columns;
   int __pyx_v_rows;
@@ -2637,11 +2646,11 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_15set_dimensions(PyObject *__pyx_v_se
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_rows)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("set_dimensions", 1, 2, 2, 1); __PYX_ERR(0, 101, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("set_dimensions", 1, 2, 2, 1); __PYX_ERR(0, 171, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_dimensions") < 0)) __PYX_ERR(0, 101, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_dimensions") < 0)) __PYX_ERR(0, 171, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -2649,12 +2658,12 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_15set_dimensions(PyObject *__pyx_v_se
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_columns = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_columns == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L3_error)
-    __pyx_v_rows = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_rows == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L3_error)
+    __pyx_v_columns = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_columns == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L3_error)
+    __pyx_v_rows = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_rows == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_dimensions", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 101, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_dimensions", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 171, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pycbf.img.Img.set_dimensions", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2677,9 +2686,9 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_14set_dimensions(struct __pyx_obj_5py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_dimensions", 0);
 
-  /* "pycbf/img.pyx":102
+  /* "pycbf/img.pyx":182
+ *         """
  * 
- *     def set_dimensions(self, int columns, int rows):
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot resize data: There are unfreed references to the image data")
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
@@ -2687,45 +2696,45 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_14set_dimensions(struct __pyx_obj_5py
   __pyx_t_1 = ((__pyx_v_self->_active_views > 0) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":103
- *     def set_dimensions(self, int columns, int rows):
+    /* "pycbf/img.pyx":183
+ * 
  *         if self._active_views > 0:
  *             raise ValueError("Cannot resize data: There are unfreed references to the image data")             # <<<<<<<<<<<<<<
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 183, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 103, __pyx_L1_error)
+    __PYX_ERR(0, 183, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":102
+    /* "pycbf/img.pyx":182
+ *         """
  * 
- *     def set_dimensions(self, int columns, int rows):
  *         if self._active_views > 0:             # <<<<<<<<<<<<<<
  *             raise ValueError("Cannot resize data: There are unfreed references to the image data")
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
  */
   }
 
-  /* "pycbf/img.pyx":104
+  /* "pycbf/img.pyx":184
  *         if self._active_views > 0:
  *             raise ValueError("Cannot resize data: There are unfreed references to the image data")
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))             # <<<<<<<<<<<<<<
  * 
  *     def set_tags(self, int number):
  */
-  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_set_dimensions(__pyx_v_self->_img_handle, __pyx_v_columns, __pyx_v_rows)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5pycbf_3img_check_error(img_set_dimensions(__pyx_v_self->_img_handle, __pyx_v_columns, __pyx_v_rows)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 184, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pycbf/img.pyx":101
+  /* "pycbf/img.pyx":171
  *         )
  * 
- *     def set_dimensions(self, int columns, int rows):             # <<<<<<<<<<<<<<
- *         if self._active_views > 0:
- *             raise ValueError("Cannot resize data: There are unfreed references to the image data")
+ *     def set_dimensions(self, int columns, int rows) -> None:             # <<<<<<<<<<<<<<
+ *         """
+ *         Resize the internal image data object.
  */
 
   /* function exit code */
@@ -2741,7 +2750,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_14set_dimensions(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":106
+/* "pycbf/img.pyx":186
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
  * 
  *     def set_tags(self, int number):             # <<<<<<<<<<<<<<
@@ -2760,7 +2769,7 @@ static PyObject *__pyx_pw_5pycbf_3img_3Img_17set_tags(PyObject *__pyx_v_self, Py
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_tags (wrapper)", 0);
   assert(__pyx_arg_number); {
-    __pyx_v_number = __Pyx_PyInt_As_int(__pyx_arg_number); if (unlikely((__pyx_v_number == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L3_error)
+    __pyx_v_number = __Pyx_PyInt_As_int(__pyx_arg_number); if (unlikely((__pyx_v_number == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 186, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -2784,18 +2793,18 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_16set_tags(struct __pyx_obj_5pycbf_3i
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("set_tags", 0);
 
-  /* "pycbf/img.pyx":107
+  /* "pycbf/img.pyx":187
  * 
  *     def set_tags(self, int number):
  *         check_error(img.img_set_tags(self._img_handle, number))             # <<<<<<<<<<<<<<
  * 
  *     @property
  */
-  __pyx_t_1 = __pyx_f_5pycbf_3img_check_error(img_set_tags(__pyx_v_self->_img_handle, __pyx_v_number)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pycbf_3img_check_error(img_set_tags(__pyx_v_self->_img_handle, __pyx_v_number)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pycbf/img.pyx":106
+  /* "pycbf/img.pyx":186
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
  * 
  *     def set_tags(self, int number):             # <<<<<<<<<<<<<<
@@ -2816,7 +2825,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_16set_tags(struct __pyx_obj_5pycbf_3i
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":110
+/* "pycbf/img.pyx":190
  * 
  *     @property
  *     def rows(self):             # <<<<<<<<<<<<<<
@@ -2846,7 +2855,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4rows___get__(struct __pyx_obj_5pycbf
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pycbf/img.pyx":111
+  /* "pycbf/img.pyx":191
  *     @property
  *     def rows(self):
  *         return self._img_handle.size[1]             # <<<<<<<<<<<<<<
@@ -2854,13 +2863,13 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4rows___get__(struct __pyx_obj_5pycbf
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_self->_img_handle->size[1])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_self->_img_handle->size[1])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":110
+  /* "pycbf/img.pyx":190
  * 
  *     @property
  *     def rows(self):             # <<<<<<<<<<<<<<
@@ -2879,7 +2888,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_4rows___get__(struct __pyx_obj_5pycbf
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":114
+/* "pycbf/img.pyx":194
  * 
  *     @property
  *     def columns(self):             # <<<<<<<<<<<<<<
@@ -2909,7 +2918,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_7columns___get__(struct __pyx_obj_5py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pycbf/img.pyx":115
+  /* "pycbf/img.pyx":195
  *     @property
  *     def columns(self):
  *         return self._img_handle.size[0]             # <<<<<<<<<<<<<<
@@ -2917,13 +2926,13 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_7columns___get__(struct __pyx_obj_5py
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_self->_img_handle->size[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int((__pyx_v_self->_img_handle->size[0])); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 195, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":114
+  /* "pycbf/img.pyx":194
  * 
  *     @property
  *     def columns(self):             # <<<<<<<<<<<<<<
@@ -2942,12 +2951,12 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_7columns___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":118
+/* "pycbf/img.pyx":198
  * 
  *     @property
- *     def rowmajor(self):             # <<<<<<<<<<<<<<
+ *     def rowmajor(self) -> bool:             # <<<<<<<<<<<<<<
+ *         """Is the internal data object row_major order?"""
  *         return self._img_handle.rowmajor
- * 
  */
 
 /* Python wrapper */
@@ -2972,26 +2981,26 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_8rowmajor___get__(struct __pyx_obj_5p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pycbf/img.pyx":119
- *     @property
- *     def rowmajor(self):
+  /* "pycbf/img.pyx":200
+ *     def rowmajor(self) -> bool:
+ *         """Is the internal data object row_major order?"""
  *         return self._img_handle.rowmajor             # <<<<<<<<<<<<<<
  * 
  *     def active_views(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->_img_handle->rowmajor); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->_img_handle->rowmajor); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":118
+  /* "pycbf/img.pyx":198
  * 
  *     @property
- *     def rowmajor(self):             # <<<<<<<<<<<<<<
+ *     def rowmajor(self) -> bool:             # <<<<<<<<<<<<<<
+ *         """Is the internal data object row_major order?"""
  *         return self._img_handle.rowmajor
- * 
  */
 
   /* function exit code */
@@ -3005,7 +3014,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_8rowmajor___get__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":121
+/* "pycbf/img.pyx":202
  *         return self._img_handle.rowmajor
  * 
  *     def active_views(self):             # <<<<<<<<<<<<<<
@@ -3035,7 +3044,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_18active_views(struct __pyx_obj_5pycb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("active_views", 0);
 
-  /* "pycbf/img.pyx":122
+  /* "pycbf/img.pyx":203
  * 
  *     def active_views(self):
  *         return self._active_views             # <<<<<<<<<<<<<<
@@ -3043,13 +3052,13 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_18active_views(struct __pyx_obj_5pycb
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_active_views); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->_active_views); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":121
+  /* "pycbf/img.pyx":202
  *         return self._img_handle.rowmajor
  * 
  *     def active_views(self):             # <<<<<<<<<<<<<<
@@ -3068,12 +3077,12 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_18active_views(struct __pyx_obj_5pycb
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":125
+/* "pycbf/img.pyx":206
  * 
  *     @property
- *     def fields(self):             # <<<<<<<<<<<<<<
+ *     def fields(self) -> Dict[str, str]:             # <<<<<<<<<<<<<<
+ *         """Retrieve a dictionary of every field on the Img object"""
  *         tags = {}
- *         cdef int index = 0
  */
 
 /* Python wrapper */
@@ -3104,20 +3113,20 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6fields___get__(struct __pyx_obj_5pyc
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pycbf/img.pyx":126
- *     @property
- *     def fields(self):
+  /* "pycbf/img.pyx":208
+ *     def fields(self) -> Dict[str, str]:
+ *         """Retrieve a dictionary of every field on the Img object"""
  *         tags = {}             # <<<<<<<<<<<<<<
  *         cdef int index = 0
  *         cdef const char *tag
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 208, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_tags = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pycbf/img.pyx":127
- *     def fields(self):
+  /* "pycbf/img.pyx":209
+ *         """Retrieve a dictionary of every field on the Img object"""
  *         tags = {}
  *         cdef int index = 0             # <<<<<<<<<<<<<<
  *         cdef const char *tag
@@ -3125,7 +3134,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6fields___get__(struct __pyx_obj_5pyc
  */
   __pyx_v_index = 0;
 
-  /* "pycbf/img.pyx":130
+  /* "pycbf/img.pyx":212
  *         cdef const char *tag
  *         cdef const char *data
  *         while img_get_next_field(self._img_handle, &tag, &data, &index) != ImageError.BAD_ARGUMENT:             # <<<<<<<<<<<<<<
@@ -3136,23 +3145,23 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6fields___get__(struct __pyx_obj_5pyc
     __pyx_t_2 = ((img_get_next_field(__pyx_v_self->_img_handle, (&__pyx_v_tag), (&__pyx_v_data), (&__pyx_v_index)) != __pyx_e_5pycbf_3img_BAD_ARGUMENT) != 0);
     if (!__pyx_t_2) break;
 
-    /* "pycbf/img.pyx":131
+    /* "pycbf/img.pyx":213
  *         cdef const char *data
  *         while img_get_next_field(self._img_handle, &tag, &data, &index) != ImageError.BAD_ARGUMENT:
  *             tags[tag.decode()] = data.decode()             # <<<<<<<<<<<<<<
  * 
  *         return tags
  */
-    __pyx_t_1 = __Pyx_decode_c_string(__pyx_v_data, 0, strlen(__pyx_v_data), NULL, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_decode_c_string(__pyx_v_data, 0, strlen(__pyx_v_data), NULL, NULL, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_decode_c_string(__pyx_v_tag, 0, strlen(__pyx_v_tag), NULL, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_decode_c_string(__pyx_v_tag, 0, strlen(__pyx_v_tag), NULL, NULL, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    if (unlikely(PyDict_SetItem(__pyx_v_tags, __pyx_t_3, __pyx_t_1) < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
+    if (unlikely(PyDict_SetItem(__pyx_v_tags, __pyx_t_3, __pyx_t_1) < 0)) __PYX_ERR(0, 213, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "pycbf/img.pyx":133
+  /* "pycbf/img.pyx":215
  *             tags[tag.decode()] = data.decode()
  * 
  *         return tags             # <<<<<<<<<<<<<<
@@ -3164,12 +3173,12 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6fields___get__(struct __pyx_obj_5pyc
   __pyx_r = __pyx_v_tags;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":125
+  /* "pycbf/img.pyx":206
  * 
  *     @property
- *     def fields(self):             # <<<<<<<<<<<<<<
+ *     def fields(self) -> Dict[str, str]:             # <<<<<<<<<<<<<<
+ *         """Retrieve a dictionary of every field on the Img object"""
  *         tags = {}
- *         cdef int index = 0
  */
 
   /* function exit code */
@@ -3185,12 +3194,12 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_6fields___get__(struct __pyx_obj_5pyc
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":136
+/* "pycbf/img.pyx":218
  * 
  *     @property
  *     def image(self):             # <<<<<<<<<<<<<<
- *         """Return the image data"""
- *         if self._img_handle.image == NULL:
+ *         """
+ *         Return the image data, as a numpy array.
  */
 
 /* Python wrapper */
@@ -3218,9 +3227,9 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pycbf/img.pyx":138
- *     def image(self):
- *         """Return the image data"""
+  /* "pycbf/img.pyx":224
+ *         You can also convert the Img object directly via np.asarray(obj).
+ *         """
  *         if self._img_handle.image == NULL:             # <<<<<<<<<<<<<<
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:
@@ -3228,57 +3237,57 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
   __pyx_t_1 = ((__pyx_v_self->_img_handle->image == NULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":139
- *         """Return the image data"""
+    /* "pycbf/img.pyx":225
+ *         """
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data - cannot generate image data")             # <<<<<<<<<<<<<<
  *         if np == None:
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 139, __pyx_L1_error)
+    __PYX_ERR(0, 225, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":138
- *     def image(self):
- *         """Return the image data"""
+    /* "pycbf/img.pyx":224
+ *         You can also convert the Img object directly via np.asarray(obj).
+ *         """
  *         if self._img_handle.image == NULL:             # <<<<<<<<<<<<<<
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:
  */
   }
 
-  /* "pycbf/img.pyx":140
+  /* "pycbf/img.pyx":226
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:             # <<<<<<<<<<<<<<
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 226, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyObject_RichCompare(__pyx_t_2, Py_None, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_t_2, Py_None, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 226, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 226, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":141
+    /* "pycbf/img.pyx":227
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")             # <<<<<<<<<<<<<<
  * 
  *         return np.asarray(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 141, __pyx_L1_error)
+    __PYX_ERR(0, 227, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":140
+    /* "pycbf/img.pyx":226
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:             # <<<<<<<<<<<<<<
@@ -3287,7 +3296,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
  */
   }
 
-  /* "pycbf/img.pyx":143
+  /* "pycbf/img.pyx":229
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")
  * 
  *         return np.asarray(self)             # <<<<<<<<<<<<<<
@@ -3295,9 +3304,9 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 229, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_asarray); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -3312,19 +3321,19 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
   }
   __pyx_t_3 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_2, ((PyObject *)__pyx_v_self)) : __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_self));
   __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 143, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "pycbf/img.pyx":136
+  /* "pycbf/img.pyx":218
  * 
  *     @property
  *     def image(self):             # <<<<<<<<<<<<<<
- *         """Return the image data"""
- *         if self._img_handle.image == NULL:
+ *         """
+ *         Return the image data, as a numpy array.
  */
 
   /* function exit code */
@@ -3340,7 +3349,7 @@ static PyObject *__pyx_pf_5pycbf_3img_3Img_5image___get__(struct __pyx_obj_5pycb
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":145
+/* "pycbf/img.pyx":231
  *         return np.asarray(self)
  * 
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):             # <<<<<<<<<<<<<<
@@ -3379,7 +3388,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   __pyx_v_buffer->obj = Py_None; __Pyx_INCREF(Py_None);
   __Pyx_GIVEREF(__pyx_v_buffer->obj);
 
-  /* "pycbf/img.pyx":146
+  /* "pycbf/img.pyx":232
  * 
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):
  *         if self._img_handle.image == NULL:             # <<<<<<<<<<<<<<
@@ -3389,20 +3398,20 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   __pyx_t_1 = ((__pyx_v_self->_img_handle->image == NULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pycbf/img.pyx":147
+    /* "pycbf/img.pyx":233
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data yet - cannot generate image data")             # <<<<<<<<<<<<<<
  *         assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"
  * 
  */
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 233, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 147, __pyx_L1_error)
+    __PYX_ERR(0, 233, __pyx_L1_error)
 
-    /* "pycbf/img.pyx":146
+    /* "pycbf/img.pyx":232
  * 
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):
  *         if self._img_handle.image == NULL:             # <<<<<<<<<<<<<<
@@ -3411,7 +3420,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   }
 
-  /* "pycbf/img.pyx":148
+  /* "pycbf/img.pyx":234
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data yet - cannot generate image data")
  *         assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"             # <<<<<<<<<<<<<<
@@ -3422,12 +3431,12 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!((!(__pyx_v_self->_img_handle->rowmajor != 0)) != 0))) {
       PyErr_SetObject(PyExc_AssertionError, __pyx_kp_u_Rowmajor_appears_only_used_with);
-      __PYX_ERR(0, 148, __pyx_L1_error)
+      __PYX_ERR(0, 234, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pycbf/img.pyx":153
+  /* "pycbf/img.pyx":239
  *         #       size1 == img_org_data[0] == cols, size2 == img_org_data[1] == rows
  *         # rows
  *         self.shape[0] = self._img_handle.size[1]             # <<<<<<<<<<<<<<
@@ -3436,7 +3445,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   (__pyx_v_self->shape[0]) = (__pyx_v_self->_img_handle->size[1]);
 
-  /* "pycbf/img.pyx":154
+  /* "pycbf/img.pyx":240
  *         # rows
  *         self.shape[0] = self._img_handle.size[1]
  *         self.strides[0] = sizeof(int)*self.shape[1]             # <<<<<<<<<<<<<<
@@ -3445,7 +3454,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   (__pyx_v_self->strides[0]) = ((sizeof(int)) * (__pyx_v_self->shape[1]));
 
-  /* "pycbf/img.pyx":156
+  /* "pycbf/img.pyx":242
  *         self.strides[0] = sizeof(int)*self.shape[1]
  *         # cols
  *         self.shape[1] = self._img_handle.size[0]             # <<<<<<<<<<<<<<
@@ -3454,7 +3463,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   (__pyx_v_self->shape[1]) = (__pyx_v_self->_img_handle->size[0]);
 
-  /* "pycbf/img.pyx":157
+  /* "pycbf/img.pyx":243
  *         # cols
  *         self.shape[1] = self._img_handle.size[0]
  *         self.strides[1] = sizeof(int)             # <<<<<<<<<<<<<<
@@ -3463,7 +3472,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   (__pyx_v_self->strides[1]) = (sizeof(int));
 
-  /* "pycbf/img.pyx":160
+  /* "pycbf/img.pyx":246
  * 
  *         # Note: self is automatically incref'd by cython
  *         buffer.obj = self             # <<<<<<<<<<<<<<
@@ -3476,7 +3485,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   __Pyx_DECREF(__pyx_v_buffer->obj);
   __pyx_v_buffer->obj = ((PyObject *)__pyx_v_self);
 
-  /* "pycbf/img.pyx":161
+  /* "pycbf/img.pyx":247
  *         # Note: self is automatically incref'd by cython
  *         buffer.obj = self
  *         buffer.buf = self._img_handle.image             # <<<<<<<<<<<<<<
@@ -3486,7 +3495,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   __pyx_t_3 = __pyx_v_self->_img_handle->image;
   __pyx_v_buffer->buf = __pyx_t_3;
 
-  /* "pycbf/img.pyx":162
+  /* "pycbf/img.pyx":248
  *         buffer.obj = self
  *         buffer.buf = self._img_handle.image
  *         buffer.len = self.shape[0] * self.shape[1] * sizeof(int)             # <<<<<<<<<<<<<<
@@ -3495,7 +3504,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->len = (((__pyx_v_self->shape[0]) * (__pyx_v_self->shape[1])) * (sizeof(int)));
 
-  /* "pycbf/img.pyx":163
+  /* "pycbf/img.pyx":249
  *         buffer.buf = self._img_handle.image
  *         buffer.len = self.shape[0] * self.shape[1] * sizeof(int)
  *         buffer.itemsize = sizeof(int)             # <<<<<<<<<<<<<<
@@ -3504,7 +3513,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->itemsize = (sizeof(int));
 
-  /* "pycbf/img.pyx":164
+  /* "pycbf/img.pyx":250
  *         buffer.len = self.shape[0] * self.shape[1] * sizeof(int)
  *         buffer.itemsize = sizeof(int)
  *         buffer.ndim = 2             # <<<<<<<<<<<<<<
@@ -3513,7 +3522,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->ndim = 2;
 
-  /* "pycbf/img.pyx":165
+  /* "pycbf/img.pyx":251
  *         buffer.itemsize = sizeof(int)
  *         buffer.ndim = 2
  *         buffer.format = "i"             # <<<<<<<<<<<<<<
@@ -3522,7 +3531,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->format = ((char *)"i");
 
-  /* "pycbf/img.pyx":166
+  /* "pycbf/img.pyx":252
  *         buffer.ndim = 2
  *         buffer.format = "i"
  *         buffer.readonly = 0             # <<<<<<<<<<<<<<
@@ -3531,7 +3540,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->readonly = 0;
 
-  /* "pycbf/img.pyx":167
+  /* "pycbf/img.pyx":253
  *         buffer.format = "i"
  *         buffer.readonly = 0
  *         buffer.shape = self.shape             # <<<<<<<<<<<<<<
@@ -3541,7 +3550,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   __pyx_t_4 = __pyx_v_self->shape;
   __pyx_v_buffer->shape = __pyx_t_4;
 
-  /* "pycbf/img.pyx":168
+  /* "pycbf/img.pyx":254
  *         buffer.readonly = 0
  *         buffer.shape = self.shape
  *         buffer.strides = NULL             # <<<<<<<<<<<<<<
@@ -3550,7 +3559,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->strides = NULL;
 
-  /* "pycbf/img.pyx":169
+  /* "pycbf/img.pyx":255
  *         buffer.shape = self.shape
  *         buffer.strides = NULL
  *         buffer.suboffsets = NULL             # <<<<<<<<<<<<<<
@@ -3559,7 +3568,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_buffer->suboffsets = NULL;
 
-  /* "pycbf/img.pyx":171
+  /* "pycbf/img.pyx":257
  *         buffer.suboffsets = NULL
  * 
  *         self._active_views += 1             # <<<<<<<<<<<<<<
@@ -3568,7 +3577,7 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
  */
   __pyx_v_self->_active_views = (__pyx_v_self->_active_views + 1);
 
-  /* "pycbf/img.pyx":145
+  /* "pycbf/img.pyx":231
  *         return np.asarray(self)
  * 
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):             # <<<<<<<<<<<<<<
@@ -3598,12 +3607,12 @@ static int __pyx_pf_5pycbf_3img_3Img_20__getbuffer__(struct __pyx_obj_5pycbf_3im
   return __pyx_r;
 }
 
-/* "pycbf/img.pyx":173
+/* "pycbf/img.pyx":259
  *         self._active_views += 1
  * 
  *     def __releasebuffer__(self, Py_buffer *buffer):             # <<<<<<<<<<<<<<
  *         self._active_views -= 1
- *         assert self._active_views >= 1
+ *         assert self._active_views >= 0
  */
 
 /* Python wrapper */
@@ -3624,34 +3633,34 @@ static void __pyx_pf_5pycbf_3img_3Img_22__releasebuffer__(struct __pyx_obj_5pycb
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__releasebuffer__", 0);
 
-  /* "pycbf/img.pyx":174
+  /* "pycbf/img.pyx":260
  * 
  *     def __releasebuffer__(self, Py_buffer *buffer):
  *         self._active_views -= 1             # <<<<<<<<<<<<<<
- *         assert self._active_views >= 1
+ *         assert self._active_views >= 0
  */
   __pyx_v_self->_active_views = (__pyx_v_self->_active_views - 1);
 
-  /* "pycbf/img.pyx":175
+  /* "pycbf/img.pyx":261
  *     def __releasebuffer__(self, Py_buffer *buffer):
  *         self._active_views -= 1
- *         assert self._active_views >= 1             # <<<<<<<<<<<<<<
+ *         assert self._active_views >= 0             # <<<<<<<<<<<<<<
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
-    if (unlikely(!((__pyx_v_self->_active_views >= 1) != 0))) {
+    if (unlikely(!((__pyx_v_self->_active_views >= 0) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 175, __pyx_L1_error)
+      __PYX_ERR(0, 261, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "pycbf/img.pyx":173
+  /* "pycbf/img.pyx":259
  *         self._active_views += 1
  * 
  *     def __releasebuffer__(self, Py_buffer *buffer):             # <<<<<<<<<<<<<<
  *         self._active_views -= 1
- *         assert self._active_views >= 1
+ *         assert self._active_views >= 0
  */
 
   /* function exit code */
@@ -4375,12 +4384,12 @@ static PyObject *__pyx_getprop_5pycbf_3img_3Img_image(PyObject *o, CYTHON_UNUSED
 }
 
 static PyMethodDef __pyx_methods_5pycbf_3img_Img[] = {
-  {"get_field", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_5get_field, METH_O, 0},
-  {"get_number", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_7get_number, METH_O, 0},
-  {"read_mar345", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_9read_mar345, METH_O, 0},
-  {"read_mar345header", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_11read_mar345header, METH_O, 0},
-  {"read_mar345data", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pycbf_3img_3Img_13read_mar345data, METH_VARARGS|METH_KEYWORDS, 0},
-  {"set_dimensions", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pycbf_3img_3Img_15set_dimensions, METH_VARARGS|METH_KEYWORDS, 0},
+  {"get_field", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_5get_field, METH_O, __pyx_doc_5pycbf_3img_3Img_4get_field},
+  {"get_number", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_7get_number, METH_O, __pyx_doc_5pycbf_3img_3Img_6get_number},
+  {"read_mar345", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_9read_mar345, METH_O, __pyx_doc_5pycbf_3img_3Img_8read_mar345},
+  {"read_mar345header", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_11read_mar345header, METH_O, __pyx_doc_5pycbf_3img_3Img_10read_mar345header},
+  {"read_mar345data", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pycbf_3img_3Img_13read_mar345data, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pycbf_3img_3Img_12read_mar345data},
+  {"set_dimensions", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pycbf_3img_3Img_15set_dimensions, METH_VARARGS|METH_KEYWORDS, __pyx_doc_5pycbf_3img_3Img_14set_dimensions},
   {"set_tags", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_17set_tags, METH_O, 0},
   {"active_views", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_19active_views, METH_NOARGS, 0},
   {"__reduce_cython__", (PyCFunction)__pyx_pw_5pycbf_3img_3Img_25__reduce_cython__, METH_NOARGS, 0},
@@ -4391,9 +4400,9 @@ static PyMethodDef __pyx_methods_5pycbf_3img_Img[] = {
 static struct PyGetSetDef __pyx_getsets_5pycbf_3img_Img[] = {
   {(char *)"rows", __pyx_getprop_5pycbf_3img_3Img_rows, 0, (char *)0, 0},
   {(char *)"columns", __pyx_getprop_5pycbf_3img_3Img_columns, 0, (char *)0, 0},
-  {(char *)"rowmajor", __pyx_getprop_5pycbf_3img_3Img_rowmajor, 0, (char *)0, 0},
-  {(char *)"fields", __pyx_getprop_5pycbf_3img_3Img_fields, 0, (char *)0, 0},
-  {(char *)"image", __pyx_getprop_5pycbf_3img_3Img_image, 0, (char *)"Return the image data", 0},
+  {(char *)"rowmajor", __pyx_getprop_5pycbf_3img_3Img_rowmajor, 0, (char *)"Is the internal data object row_major order?", 0},
+  {(char *)"fields", __pyx_getprop_5pycbf_3img_3Img_fields, 0, (char *)"Retrieve a dictionary of every field on the Img object", 0},
+  {(char *)"image", __pyx_getprop_5pycbf_3img_3Img_image, 0, (char *)"\n        Return the image data, as a numpy array.\n\n        You can also convert the Img object directly via np.asarray(obj).\n        ", 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -4445,7 +4454,7 @@ static PyTypeObject __pyx_type_5pycbf_3img_Img = {
   0, /*tp_setattro*/
   &__pyx_tp_as_buffer_Img, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
-  0, /*tp_doc*/
+  "\n    Interface to CBFlib's libimg API\n    ", /*tp_doc*/
   0, /*tp_traverse*/
   0, /*tp_clear*/
   0, /*tp_richcompare*/
@@ -4529,6 +4538,7 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_n_s_Any, __pyx_k_Any, sizeof(__pyx_k_Any), 0, 0, 1, 1},
   {&__pyx_kp_u_Bad_Format, __pyx_k_Bad_Format, sizeof(__pyx_k_Bad_Format), 0, 1, 0, 0},
   {&__pyx_kp_u_Bad_Write, __pyx_k_Bad_Write, sizeof(__pyx_k_Bad_Write), 0, 1, 0, 0},
   {&__pyx_kp_u_Bad_field, __pyx_k_Bad_field, sizeof(__pyx_k_Bad_field), 0, 1, 0, 0},
@@ -4536,6 +4546,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Bad_read, __pyx_k_Bad_read, sizeof(__pyx_k_Bad_read), 0, 1, 0, 0},
   {&__pyx_kp_u_Cannot_reload_data_There_are_unf, __pyx_k_Cannot_reload_data_There_are_unf, sizeof(__pyx_k_Cannot_reload_data_There_are_unf), 0, 1, 0, 0},
   {&__pyx_kp_u_Cannot_resize_data_There_are_unf, __pyx_k_Cannot_resize_data_There_are_unf, sizeof(__pyx_k_Cannot_resize_data_There_are_unf), 0, 1, 0, 0},
+  {&__pyx_n_s_Dict, __pyx_k_Dict, sizeof(__pyx_k_Dict), 0, 0, 1, 1},
+  {&__pyx_n_s_IO, __pyx_k_IO, sizeof(__pyx_k_IO), 0, 0, 1, 1},
   {&__pyx_n_s_IOError, __pyx_k_IOError, sizeof(__pyx_k_IOError), 0, 0, 1, 1},
   {&__pyx_n_s_Img, __pyx_k_Img, sizeof(__pyx_k_Img), 0, 0, 1, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
@@ -4550,7 +4562,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_OverflowError, __pyx_k_OverflowError, sizeof(__pyx_k_OverflowError), 0, 0, 1, 1},
   {&__pyx_kp_u_Rowmajor_appears_only_used_with, __pyx_k_Rowmajor_appears_only_used_with, sizeof(__pyx_k_Rowmajor_appears_only_used_with), 0, 1, 0, 0},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
+  {&__pyx_n_s_Tuple, __pyx_k_Tuple, sizeof(__pyx_k_Tuple), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
+  {&__pyx_n_s_Union, __pyx_k_Union, sizeof(__pyx_k_Union), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_n_s_asarray, __pyx_k_asarray, sizeof(__pyx_k_asarray), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
@@ -4579,15 +4593,16 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
   {&__pyx_n_s_sys, __pyx_k_sys, sizeof(__pyx_k_sys), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+  {&__pyx_n_s_typing, __pyx_k_typing, sizeof(__pyx_k_typing), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 26, __pyx_L1_error)
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 28, __pyx_L1_error)
-  __pyx_builtin_IOError = __Pyx_GetBuiltinName(__pyx_n_s_IOError); if (!__pyx_builtin_IOError) __PYX_ERR(0, 30, __pyx_L1_error)
-  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 34, __pyx_L1_error)
-  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 36, __pyx_L1_error)
-  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_builtin_IOError = __Pyx_GetBuiltinName(__pyx_n_s_IOError); if (!__pyx_builtin_IOError) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_builtin_KeyError = __Pyx_GetBuiltinName(__pyx_n_s_KeyError); if (!__pyx_builtin_KeyError) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 227, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(1, 116, __pyx_L1_error)
   __pyx_builtin_OverflowError = __Pyx_GetBuiltinName(__pyx_n_s_OverflowError); if (!__pyx_builtin_OverflowError) __PYX_ERR(1, 81, __pyx_L1_error)
@@ -4602,124 +4617,124 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "pycbf/img.pyx":30
+  /* "pycbf/img.pyx":32
  *         raise MemoryError
  *     elif err == ImageError.BAD_OPEN:
  *         raise IOError("Bad open")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_READ:
  *         raise IOError("Bad read")
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Bad_open); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_u_Bad_open); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "pycbf/img.pyx":32
+  /* "pycbf/img.pyx":34
  *         raise IOError("Bad open")
  *     elif err == ImageError.BAD_READ:
  *         raise IOError("Bad read")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_FORMAT:
  *         raise RuntimeError("Bad Format")
  */
-  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_u_Bad_read); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(1, __pyx_kp_u_Bad_read); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "pycbf/img.pyx":34
+  /* "pycbf/img.pyx":36
  *         raise IOError("Bad read")
  *     elif err == ImageError.BAD_FORMAT:
  *         raise RuntimeError("Bad Format")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_FIELD:
  *         raise KeyError("Bad field")
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_Bad_Format); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_Bad_Format); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "pycbf/img.pyx":36
+  /* "pycbf/img.pyx":38
  *         raise RuntimeError("Bad Format")
  *     elif err == ImageError.BAD_FIELD:
  *         raise KeyError("Bad field")             # <<<<<<<<<<<<<<
  *     elif err == ImageError.BAD_WRITE:
  *         raise IOError("Bad Write")
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_u_Bad_field); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_u_Bad_field); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
 
-  /* "pycbf/img.pyx":38
+  /* "pycbf/img.pyx":40
  *         raise KeyError("Bad field")
  *     elif err == ImageError.BAD_WRITE:
  *         raise IOError("Bad Write")             # <<<<<<<<<<<<<<
  * 
  * cdef class Img:
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Bad_Write); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Bad_Write); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "pycbf/img.pyx":74
+  /* "pycbf/img.pyx":118
  *         # Make sure that we don't rewire memory while references are handed out
  *         if self._active_views > 0:
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")             # <<<<<<<<<<<<<<
  *         cdef int mardata[4];
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_Cannot_reload_data_There_are_unf); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_Cannot_reload_data_There_are_unf); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "pycbf/img.pyx":93
+  /* "pycbf/img.pyx":163
  *             raise ValueError("Cannot reload data: There are unfreed references to the image data")
  *         if len(org_data) != 4:
  *             raise ValueError("org_data appears to be in incorrect form for header data")             # <<<<<<<<<<<<<<
  *         cdef int[4] mardata = org_data
  *         cdef int fd = PyObject_AsFileDescriptor(fileobject)
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_org_data_appears_to_be_in_incorr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_org_data_appears_to_be_in_incorr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
 
-  /* "pycbf/img.pyx":103
- *     def set_dimensions(self, int columns, int rows):
+  /* "pycbf/img.pyx":183
+ * 
  *         if self._active_views > 0:
  *             raise ValueError("Cannot resize data: There are unfreed references to the image data")             # <<<<<<<<<<<<<<
  *         check_error(img.img_set_dimensions(self._img_handle, columns, rows))
  * 
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_Cannot_resize_data_There_are_unf); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 103, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_Cannot_resize_data_There_are_unf); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 183, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "pycbf/img.pyx":139
- *         """Return the image data"""
+  /* "pycbf/img.pyx":225
+ *         """
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data - cannot generate image data")             # <<<<<<<<<<<<<<
  *         if np == None:
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_No_image_data_cannot_generate_im); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_No_image_data_cannot_generate_im); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 225, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
-  /* "pycbf/img.pyx":141
+  /* "pycbf/img.pyx":227
  *             raise RuntimeError("No image data - cannot generate image data")
  *         if np == None:
  *             raise ImportError("Missing numpy. You can access image data as a memoryview.")             # <<<<<<<<<<<<<<
  * 
  *         return np.asarray(self)
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_Missing_numpy_You_can_access_ima); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_Missing_numpy_You_can_access_ima); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "pycbf/img.pyx":147
+  /* "pycbf/img.pyx":233
  *     def __getbuffer__(self, Py_buffer *buffer, int flags):
  *         if self._img_handle.image == NULL:
  *             raise RuntimeError("No image data yet - cannot generate image data")             # <<<<<<<<<<<<<<
  *         assert not self._img_handle.rowmajor, "Rowmajor appears only used with SMV?"
  * 
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_No_image_data_yet_cannot_generat); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_No_image_data_yet_cannot_generat); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 233, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
@@ -4794,15 +4809,15 @@ static int __Pyx_modinit_type_init_code(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_5pycbf_3img_Img.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_5pycbf_3img_Img.tp_dictoffset && __pyx_type_5pycbf_3img_Img.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_5pycbf_3img_Img.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_Img, (PyObject *)&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_Img, (PyObject *)&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5pycbf_3img_Img) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
   __pyx_ptype_5pycbf_3img_Img = &__pyx_type_5pycbf_3img_Img;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -5100,6 +5115,55 @@ if (!__Pyx_RefNanny) {
   /* "pycbf/img.pyx":17
  * cimport pycbf.img as img
  * 
+ * from typing import Union, Dict, IO, Tuple, Any             # <<<<<<<<<<<<<<
+ * 
+ * try:
+ */
+  __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(__pyx_n_s_Union);
+  __Pyx_GIVEREF(__pyx_n_s_Union);
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_Union);
+  __Pyx_INCREF(__pyx_n_s_Dict);
+  __Pyx_GIVEREF(__pyx_n_s_Dict);
+  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_Dict);
+  __Pyx_INCREF(__pyx_n_s_IO);
+  __Pyx_GIVEREF(__pyx_n_s_IO);
+  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_IO);
+  __Pyx_INCREF(__pyx_n_s_Tuple);
+  __Pyx_GIVEREF(__pyx_n_s_Tuple);
+  PyList_SET_ITEM(__pyx_t_1, 3, __pyx_n_s_Tuple);
+  __Pyx_INCREF(__pyx_n_s_Any);
+  __Pyx_GIVEREF(__pyx_n_s_Any);
+  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_n_s_Any);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_typing, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Union); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Union, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Dict, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_IO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_IO, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Tuple); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Tuple, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Any); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Any, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "pycbf/img.pyx":19
+ * from typing import Union, Dict, IO, Tuple, Any
+ * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np
  * except ModuleNotFoundError:
@@ -5107,118 +5171,119 @@ if (!__Pyx_RefNanny) {
   {
     __Pyx_PyThreadState_declare
     __Pyx_PyThreadState_assign
-    __Pyx_ExceptionSave(&__pyx_t_2, &__pyx_t_3, &__pyx_t_4);
-    __Pyx_XGOTREF(__pyx_t_2);
+    __Pyx_ExceptionSave(&__pyx_t_3, &__pyx_t_4, &__pyx_t_5);
     __Pyx_XGOTREF(__pyx_t_3);
     __Pyx_XGOTREF(__pyx_t_4);
+    __Pyx_XGOTREF(__pyx_t_5);
     /*try:*/ {
 
-      /* "pycbf/img.pyx":18
+      /* "pycbf/img.pyx":20
  * 
  * try:
  *     import numpy as np             # <<<<<<<<<<<<<<
  * except ModuleNotFoundError:
  *     np = None
  */
-      __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L2_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 18, __pyx_L2_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_2 = __Pyx_Import(__pyx_n_s_numpy, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L2_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_2) < 0) __PYX_ERR(0, 20, __pyx_L2_error)
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "pycbf/img.pyx":17
- * cimport pycbf.img as img
+      /* "pycbf/img.pyx":19
+ * from typing import Union, Dict, IO, Tuple, Any
  * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np
  * except ModuleNotFoundError:
  */
     }
-    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     goto __pyx_L7_try_end;
     __pyx_L2_error:;
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "pycbf/img.pyx":19
+    /* "pycbf/img.pyx":21
  * try:
  *     import numpy as np
  * except ModuleNotFoundError:             # <<<<<<<<<<<<<<
  *     np = None
  * 
  */
-    __Pyx_ErrFetch(&__pyx_t_1, &__pyx_t_5, &__pyx_t_6);
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ModuleNotFoundError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 19, __pyx_L4_except_error)
+    __Pyx_ErrFetch(&__pyx_t_2, &__pyx_t_1, &__pyx_t_6);
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ModuleNotFoundError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 21, __pyx_L4_except_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __Pyx_PyErr_GivenExceptionMatches(__pyx_t_1, __pyx_t_7);
+    __pyx_t_8 = __Pyx_PyErr_GivenExceptionMatches(__pyx_t_2, __pyx_t_7);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_ErrRestore(__pyx_t_1, __pyx_t_5, __pyx_t_6);
-    __pyx_t_1 = 0; __pyx_t_5 = 0; __pyx_t_6 = 0;
+    __Pyx_ErrRestore(__pyx_t_2, __pyx_t_1, __pyx_t_6);
+    __pyx_t_2 = 0; __pyx_t_1 = 0; __pyx_t_6 = 0;
     if (__pyx_t_8) {
       __Pyx_AddTraceback("pycbf.img", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_5, &__pyx_t_1) < 0) __PYX_ERR(0, 19, __pyx_L4_except_error)
+      if (__Pyx_GetException(&__pyx_t_6, &__pyx_t_1, &__pyx_t_2) < 0) __PYX_ERR(0, 21, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_GOTREF(__pyx_t_2);
 
-      /* "pycbf/img.pyx":20
+      /* "pycbf/img.pyx":22
  *     import numpy as np
  * except ModuleNotFoundError:
  *     np = None             # <<<<<<<<<<<<<<
  * 
  * cdef check_error(int err):
  */
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, Py_None) < 0) __PYX_ERR(0, 20, __pyx_L4_except_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, Py_None) < 0) __PYX_ERR(0, 22, __pyx_L4_except_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       goto __pyx_L3_exception_handled;
     }
     goto __pyx_L4_except_error;
     __pyx_L4_except_error:;
 
-    /* "pycbf/img.pyx":17
- * cimport pycbf.img as img
+    /* "pycbf/img.pyx":19
+ * from typing import Union, Dict, IO, Tuple, Any
  * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np
  * except ModuleNotFoundError:
  */
-    __Pyx_XGIVEREF(__pyx_t_2);
     __Pyx_XGIVEREF(__pyx_t_3);
     __Pyx_XGIVEREF(__pyx_t_4);
-    __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
+    __Pyx_XGIVEREF(__pyx_t_5);
+    __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
     goto __pyx_L1_error;
     __pyx_L3_exception_handled:;
-    __Pyx_XGIVEREF(__pyx_t_2);
     __Pyx_XGIVEREF(__pyx_t_3);
     __Pyx_XGIVEREF(__pyx_t_4);
-    __Pyx_ExceptionReset(__pyx_t_2, __pyx_t_3, __pyx_t_4);
+    __Pyx_XGIVEREF(__pyx_t_5);
+    __Pyx_ExceptionReset(__pyx_t_3, __pyx_t_4, __pyx_t_5);
     __pyx_L7_try_end:;
   }
 
-  /* "pycbf/img.pyx":64
+  /* "pycbf/img.pyx":77
  * 
  *     @classmethod
- *     def read_mar345(cls, object filename):             # <<<<<<<<<<<<<<
- *         img = Img()
- *         strpath = os.fspath(filename)
+ *     def read_mar345(cls, object filename : Union[str, bytes, os.PathLike]) -> Img:             # <<<<<<<<<<<<<<
+ *         """
+ *         Read a mar345 image from filename
  */
-  __Pyx_GetNameInClass(__pyx_t_1, (PyObject *)__pyx_ptype_5pycbf_3img_Img, __pyx_n_s_read_mar345); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetNameInClass(__pyx_t_2, (PyObject *)__pyx_ptype_5pycbf_3img_Img, __pyx_n_s_read_mar345); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
 
-  /* "pycbf/img.pyx":63
+  /* "pycbf/img.pyx":76
  *         return img.img_get_number(self._img_handle, name)
  * 
  *     @classmethod             # <<<<<<<<<<<<<<
- *     def read_mar345(cls, object filename):
- *         img = Img()
+ *     def read_mar345(cls, object filename : Union[str, bytes, os.PathLike]) -> Img:
+ *         """
  */
-  __pyx_t_5 = __Pyx_Method_ClassMethod(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 63, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_1 = __Pyx_Method_ClassMethod(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5pycbf_3img_Img->tp_dict, __pyx_n_s_read_mar345, __pyx_t_1) < 0) __PYX_ERR(0, 77, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5pycbf_3img_Img->tp_dict, __pyx_n_s_read_mar345, __pyx_t_5) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   PyType_Modified(__pyx_ptype_5pycbf_3img_Img);
 
   /* "pycbf/img.pyx":1
@@ -5226,10 +5291,10 @@ if (!__Pyx_RefNanny) {
  * # distutils: include_dirs = cbflib/include
  * # distutils: define_macros=NPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION
  */
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_5) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "carray.from_py":77
  * 
@@ -5244,7 +5309,7 @@ if (!__Pyx_RefNanny) {
   goto __pyx_L0;
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   if (__pyx_m) {
@@ -6468,6 +6533,20 @@ bad:
     Py_XDECREF(empty_list);
     Py_XDECREF(empty_dict);
     return module;
+}
+
+/* ImportFrom */
+static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
+    PyObject* value = __Pyx_PyObject_GetAttrStr(module, name);
+    if (unlikely(!value) && PyErr_ExceptionMatches(PyExc_AttributeError)) {
+        PyErr_Format(PyExc_ImportError,
+        #if PY_MAJOR_VERSION < 3
+            "cannot import name %.230s", PyString_AS_STRING(name));
+        #else
+            "cannot import name %S", name);
+        #endif
+    }
+    return value;
 }
 
 /* FastTypeChecks */
