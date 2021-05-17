@@ -1,5 +1,6 @@
 import re
 from distutils.core import Extension
+from hashlib import sha256
 from pathlib import Path, PurePath
 from typing import Any, Dict
 
@@ -71,9 +72,44 @@ extensions = [
 ]
 
 
+def hash_files(*files):
+    """
+    Generate a combined checksum for a list of files.
+
+    For validating the the generated output file is the latest generated
+    from the input sources. Equivalent to running the command:
+
+        sha256sum <files> | sort | sha256sum
+    """
+    hashes = []
+    for filename in sorted(files):
+        h = sha256()
+        h.update(filename.read_bytes())
+        hashes.append(h.hexdigest() + "  " + filename.name)
+    hashes = sorted(hashes)
+    hashes.append("")
+    # Make a combined checksum for this
+    h = sha256()
+    h.update("\n".join(hashes).encode())
+    return h.hexdigest()
+
+
 def build(setup_kwargs: Dict[str, Any]) -> None:
     # print("Build C Extensions Here")
     # Rewrite the cbf.h file to not require hdf5
+
+    # Validate that the SWIG wrappers are generated from the latest
+    # sources (if we have them)
+    thisdir = Path(__file__).parent
+    swigdir = thisdir / "SWIG"
+    if swigdir.is_dir():
+        combined_checksum = hash_files(swigdir / "make_pycbf.py", *swigdir.glob("*.i"))
+        if (
+            combined_checksum not in (thisdir / "pycbf_wrap.c").read_text()
+            or combined_checksum
+            not in thisdir.joinpath("src", "pycbf", "_wrapper.py").read_text()
+        ):
+            raise RuntimeError("Error: The SWIG generated sources are out of date")
 
     # Rewrite cbf.h so that it doesn't require HDF5.h (it doesn't need it)
     cbf_h = Path(__file__).parent.joinpath("cbflib", "include", "cbf.h")
