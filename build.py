@@ -4,8 +4,7 @@ from hashlib import sha256
 from pathlib import Path, PurePath
 from typing import Any, Dict
 
-# import skbuild
-# import skbuild.constants
+from Cython.Build import cythonize
 
 CBF_SOURCES = [
     "cbflib/src/cbf.c",
@@ -44,16 +43,32 @@ CBF_SOURCES = [
     # "cbflib/src/cbf_hdf5.c",
     # "cbflib/src/cbf_hdf5_filter.c",
 ]
+
+PYCBF_ROOT = PurePath(__file__).parent
+CBFLIB_INCLUDE = PYCBF_ROOT / "cbflib" / "include"
+
 extensions = [
     Extension(
         "pycbf._pycbf",
         sources=["pycbf_wrap.c", *CBF_SOURCES],
-        include_dirs=[str(PurePath(__file__).parent / "cbflib" / "include")],
+        include_dirs=[str(CBFLIB_INCLUDE)],
         define_macros=[
             ("CBF_NO_REGEX", None),
             ("SWIG_PYTHON_STRICT_BYTE_CHAR", None),
         ],
-    )
+    ),
+    *cythonize(
+        [
+            Extension(
+                "pycbf.img",
+                sources=["src/pycbf/img.pyx"],
+                include_dirs=[
+                    str(CBFLIB_INCLUDE),
+                    str(PYCBF_ROOT),  # img.c includes from cbflib/include
+                ],
+            ),
+        ]
+    ),
 ]
 
 
