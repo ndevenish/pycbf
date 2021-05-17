@@ -848,9 +848,9 @@ static const char *__pyx_filename;
 static const char *__pyx_f[] = {
   "src/pycbf/img.pyx",
   "stringsource",
-  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/type.pxd",
-  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/bool.pxd",
-  "CENV/lib/python3.9/site-packages/Cython/Includes/cpython/complex.pxd",
+  "type.pxd",
+  "bool.pxd",
+  "complex.pxd",
 };
 
 /*--- Type declarations ---*/
@@ -5115,54 +5115,54 @@ if (!__Pyx_RefNanny) {
   /* "pycbf/img.pyx":17
  * cimport pycbf.img as img
  * 
- * from typing import Union, Dict, IO, Tuple, Any             # <<<<<<<<<<<<<<
+ * from typing import IO, Any, Dict, Tuple, Union             # <<<<<<<<<<<<<<
  * 
  * try:
  */
   __pyx_t_1 = PyList_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_INCREF(__pyx_n_s_Union);
-  __Pyx_GIVEREF(__pyx_n_s_Union);
-  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_Union);
-  __Pyx_INCREF(__pyx_n_s_Dict);
-  __Pyx_GIVEREF(__pyx_n_s_Dict);
-  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_Dict);
   __Pyx_INCREF(__pyx_n_s_IO);
   __Pyx_GIVEREF(__pyx_n_s_IO);
-  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_IO);
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_IO);
+  __Pyx_INCREF(__pyx_n_s_Any);
+  __Pyx_GIVEREF(__pyx_n_s_Any);
+  PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_Any);
+  __Pyx_INCREF(__pyx_n_s_Dict);
+  __Pyx_GIVEREF(__pyx_n_s_Dict);
+  PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_Dict);
   __Pyx_INCREF(__pyx_n_s_Tuple);
   __Pyx_GIVEREF(__pyx_n_s_Tuple);
   PyList_SET_ITEM(__pyx_t_1, 3, __pyx_n_s_Tuple);
-  __Pyx_INCREF(__pyx_n_s_Any);
-  __Pyx_GIVEREF(__pyx_n_s_Any);
-  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_n_s_Any);
+  __Pyx_INCREF(__pyx_n_s_Union);
+  __Pyx_GIVEREF(__pyx_n_s_Union);
+  PyList_SET_ITEM(__pyx_t_1, 4, __pyx_n_s_Union);
   __pyx_t_2 = __Pyx_Import(__pyx_n_s_typing, __pyx_t_1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Union); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Union, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Dict, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_IO); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_IO, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Tuple); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Tuple, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Any); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_Any, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Dict); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Dict, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Tuple); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Tuple, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_Union); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_Union, __pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "pycbf/img.pyx":19
- * from typing import Union, Dict, IO, Tuple, Any
+ * from typing import IO, Any, Dict, Tuple, Union
  * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np
@@ -5190,7 +5190,7 @@ if (!__Pyx_RefNanny) {
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
       /* "pycbf/img.pyx":19
- * from typing import Union, Dict, IO, Tuple, Any
+ * from typing import IO, Any, Dict, Tuple, Union
  * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np
@@ -5243,7 +5243,7 @@ if (!__Pyx_RefNanny) {
     __pyx_L4_except_error:;
 
     /* "pycbf/img.pyx":19
- * from typing import Union, Dict, IO, Tuple, Any
+ * from typing import IO, Any, Dict, Tuple, Union
  * 
  * try:             # <<<<<<<<<<<<<<
  *     import numpy as np

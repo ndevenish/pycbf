@@ -36,4 +36,9 @@ def test_image_reading(mar_image):
 
     img = np.asarray(Img.read_mar345(mar_image))
     assert img.shape == (2300, 2300)
-    assert img[img == 0].sum() == 1131017
+    assert img.any()
+    assert (img == 0).sum() == 1131017
+    assert (img != 0).sum() == 4158983
+
+    img_base = Img.read_mar345(mar_image)
+    assert (img == img_base.image).all()
