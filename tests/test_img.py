@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 
 from pycbf.img import Img
@@ -21,20 +19,8 @@ def test_get_number():
 
 
 @pytest.fixture
-def mar_image():
-    # return (
-    #     dials_data("image_examples", pathlib=True)
-    #     / "DESY_BW7B"
-    #     / "mar345_01_001.mar2300"
-    # )
-    mar_image_locations = [
-        "/dls/science/groups/scisoft/DIALS/repositories/git-reference/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
-        "/Users/nickd/dials/regression/dials_regression/image_examples/DESY_BW7B/mar345_01_001.mar2300",
-    ]
-    for path in mar_image_locations:
-        if Path(path).is_file():
-            return path
-    pytest.skip("No mar345 file found")
+def mar_image(dials_data):
+    return dials_data("pycbf", pathlib=True) / "mar345_01_001.mar2300"
 
 
 def test_regression_image(mar_image):
