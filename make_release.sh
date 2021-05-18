@@ -33,6 +33,16 @@ quietly() {
     printf $NC
 }
 
+silently() {
+    echo "${W}+ $@"
+    if ! _output="$("$@" 2>&1)"; then
+        echo "${R}Error:"
+        echo "$_output" | sed 's/\x1b\[[0-9;]*m//g'
+        printf $NC
+        return 1
+    fi
+}
+
 DRY_RUN=""
 ALLOW_NONMAIN=""
 ALLOW_DIRTY=""
@@ -157,6 +167,12 @@ fi
 
 new_dev_version="$(echo "$_output" | grep new_version | sed -r s,"^.*=",,)"
 echo "New development version: $BOLD$M$new_dev_version$NC"
+
+echo "Regenerating SWIG files$W"
+silently ./regenerate_pycbf.py
+
+echo "Re-running build for Cython"
+silently poetry build
 
 echo "${BOLD}Making new development commit$NC"
 (   set -x
