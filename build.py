@@ -110,10 +110,11 @@ def generate_combined_checksum(root):
         swigdir / "make_pycbf.py",
         *swigdir.glob("*.i"),
     ]
+    re_toml_hashlines = re.compile("^version ?=|Cython", re.I)
     extra_data = [
         x
         for x in (root / "pyproject.toml").read_text().splitlines()
-        if "version" in x or "cython" in x.lower()
+        if re_toml_hashlines.search(x)
     ]
     return hash_files(*gen_files, extra_data=extra_data)
 
