@@ -13,10 +13,13 @@ In order to do this, it has some limitations compared to the full build of CBFli
 
 In addition to the base 0.9.6, this has the following alterations:
 
-| Version                | Changes                                                                                                    |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
-| 0.9.6.0                | Regenerated SWIG bindings for Python 3 compatibility. Compiled with `SWIG_PYTHON_STRICT_BYTE_CHAR`.        |
-| ~~0.9.6.1~~            | This was an unreleased internal version.                                                                   |
+| Version     | Changes                                                                                             |
+| ----------- | --------------------------------------------------------------------------------------------------- |
+| 0.9.6.0     | Regenerated SWIG bindings for Python 3 compatibility. Compiled with `SWIG_PYTHON_STRICT_BYTE_CHAR`. |
+| ~~0.9.6.1~~ | This was an unreleased internal version.                                                            |
+| 0.9.6.2     | Drop python 2.7. Accept both `bytes` and `str`. Add `read_buffer` method, and `libimg` bindings.    |
+
+For details, please see the [CHANGELOG](CHANGELOG.rst).
 
 [cbflib]: https://github.com/yayahjb/cbflib
 [manylinux]: https://www.python.org/dev/peps/pep-0571/
