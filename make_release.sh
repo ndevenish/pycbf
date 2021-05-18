@@ -144,11 +144,9 @@ echo "Running pre-commit to clean up"
 quietly pre-commit run --all || true
 
 
-echo "${BOLD}Making commit"
-(   set -x
-    git add --update
-    git commit -n -m "pycbf $new_version"
-)
+echo "${BOLD}Making commit$NC"
+quietly git add --update
+quietly git commit -n -m "pycbf $new_version"
 
 if [[ $NO_TAG != "true" ]]; then
     echo "Making tag ${M}v${new_version}$NC"
