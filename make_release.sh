@@ -10,7 +10,7 @@ NC="$(printf "\033[0m")"
 BOLD="$(printf "\033[1m")"
 
 print_usage() {
-    echo "Usage: $0 [-h|--help] [--no-tag]"
+    echo "Usage: $0 [-h|--help] [--no-tag] [--no-edit] --do"
 }
 print_help() {
     print_usage
@@ -20,6 +20,7 @@ print_help() {
     echo "-h, --help      Show this message"
     echo "--no-tag        Don't create a tag for the release commit"
     echo "--no-edit       Don't pause to allow CHANGELOG editing"
+    echo "--do            Actually run. Safety so that no arguments doesnt commit"
 #    echo "--dry-run, -n   Don't do anything"
     echo
     echo "ARG....      Arguments to pass to bump2version"
@@ -48,6 +49,7 @@ ALLOW_NONMAIN=""
 ALLOW_DIRTY=""
 NO_TAG=""
 NO_EDIT=""
+DO=""
 _positionals=()
 while [[ $# -gt 0 ]]; do
     _key="$1"
@@ -75,6 +77,9 @@ while [[ $# -gt 0 ]]; do
         --no-edit)
             NO_EDIT=true
             ;;
+        --do)
+            DO=true
+            ;;
         *)
             _positionals+=("$1")
             ;;
@@ -86,6 +91,13 @@ if [[ ${#_positionals[@]} -gt 0 ]]; then
     echo "${R}Error: Unknown positional arguments: ${_positionals[@]}"
     exit 1
 fi
+
+if [[ $DO != true ]]; then
+    print_usage
+    echo "${R}Error: You must pass --do to actually make a release$NC"
+    exit 1
+fi
+
 if [[ $DRY_RUN == true ]]; then
     echo "Error: Sorry, dry-run isn't implemented yet"
     exit 1
