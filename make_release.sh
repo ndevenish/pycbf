@@ -23,8 +23,8 @@ print_help() {
     echo "ARG....      Arguments to pass to bump2version"
 }
 quietly() {
-    printf $W
-    if ! "$*" | sed 's/\x1b\[[0-9;]*m//g'; then
+    echo "${W}+ $@"
+    if ! "$@" 2>&1 | sed 's/\x1b\[[0-9;]*m//g'; then
         return 1
     fi
 }
@@ -97,13 +97,13 @@ new_version="$(echo "$_output" | grep new_version | sed -r s,"^.*=",,)"
 echo "New version: $BOLD$M$new_version$NC"
 
 echo "Regenerating SWIG files$W"
-(set -x; ./regenerate_pycbf.py)
+quietly ./regenerate_pycbf.py
 
 echo "${NC}Re-running build for Cython$W"
-quietly (set -x; poetry build 2>&1)
+quietly poetry build
 
 echo "${NC}Running pre-commit to clean up$W"
-quietly (set -x; pre-commit run --all 2>&1) || true
+quietly pre-commit run --all || true
 
 echo "${NC}Running towncrier$W"
 quietly towncrier --yes
