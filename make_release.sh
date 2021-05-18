@@ -148,7 +148,7 @@ fi
 echo "$NC"
 echo "Advancing to new development release"
 
-if ! _output"$(set -x; bump2version minor --list); then
+if ! _output="$(set -x; bump2version minor --list)"; then
     echo "${R}Error: Advancing release tag to next development release"
     echo "$_output" $NC
     exit 1
