@@ -18,6 +18,7 @@ print_help() {
     echo
     echo "-h, --help      Show this message"
     echo "--no-tag        Don't create a tag for the release commit"
+    echo "--no-edit       Don't pause to allow CHANGELOG editing"
 #    echo "--dry-run, -n   Don't do anything"
     echo
     echo "ARG....      Arguments to pass to bump2version"
@@ -33,6 +34,7 @@ DRY_RUN=""
 ALLOW_NONMAIN=""
 ALLOW_DIRTY=""
 NO_TAG=""
+NO_EDIT=""
 _positionals=()
 while [[ $# -gt 0 ]]; do
     _key="$1"
@@ -57,6 +59,9 @@ while [[ $# -gt 0 ]]; do
         --no-tag)
             NO_TAG=true
             ;;
+        --no-edit)
+            NO_EDIT=true
+            ;;
         *)
             _positionals+=("$1")
             ;;
@@ -79,6 +84,12 @@ fi
 if [[ $ALLOW_DIRTY != true && -n "$(git status --porcelain | grep -v '??')" ]]; then
     echo "${R}Error: Working branch is dirty. Cannot continue."
     exit 1
+fi
+
+# Check that _this file_ isn't dirty
+if [[ -n "$(git status --porcelain | grep make_release.sh)" ]]; then
+    echo "${R}Fatal Error: Release generation file make_release.sh is dirty$NC"
+    exit
 fi
 _start_commit="$(git rev-parse HEAD)"
 
@@ -106,7 +117,13 @@ quietly poetry build
 echo "${NC}Running pre-commit to clean up$W"
 quietly pre-commit run --all || true
 
-echo "${NC}Running towncrier$W"
+echo "Running towncrier"
 quietly towncrier --yes --version="$new_version"
 
+if [[ $NO_EDIT != true ]]; then
+    echo "Pausing for CHANGELOG editing"
+    "${EDITOR:-vi}" CHANGELOG.rst
+fi
+
+    
 echo "${NC}Making commit$W"
