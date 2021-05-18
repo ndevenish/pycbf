@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pycbf"
-version = "0.9.6.2"
+version = "0.9.6.3.dev"
 description = "An API for CBF/imgCIF Crystallographic Binary Files"
 homepage="http://www.bernstein-plus-sons.com/software/CBF/"
 authors = ["Herbert J. Bernstein <yaya@bernstein-plus-sons.com>", "Paul J. Ellis"]
