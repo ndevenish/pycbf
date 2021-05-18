@@ -4,7 +4,7 @@ pycbf 0.9.6.1
 This was an unreleased internal commit.
 
 
-Pycbf 0.9.6.0 (2021-05-06)
+pycbf 0.9.6.0 (2021-05-06)
 ==========================
 
 - Regenerated SWIG bindings for Python 3 compatibility
