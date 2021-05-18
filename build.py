@@ -2,7 +2,7 @@ import re
 from distutils.core import Extension
 from hashlib import sha256
 from pathlib import Path, PurePath
-from typing import Any, Dict
+from typing import Any, Dict, Iterable
 
 from Cython.Build import cythonize
 
@@ -72,7 +72,7 @@ extensions = [
 ]
 
 
-def hash_files(*files):
+def hash_files(*files, extra_data: Iterable[str] = None) -> str:
     """
     Generate a combined checksum for a list of files.
 
@@ -80,18 +80,42 @@ def hash_files(*files):
     from the input sources. Equivalent to running the command:
 
         sha256sum <files> | sort | sha256sum
+
+    If extra_data is provided - this is treated as though there was a
+    file called "extra_contents" containing the iterable items,
+    concatenated with newlines, and with a trailing newline.
     """
     hashes = []
     for filename in sorted(files):
         h = sha256()
         h.update(filename.read_bytes())
         hashes.append(h.hexdigest() + "  " + filename.name)
+    if extra_data:
+        h = sha256()
+        h.update("\n".join(extra_data).encode() + b"\n")
+        hashes.append(h.hexdigest() + "  " + "extra_data")
     hashes = sorted(hashes)
+    print("\n".join(hashes))
     hashes.append("")
     # Make a combined checksum for this
     h = sha256()
     h.update("\n".join(hashes).encode())
     return h.hexdigest()
+
+
+def generate_combined_checksum(root):
+    # Calculate the combined hash so we know if the source have changed
+    swigdir = root / "swig"
+    gen_files = [
+        swigdir / "make_pycbf.py",
+        *swigdir.glob("*.i"),
+    ]
+    extra_data = [
+        x
+        for x in (root / "pyproject.toml").read_text().splitlines()
+        if "version" in x or "cython" in x.lower()
+    ]
+    return hash_files(*gen_files, extra_data=extra_data)
 
 
 def build(setup_kwargs: Dict[str, Any]) -> None:
@@ -103,9 +127,7 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
     thisdir = Path(__file__).parent
     swigdir = thisdir / "SWIG"
     if swigdir.is_dir():
-        combined_checksum = hash_files(
-            swigdir / "make_pycbf.py", thisdir / "pyproject.toml", *swigdir.glob("*.i")
-        )
+        combined_checksum = generate_combined_checksum(thisdir)
         if (
             combined_checksum not in (thisdir / "pycbf_wrap.c").read_text()
             or combined_checksum

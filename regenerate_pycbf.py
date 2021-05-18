@@ -45,6 +45,30 @@ def hash_files(*files, extra_data: Iterable[str] = None) -> str:
     return h.hexdigest()
 
 
+def generate_combined_checksum(root):
+    # Calculate the combined hash so we know if the source have changed
+    swigdir = root / "swig"
+    gen_files = [
+        swigdir / "make_pycbf.py",
+        *swigdir.glob("*.i"),
+    ]
+    extra_data = [
+        x
+        for x in (root / "pyproject.toml").read_text().splitlines()
+        if "version" in x or "cython" in x.lower()
+    ]
+    swig_combined_hash = hash_files(*gen_files, extra_data=extra_data)
+    hash_header = (
+        "# Generated from:\n"
+        + "\n".join("# - " + x.name for x in sorted(gen_files, key=lambda x: x.name))
+        + "\n"
+        + "\n".join("# + " + x for x in extra_data)
+        + "\n#\n# Combined Checksum: "
+        + swig_combined_hash
+    )
+    return swig_combined_hash, hash_header
+
+
 def check_call(command, *args, **kwargs):
     command_str = command if isinstance(command, str) else " ".join(command)
     print(f"\n\nRunning {command_str}")
@@ -164,26 +188,7 @@ if __name__ == "__main__":
 
     check_output([sys.executable, str(regen_dir / "make_pycbf.py")])
 
-    # Calculate the combined hash so we know if the source have changed
-    swigdir = ROOT_DIR / "swig"
-    gen_files = [
-        swigdir / "make_pycbf.py",
-        *swigdir.glob("*.i"),
-    ]
-    extra_data = [
-        x
-        for x in (ROOT_DIR / "pyproject.toml").read_text().splitlines()
-        if "version" in x or "cython" in x.lower()
-    ]
-    swig_combined_hash = hash_files(*gen_files, extra_data=extra_data)
-    hash_header = (
-        "# Generated from:\n"
-        + "\n".join("# - " + x.name for x in sorted(gen_files, key=lambda x: x.name))
-        + "\n"
-        + "\n".join("# + " + x for x in extra_data)
-        + "\n#\n# Combined Checksum: "
-        + swig_combined_hash
-    )
+    combined_hash, hash_header = generate_combined_checksum(ROOT_DIR)
     print("Combined hash header:\n" + hash_header)
 
     # Finally, regenerate with swig
