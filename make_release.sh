@@ -3,6 +3,7 @@
 set -eu
 
 R="$(printf "\033[31m")"
+B="$(printf "\033[34m")"
 W="$(printf "\033[37m")"
 M="$(printf "\033[35m")"
 NC="$(printf "\033[0m")"
@@ -166,5 +167,5 @@ echo
 echo "Successfully released $M$new_version$NC and advanced to $M$new_dev_version$NC"
 echo
 if [[ $NO_TAG != true ]]; then
-    echo "Please remember to $Bgit push --tags$NC"
+    echo "Please remember to ${B}git push --tags$NC"
 fi
