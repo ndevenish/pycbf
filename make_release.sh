@@ -154,4 +154,17 @@ if ! _output="$(set -x; bump2version minor --list)"; then
     exit 1
 fi
 
+new_dev_version="$(echo "$_output" | grep new_version | sed -r s,"^.*=",,)"
+echo "New development version: $BOLD$M$new_dev_version$NC"
 
+echo "${BOLD}Making new development commit$NC"
+(   set -x
+    git add --update
+    git commit -n -m "Advance to ${new_dev_version} development series"
+)
+echo
+echo "Successfully released $M$new_version$NC and advanced to $M$new_dev_version$NC"
+echo
+if [[ $NO_TAG != true ]]; then
+    echo "Please remember to $Bgit push --tags$NC"
+fi
