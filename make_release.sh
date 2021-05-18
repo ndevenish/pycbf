@@ -141,7 +141,7 @@ echo "${BOLD}Making commit"
 )
 
 if [[ $NO_TAG != "true" ]]; then
-    echo "Making tag $Mv${new_version}$NC"
+    echo "Making tag ${M}v${new_version}$NC"
     (set -x; git tag "v${new_version}")
 fi
 
