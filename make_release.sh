@@ -121,7 +121,7 @@ quietly towncrier --yes --version="$new_version"
 
 if [[ $NO_EDIT != true ]]; then
     echo "Pausing for CHANGELOG editing"
-    "${EDITOR:-vi}" CHANGELOG.rst
+    ${EDITOR:-vi} CHANGELOG.rst
 else
     echo "No editing phase requested; using CHANGELOG as-is"
 fi
