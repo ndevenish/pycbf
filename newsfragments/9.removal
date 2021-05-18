@@ -1,1 +1,0 @@
-Regeneration via nuweb literate sources is removed. The generated sources are now used as the original versions, which makes it much easier to add changes without going via ``patches/*.patch``
