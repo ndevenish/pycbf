@@ -114,16 +114,24 @@ quietly ./regenerate_pycbf.py
 echo "${NC}Re-running build for Cython$W"
 quietly poetry build
 
-echo "${NC}Running pre-commit to clean up$W"
-quietly pre-commit run --all || true
-
 echo "Running towncrier"
 quietly towncrier --yes --version="$new_version"
 
 if [[ $NO_EDIT != true ]]; then
     echo "Pausing for CHANGELOG editing"
     "${EDITOR:-vi}" CHANGELOG.rst
+else
+    echo "No editing phase requested; using CHANGELOG as-is"
 fi
 
-    
+echo "Running pre-commit to clean up"
+quietly pre-commit run --all || true
+
+
 echo "${NC}Making commit$W"
+(   set -x
+    git add --update
+    git commit -n -m "pycbf $new_version"
+)
+
+
