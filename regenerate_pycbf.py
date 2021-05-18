@@ -6,7 +6,7 @@ import subprocess
 import sys
 from hashlib import sha256
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 import toml
 
@@ -14,7 +14,7 @@ ROOT_DIR = Path(__file__).parent
 CBFLIB_DIR = ROOT_DIR / "cbflib"
 
 
-def hash_files(*files):
+def hash_files(*files, extra_data: Iterable[str] = None) -> str:
     """
     Generate a combined checksum for a list of files.
 
@@ -22,13 +22,22 @@ def hash_files(*files):
     from the input sources. Equivalent to running the command:
 
         sha256sum <files> | sort | sha256sum
+
+    If extra_data is provided - this is treated as though there was a
+    file called "extra_contents" containing the iterable items,
+    concatenated with newlines, and with a trailing newline.
     """
     hashes = []
     for filename in sorted(files):
         h = sha256()
         h.update(filename.read_bytes())
         hashes.append(h.hexdigest() + "  " + filename.name)
+    if extra_data:
+        h = sha256()
+        h.update("\n".join(extra_data).encode() + b"\n")
+        hashes.append(h.hexdigest() + "  " + "extra_data")
     hashes = sorted(hashes)
+    print("\n".join(hashes))
     hashes.append("")
     # Make a combined checksum for this
     h = sha256()
@@ -160,12 +169,18 @@ if __name__ == "__main__":
     gen_files = [
         swigdir / "make_pycbf.py",
         *swigdir.glob("*.i"),
-        ROOT_DIR / "pyproject.toml",
     ]
-    swig_combined_hash = hash_files(*gen_files)
+    extra_data = [
+        x
+        for x in (ROOT_DIR / "pyproject.toml").read_text().splitlines()
+        if "version" in x or "cython" in x.lower()
+    ]
+    swig_combined_hash = hash_files(*gen_files, extra_data=extra_data)
     hash_header = (
         "# Generated from:\n"
         + "\n".join("# - " + x.name for x in sorted(gen_files, key=lambda x: x.name))
+        + "\n"
+        + "\n".join("# + " + x for x in extra_data)
         + "\n#\n# Combined Checksum: "
         + swig_combined_hash
     )
