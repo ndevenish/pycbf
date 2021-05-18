@@ -8,7 +8,7 @@ Features
 - Add python bindings ``read_buffer`` for ``cbf_read_buffered_file``, for loading files directly from bytes buffers. (#3)
 - Functions that accept string arguments will now accept both ``bytes`` and ``str``, for easier transition away from ``SWIG_PYTHON_BYTE_CHAR``. (#4)
 - The ``pycbf.cbf2str`` utility function has been added to convert CBF string returns to str, no matter what is used in the SWIG bindings. (#4)
-- Add ``pycbf.HAS_SWIG_PYTHON_STRICT_BYTE_CHAR```, to tell if the module has been build with the ``SWIG_PYTHON_STRICT_BYTE_CHAR`` compile definition. (#10)
+- Add ``pycbf.HAS_SWIG_PYTHON_STRICT_BYTE_CHAR``, to tell if the module has been build with the ``SWIG_PYTHON_STRICT_BYTE_CHAR`` compile definition. (#10)
 
 
 Deprecations and Removals
