@@ -107,6 +107,6 @@ echo "${NC}Running pre-commit to clean up$W"
 quietly pre-commit run --all || true
 
 echo "${NC}Running towncrier$W"
-quietly towncrier --yes
+quietly towncrier --yes --version="$new_version"
 
 echo "${NC}Making commit$W"
