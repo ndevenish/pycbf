@@ -22,6 +22,12 @@ print_help() {
     echo
     echo "ARG....      Arguments to pass to bump2version"
 }
+quietly() {
+    printf $W
+    if ! "$*" | sed 's/\x1b\[[0-9;]*m//g'; then
+        return 1
+    fi
+}
 
 DRY_RUN=""
 ALLOW_NONMAIN=""
@@ -94,12 +100,12 @@ echo "Regenerating SWIG files$W"
 (set -x; ./regenerate_pycbf.py)
 
 echo "${NC}Re-running build for Cython$W"
-(set -x; poetry build 2>&1 | sed 's/\x1b\[[0-9;]*m//g')
+quietly (set -x; poetry build 2>&1)
 
 echo "${NC}Running pre-commit to clean up$W"
-(set -x; pre-commit run --all)
+quietly (set -x; pre-commit run --all 2>&1) || true
 
 echo "${NC}Running towncrier$W"
-towncrier --yes
+quietly towncrier --yes
 
 echo "${NC}Making commit$W"
