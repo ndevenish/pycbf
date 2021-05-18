@@ -9,7 +9,7 @@ NC="$(printf "\033[0m")"
 BOLD="$(printf "\033[1m")"
 
 print_usage() {
-    echo "Usage: $0 [-h|--help] [--no-tag] ARG [ARG...]"
+    echo "Usage: $0 [-h|--help] [--no-tag]"
 }
 print_help() {
     print_usage
@@ -71,6 +71,10 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+if [[ ${#_positionals[@]} -gt 0 ]]; then
+    echo "${R}Error: Unknown positional arguments: ${_positionals[@]}"
+    exit 1
+fi
 if [[ $DRY_RUN == true ]]; then
     echo "Error: Sorry, dry-run isn't implemented yet"
     exit 1
