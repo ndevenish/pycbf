@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+import os
 import re
 import subprocess
 import sys
@@ -12,6 +13,8 @@ import toml
 
 ROOT_DIR = Path(__file__).parent
 CBFLIB_DIR = ROOT_DIR / "cbflib"
+
+re_toml_hashlines = re.compile("^version ?=|Cython", re.I)
 
 
 def hash_files(*files, extra_data: Iterable[str] = None) -> str:
@@ -223,5 +226,7 @@ if __name__ == "__main__":
     (ROOT_DIR / "pycbf_wrap.c").write_bytes(
         hash_header.replace("#", "//").encode() + b"\n\n" + pycbf_wrap_data
     )
+    os.remove(regen_dir / "pycbf.py")
+    os.remove(regen_dir / "pycbf_wrap.c")
 
     print("done.")
