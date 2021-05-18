@@ -130,10 +130,24 @@ echo "Running pre-commit to clean up"
 quietly pre-commit run --all || true
 
 
-echo "${BOLD}Making commit$NC"
+echo "${BOLD}Making commit"
 (   set -x
     git add --update
     git commit -n -m "pycbf $new_version"
 )
+
+if [[ $NO_TAG != "true" ]]; then
+    echo "Making tag $Mv${new_version}$NC"
+    (set -x; git tag "v${new_version}")
+fi
+
+echo "$NC"
+echo "Advancing to new development release"
+
+if ! _output"$(set -x; bump2version minor --list); then
+    echo "${R}Error: Advancing release tag to next development release"
+    echo "$_output" $NC
+    exit 1
+fi
 
 
