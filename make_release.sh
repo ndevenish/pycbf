@@ -90,6 +90,7 @@ fi
 if ! _output="$(set -x; bump2version "${bump2version_args[@]}")"; then
     echo "${R}Error: Bump2version failed"
     echo "$_output" $NC
+    exit 1
 fi
 echo "$W$_output$NC"
 
