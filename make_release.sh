@@ -120,19 +120,18 @@ if ! _output="$(set -x; bump2version "${bump2version_args[@]}")"; then
     echo "$_output" $NC
     exit 1
 fi
-echo "$W$_output$NC"
 
 new_version="$(echo "$_output" | grep new_version | sed -r s,"^.*=",,)"
 echo "New version: $BOLD$M$new_version$NC"
 
 echo "Regenerating SWIG files$W"
-quietly ./regenerate_pycbf.py
+silently ./regenerate_pycbf.py
 
 echo "Re-running build for Cython"
-quietly poetry build
+silently poetry build
 
 echo "Running towncrier"
-quietly towncrier --yes --version="$new_version"
+silently towncrier --yes --version="$new_version"
 
 if [[ $NO_EDIT != true ]]; then
     echo "Pausing for CHANGELOG editing"
@@ -153,7 +152,7 @@ echo "${BOLD}Making commit"
 
 if [[ $NO_TAG != "true" ]]; then
     echo "Making tag ${M}v${new_version}$NC"
-    (set -x; git tag "v${new_version}")
+    quietly git tag "v${new_version}"
 fi
 
 echo "$NC"
