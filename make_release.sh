@@ -34,7 +34,7 @@ quietly() {
 }
 
 silently() {
-    echo "${W}+ $@"
+    echo "${W}+ $@$NC"
     if ! _output="$("$@" 2>&1)"; then
         echo "${R}Error:"
         echo "$_output" | sed 's/\x1b\[[0-9;]*m//g'
