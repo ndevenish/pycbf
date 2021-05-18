@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+import os
 import re
 import subprocess
 import sys
@@ -202,5 +203,7 @@ if __name__ == "__main__":
     (ROOT_DIR / "pycbf_wrap.c").write_bytes(
         hash_header.replace("#", "//").encode() + b"\n\n" + pycbf_wrap_data
     )
+    os.remove(regen_dir / "pycbf.py")
+    os.remove(regen_dir / "pycbf_wrap.c")
 
     print("done.")
