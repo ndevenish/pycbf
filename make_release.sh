@@ -26,8 +26,10 @@ print_help() {
 quietly() {
     echo "${W}+ $@"
     if ! "$@" 2>&1 | sed 's/\x1b\[[0-9;]*m//g'; then
+        printf $NC
         return 1
     fi
+    printf $NC
 }
 
 DRY_RUN=""
@@ -111,7 +113,7 @@ echo "New version: $BOLD$M$new_version$NC"
 echo "Regenerating SWIG files$W"
 quietly ./regenerate_pycbf.py
 
-echo "${NC}Re-running build for Cython$W"
+echo "Re-running build for Cython"
 quietly poetry build
 
 echo "Running towncrier"
@@ -128,7 +130,7 @@ echo "Running pre-commit to clean up"
 quietly pre-commit run --all || true
 
 
-echo "${NC}Making commit$W"
+echo "${BOLD}Making commit$NC"
 (   set -x
     git add --update
     git commit -n -m "pycbf $new_version"
