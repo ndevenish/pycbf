@@ -156,8 +156,12 @@ if __name__ == "__main__":
     check_output([sys.executable, str(regen_dir / "make_pycbf.py")])
 
     # Calculate the combined hash so we know if the source have changed
-    swigdir = Path(__file__).parent / "swig"
-    gen_files = [swigdir / "make_pycbf.py", *swigdir.glob("*.i")]
+    swigdir = ROOT_DIR / "swig"
+    gen_files = [
+        swigdir / "make_pycbf.py",
+        *swigdir.glob("*.i"),
+        ROOT_DIR / "pyproject.toml",
+    ]
     swig_combined_hash = hash_files(*gen_files)
     hash_header = (
         "# Generated from:\n"

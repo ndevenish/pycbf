@@ -103,7 +103,9 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
     thisdir = Path(__file__).parent
     swigdir = thisdir / "SWIG"
     if swigdir.is_dir():
-        combined_checksum = hash_files(swigdir / "make_pycbf.py", *swigdir.glob("*.i"))
+        combined_checksum = hash_files(
+            swigdir / "make_pycbf.py", thisdir / "pyproject.toml", *swigdir.glob("*.i")
+        )
         if (
             combined_checksum not in (thisdir / "pycbf_wrap.c").read_text()
             or combined_checksum
