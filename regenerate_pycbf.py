@@ -14,6 +14,8 @@ import toml
 ROOT_DIR = Path(__file__).parent
 CBFLIB_DIR = ROOT_DIR / "cbflib"
 
+re_toml_hashlines = re.compile("^version ?=|Cython", re.I)
+
 
 def hash_files(*files, extra_data: Iterable[str] = None) -> str:
     """
@@ -174,7 +176,7 @@ if __name__ == "__main__":
     extra_data = [
         x
         for x in (ROOT_DIR / "pyproject.toml").read_text().splitlines()
-        if "version" in x or "cython" in x.lower()
+        if re_toml_hashlines.search(x)
     ]
     swig_combined_hash = hash_files(*gen_files, extra_data=extra_data)
     hash_header = (
