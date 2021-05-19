@@ -1,4 +1,5 @@
 import copy
+import itertools
 import re
 import sys
 from pathlib import Path
@@ -194,21 +195,7 @@ def extract_definition(element, section_number=None):
         definition["ARGUMENTS"] = parse_arguments(definition["ARGUMENTS"])
     if "PROTOTYPE" in definition:
         definition["PROTOTYPE"] = parse_prototype(definition["PROTOTYPE"])
-    # # For each section, strip out the header part
-    # for header, parts in defn.items():
-    #     for part in parts:
-    #         if isinstance(part, NavigableString):
-    #             continue
-    #         h_tag = part.find(string=header)
-    #         if h_tag:
-    #             assert h_tag.parent.name == "b" or h_tag.parent.name == "strong"
-    #             h_tag.parent.decompose()
-    #             break
-    #     remove_empty_paragraphs(parts)
-    #     remove_paragraph_newlines(parts)
-
-    # if "PROTOTYPE" in defn:
-    #     remove_string(defn["PROTOTYPE"], '#include "cbf.h"')
+    parse_title_and_preamble(definition)
 
     return definition
 
@@ -272,6 +259,84 @@ def parse_arguments(element):
         name: " ".join(line.strip() for line in desc.splitlines())
         for name, desc in data
     }
+
+
+def parse_title_and_preamble(defn):
+    """
+    Parse and validate the title entries. Split the title and any preamble.
+
+    Writes back the NAMES section.
+    Prepends any remaining PREAMBLE to the DESCRIPTION.
+    """
+    num = defn["SECTION_NUMBER"]
+    assert defn["PREAMBLE"].find("h4")
+    header = defn["PREAMBLE"].find("h4").extract()
+    # print("    " + header.get_text())
+    header_text = header.get_text()
+    assert num in header_text
+    # We know some of the section headers are wrong
+    header_text = fix_known_bad_header_titles(header_text, defn)
+
+    names = list(header_text.replace(num, "").replace(",", " ").split())
+    assert len(names) == len(set(names)), f"Section {num} has duplicate titles?"
+    defn["NAMES"] = names
+    if "PROTOTYPE" in defn:
+        assert len(defn["PROTOTYPE"]) == len(names), "Header-prototype length mismatch"
+
+        checknames = set(names)
+        # Check that every header name has a prototype definition
+        for proto in defn["PROTOTYPE"]:
+            for name in list(checknames):
+                if name in proto.definition:
+                    checknames.remove(name)
+                    break
+        assert not checknames, f"Not all title names in {num} had prototype definitions"
+
+    if defn["PREAMBLE"].get_text().strip():
+        # print(defn["PREAMBLE"].get_text().strip())
+        if "DESCRIPTION" in defn:
+            # Reinject the preamble into the description
+            for child in reversed(defn["PREAMBLE"].contents):
+                defn["DESCRIPTION"].insert(0, child.extract())
+            assert not defn["PREAMBLE"].get_text().strip()
+        else:
+            defn["DESCRIPTION"] = defn["PREAMBLE"]
+    del defn["PREAMBLE"]
+
+
+def fix_known_bad_header_titles(header_text, definition):
+    # Fix some hardcoded known-bad header entries
+    if (
+        "PROTOTYPE" in definition
+        and "cbf_write_file" in header_text
+        and "cbf_write_widefile" not in header_text
+        and any("cbf_write_widefile" in x.definition for x in definition["PROTOTYPE"])
+    ):
+        # 2.3.4 missing title entry
+        header_text = header_text.replace(
+            "cbf_write_file", "cbf_write_file, cbf_write_widefile"
+        )
+    header_text = (
+        header_text.replace("cbf_ ", "cbf_")
+        .replace(
+            "cbf_reset_datablock, cbf_reset_datablock",
+            "cbf_reset_datablock, cbf_reset_saveframe",
+        )
+        .replace(
+            "cbf_set_3d_image, cbf_set_3d_image, cbf_set_3d_image",
+            "cbf_set_3d_image, cbf_set_3d_image_fs, cbf_set_3d_image_sf,",
+        )
+        .replace(
+            "set_reference_beam_center_fs, set_reference_beam_center_fs",
+            "set_reference_beam_center_fs, set_reference_beam_center_sf",
+        )
+        .replace(
+            "cbf_get_detector_axis_slow, cbf_get_detector_axis_slow,",
+            "cbf_get_detector_axis_slow, cbf_get_detector_axis_fast,",
+        )
+        .replace("cbf_get_reference_poise", "cbf_get_axis_reference_poise")
+    )
+    return header_text
 
 
 # Parse the soup
@@ -338,80 +403,15 @@ defs = {n: extract_definition(section, n) for n, section in sections.items()}
 #         # print(defn["ARGUMENTS"])
 #     else:
 #         print(num)
-def fix_known_bad_header_titles(header_text):
-    # Fix some hardcoded known-bad header entries
-    if (
-        "PROTOTYPE" in defn
-        and "cbf_write_file" in header_text
-        and "cbf_write_widefile" not in header_text
-        and any("cbf_write_widefile" in x.definition for x in defn["PROTOTYPE"])
-    ):
-        # 2.3.4 missing title entry
-        header_text = header_text.replace(
-            "cbf_write_file", "cbf_write_file, cbf_write_widefile"
-        )
-    header_text = (
-        header_text.replace("cbf_ ", "cbf_")
-        .replace(
-            "cbf_reset_datablock, cbf_reset_datablock",
-            "cbf_reset_datablock, cbf_reset_saveframe",
-        )
-        .replace(
-            "cbf_set_3d_image, cbf_set_3d_image, cbf_set_3d_image",
-            "cbf_set_3d_image, cbf_set_3d_image_fs, cbf_set_3d_image_sf,",
-        )
-        .replace(
-            "set_reference_beam_center_fs, set_reference_beam_center_fs",
-            "set_reference_beam_center_fs, set_reference_beam_center_sf",
-        )
-        .replace(
-            "cbf_get_detector_axis_slow, cbf_get_detector_axis_slow,",
-            "cbf_get_detector_axis_slow, cbf_get_detector_axis_fast,",
-        )
-        .replace("cbf_get_reference_poise", "cbf_get_axis_reference_poise")
-    )
-    return header_text
 
+sectionhead = re.compile(r"^\d+\.\d+")
 
-def parse_title_and_preamble(defn):
-    """
-    Parse and validate the title entries. Split the title and any preamble.
-
-    Writes back the NAMES section
-    """
-    num = defn["SECTION_NUMBER"]
-    assert defn["PREAMBLE"].find("h4")
-    header = defn["PREAMBLE"].find("h4").extract()
-    # print("    " + header.get_text())
-    header_text = header.get_text()
-    assert num in header_text
-    # We know some of the section headers are wrong
-    header_text = fix_known_bad_header_titles(header_text)
-
-    names = list(header_text.replace(num, "").replace(",", " ").split())
-    assert len(names) == len(set(names)), f"Section {num} has duplicate titles?"
-    defn["NAMES"] = names
-    if "PROTOTYPE" in defn:
-        assert len(defn["PROTOTYPE"]) == len(names), "Header-prototype length mismatch"
-
-        checknames = set(names)
-        # Check that every header name has a prototype definition
-        for proto in defn["PROTOTYPE"]:
-            for name in list(checknames):
-                if name in proto.definition:
-                    checknames.remove(name)
-                    break
-        assert not checknames, f"Not all title names in {num} had prototype definitions"
-
-    if defn["PREAMBLE"].get_text().strip():
-        print(defn["PREAMBLE"].get_text().strip())
-
-
-# Try title extraction for validation
-for num, defn in defs.items():
-    print(num)
-    parse_title_and_preamble(defn)
-
+sections = {}
+for section in set(itertools.chain(*[sectionhead.findall(x) for x in defs])):
+    # Get the description of this from the a
+    sec = soup.find("a", attrs={"name": section})
+    sections[section] = sec
+# section_links = [x for x in soup.find_all("a") if ]
 breakpoint()
 # # # Now let's try parsing the arguments list
 # # print(cm["ARGUMENTS"])
