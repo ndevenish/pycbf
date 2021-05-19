@@ -14,7 +14,7 @@ from typing import (
     List,
     NamedTuple,
     Optional,
-    Tuple,
+    Sequence,
     Union,
 )
 
@@ -40,8 +40,8 @@ class FunctionArgument(NamedTuple):
 
 class FunctionPrototype(NamedTuple):
     name: str
-    ret: Tuple[str]
-    args: Tuple[FunctionArgument]
+    ret: Sequence[str]
+    args: Sequence[FunctionArgument]
     raw: str
     header: str = None
 
@@ -593,9 +593,6 @@ def format_sphinx_domain(definitions: Dict[str, RootObject]):
             # Do parameters
             param: FunctionArgument
             for param in member.args[1:]:
-                # Find this arg in the definition
-                # assert param.name in defn["ARGUMENTS"]
-
                 if param.name in defn.arguments:
                     arg_desc = defn.arguments[param.name]
                 else:
