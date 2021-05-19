@@ -1,5 +1,9 @@
 # `pycbf` - CBFlib for python
 
+[![PyPI release](https://img.shields.io/pypi/v/pycbf.svg)](https://pypi.python.org/pypi/pycbf)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/pycbf.svg)](https://pypi.org/project/pycbf)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)]( https://github.com/ambv/black)
+        
 This repository builds the `pycbf` portion of [CBFlib] only, as a [manylinux]
 binary wheel installable through `pip install pycbf`.
 
