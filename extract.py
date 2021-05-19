@@ -478,11 +478,11 @@ defs = {n: extract_definition(section, n) for n, section in sections.items()}
 # A list of objects we want to bind, and the lifecycle methods for them
 objects_lifecycle_methods = {
     "cbf_handle": ("cbf_make_handle", "cbf_free_handle"),
-    "cbf_detector": None,
-    "cbf_goniometer": None,
-    "cbf_positioner": None,
-    "cbf_h5handle": None,
-    "cbf_config_t": ("cbf_config_create", "cbf_config_free"),
+    "cbf_detector": [],
+    "cbf_goniometer": [],
+    "cbf_positioner": [],
+    "cbf_h5handle": [],
+    "cbf_config": ("cbf_config_create", "cbf_config_free"),
 }
 
 re_multiple_newlines = re.compile(r"\n\n\n+")
@@ -491,14 +491,20 @@ re_multiple_newlines = re.compile(r"\n\n\n+")
 def format_description(desc):
     # if "cbf_get_axis_poise" in desc.get_text():
     #     breakpoint()
-    out = re_multiple_newlines.sub("\n\n", desc.get_text().strip())
+    out = (
+        re_multiple_newlines.sub("\n\n", desc.get_text().strip())
+        .replace("\xa0", " ")
+        .replace("*", "\\*")
+    )
     # Dedent everything except the first line....
     ddlines = out.splitlines()
     out = ddlines[0] + "\n" + textwrap.dedent("\n".join(ddlines[1:]))
     return out
 
 
-for root_object in ["cbf_handle"]:
+DOC_ROOT = Path(__file__).parent / "docs"
+
+for root_object in objects_lifecycle_methods:
     output = StringIO()
     # Find all methods which take this object as the first argument
     obj_methods = [
@@ -521,12 +527,13 @@ for root_object in ["cbf_handle"]:
         members.keys(), key=lambda x: (members[x]["SECTION_NUMBER"], x.name)
     )
     assert all(x.name.startswith("cbf_") for x in members)
-
+    assert len(set(x.name for x in members)) == len(members)
     root_classname = f"{root_object}_struct"
 
-    domain_defs = []
+    domain_defs = [f"{root_classname}\n{'*'*len(root_classname)}"]
     domain_defs.append(f".. py:class:: {root_classname}")
 
+    print([x.name for x in members_order[:10]])
     for member, defn in zip(members_order, [members[x] for x in members_order]):
         # Don't document the constructor or destructor
         if member.name in objects_lifecycle_methods[root_object]:
@@ -536,7 +543,7 @@ for root_object in ["cbf_handle"]:
             f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})"
         ]
         entries.append("")
-        entries.append(textwrap.indent(format_description(defn["DESCRIPTION"]), "    "))
+        entries.append(textwrap.indent(format_description(defn["DESCRIPTION"]), "   "))
         entries.append("")
         # Do parameters
         for param in member.args[1:]:
@@ -547,10 +554,11 @@ for root_object in ["cbf_handle"]:
                 arg_desc = defn["ARGUMENTS"][param.name]
             else:
                 arg_desc = ""
-            entries.append(f"    :param {param.name}: {arg_desc}".rstrip())
-            domain_defs.append("\n".join(entries))
+            entries.append(f"   :param {param.name}: {arg_desc}".rstrip())
+        domain_defs.append("\n".join(entries))
 
-    print("\n\n".join(domain_defs))
+    (DOC_ROOT / "objects" / f"{root_object}.rst").write_text("\n\n".join(domain_defs))
+
 
 # breakpoint()
 # # breakpoint()

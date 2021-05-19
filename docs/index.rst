@@ -8,9 +8,8 @@ Welcome to pycbf's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
+   objects
 
 Indices and tables
 ==================
@@ -18,10 +17,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-.. autoclass:: pycbf.cbf_handle_struct
-   :members:
-   :undoc-members:
 
 
 .. .. automodule:: pycbf
