@@ -1,14 +1,25 @@
 import copy
 import itertools
 import re
+import subprocess
 import sys
 import textwrap
 from collections import ChainMap
-from io import StringIO
 from pathlib import Path
-from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    NamedTuple,
+    Optional,
+    Tuple,
+    Union,
+)
 
 from bs4 import BeautifulSoup, NavigableString, Tag
+from tqdm import tqdm
 
 BOLD = "\033[1m"
 NC = "\033[0m"
@@ -18,10 +29,43 @@ W = "\033[37m"
 
 Node = Union[Tag, NavigableString]
 
+reInclude = re.compile(r'\s*#include "([^"]+)')
+
+
+class FunctionArgument(NamedTuple):
+    type: str
+    const: bool
+    name: str
+
+
+class FunctionPrototype(NamedTuple):
+    name: str
+    ret: Tuple[str]
+    args: Tuple[FunctionArgument]
+    raw: str
+    header: str = None
+
+
+class Definition(NamedTuple):
+    prototypes: List[FunctionPrototype]
+    description: Tag
+    arguments: Dict[str, str]
+    returns: Tag
+    see_also: Tag
+    macro_definition: Tag
+    section_number: str
+
 
 class Prototype(NamedTuple):
     header: str
     definition: str
+
+
+class RootObject(NamedTuple):
+    name: str
+    members: Dict[FunctionPrototype, Definition]
+    init: Optional[List[FunctionPrototype]] = None
+    deinit: Optional[FunctionPrototype] = None
 
 
 VERBOSE = 0
@@ -194,22 +238,39 @@ def extract_definition(element, section_number=None):
 
         element = next_uncontained_element(last_part)
 
+    prototypes = None
+    arguments = None
     if "ARGUMENTS" in definition:
-        definition["ARGUMENTS"] = parse_arguments(definition["ARGUMENTS"])
+        arguments = parse_arguments(definition["ARGUMENTS"])
     if "PROTOTYPE" in definition:
-        definition["PROTOTYPE"] = parse_prototype(definition["PROTOTYPE"])
+        prototypes = parse_prototype(definition["PROTOTYPE"])
+        definition["PROTOTYPE"] = prototypes
+
     parse_title_and_preamble(definition)
 
+    return Definition(
+        prototypes=prototypes,
+        description=definition["DESCRIPTION"],
+        arguments=arguments,
+        returns=definition.get("RETURN VALUE", None),
+        see_also=definition.get("SEE ALSO", None),
+        macro_definition=definition.get("DEFINITION", None),
+        section_number=definition["SECTION_NUMBER"],
+    )
+    #     prototypes: List[FunctionPrototype]
+    # description: Tag
+    # arguments: Dict[str, str]
+    # returns: Tag
+    # see_also: Tag
+    # macro_definition: Tag
+    # section_number: str
     return definition
 
 
-reInclude = re.compile(r'\s*#include "([^"]+)')
-
-
-def parse_prototype(element):
+def parse_prototype(element: Tag) -> List[FunctionPrototype]:
     """Parse a prototye subsection"""
     header = None
-    definitions = []
+    definitions: List[str] = []
     prototype_text = element.get_text()
     # Manual override: 2.4.45 has bad definitions
     if "cbf_get_pixel_normal" in prototype_text:
@@ -268,7 +329,7 @@ def parse_arguments(element):
     }
 
 
-def parse_title_and_preamble(defn):
+def parse_title_and_preamble(defn: Dict[str, Any]):
     """
     Parse and validate the title entries. Split the title and any preamble.
 
@@ -299,15 +360,8 @@ def parse_title_and_preamble(defn):
         assert all_protos == set(
             names
         ), f"Not all title names in {num} had prototype definitions"
-        # for proto in defn["PROTOTYPE"]:
-        #     for name in list(checknames):
-        #         if name == proto.name:
-        #             checknames.remove(name)
-        #             break
-        # assert not checknames,
 
     if defn["PREAMBLE"].get_text().strip():
-        # print(defn["PREAMBLE"].get_text().strip())
         if "DESCRIPTION" in defn:
             # Reinject the preamble into the description
             for child in reversed(defn["PREAMBLE"].contents):
@@ -318,7 +372,7 @@ def parse_title_and_preamble(defn):
     del defn["PREAMBLE"]
 
 
-def fix_known_bad_header_titles(header_text, definition):
+def fix_known_bad_header_titles(header_text, definition: Dict[str, Any]):
     # Fix some hardcoded known-bad header entries
     if (
         "PROTOTYPE" in definition
@@ -370,7 +424,10 @@ def get_section_headers(
             and the section titles will be extracted for those numbers.
     """
     sectionhead = re.compile(r"^\d+\.\d+")
-    for section in set(itertools.chain(*[sectionhead.findall(x) for x in defs])):
+    sections = {}
+    for section in set(
+        itertools.chain(*[sectionhead.findall(x) for x in all_sections])
+    ):
         # Get the description of this from the a
         sectiontitle = soup.find("a", attrs={"name": section})
         if sectiontitle:
@@ -380,6 +437,7 @@ def get_section_headers(
             sec = sectiontitle.find(["h2", "h4"]).string
 
         sections[section] = sec.replace(section + " ", "").strip()
+    return sections
 
 
 def split_with_nested(splitter: str, string: str, keep_splitter: str = "") -> List[str]:
@@ -413,20 +471,6 @@ def split_with_nested(splitter: str, string: str, keep_splitter: str = "") -> Li
     return args
 
 
-class FunctionPrototype(NamedTuple):
-    name: str
-    ret: Tuple[str]
-    args: Tuple[str]
-    raw: str
-    header: str = None
-
-
-class FunctionArgument(NamedTuple):
-    type: str
-    const: bool
-    name: str
-
-
 def parse_function_argument(arg):
     if "(" in arg:
         # We're complex - just skip this parsing
@@ -456,6 +500,112 @@ def parse_function_definition(definition):
     print("   ", args)
 
 
+def pandoc_format_rst(desc) -> str:
+    instr = str(desc).replace("\xa0", " ")
+    out = subprocess.check_output(
+        ["pandoc", "-f", "html", "-t", "rst"], input=instr, encoding="utf-8"
+    )
+    return textwrap.dedent("\n".join(out.splitlines()[1:]))
+
+
+# Build a lookup map of base class to members
+def build_member_lookups(defs: Dict[str, Definition]) -> Dict[str, RootObject]:
+    """Build a lookup of root object -> members for each object"""
+    # A list of objects we want to bind, and the lifecycle methods for them
+    objects_lifecycle_methods = {
+        "cbf_handle": ("cbf_make_handle", "cbf_free_handle"),
+        "cbf_detector": [],
+        "cbf_goniometer": [],
+        "cbf_positioner": [],
+        "cbf_h5handle": [],
+        "cbf_config": ("cbf_config_create", "cbf_config_free"),
+    }
+    all_definitions = {}
+    for root_object in objects_lifecycle_methods:  # ["cbf_handle"]:
+        # Start with a simple heuristic; Find all methods which take
+        # this object as the first argument
+        obj_methods = [
+            defn
+            for n, defn in defs.items()
+            if defn.prototypes
+            and defn.prototypes[0].args
+            and defn.prototypes[0].args[0].type[0] == root_object
+        ]
+
+        # Make a "Reverse" lookup for each object method
+        members = dict(
+            ChainMap(
+                *[{proto: defn for proto in defn.prototypes} for defn in obj_methods]
+            )
+        )
+        # Remove items from this list if they match the init, deinit functions
+        init_methods = []
+        deinit_method = None
+        if objects_lifecycle_methods[root_object]:
+            (inits, deinits) = objects_lifecycle_methods[root_object]
+            for member in list(members):
+                if member.name in inits:
+                    init_methods.append(member)
+                    del members[member]
+                elif member.name == deinit_method:
+                    deinit_method = member
+                    del members[member]
+
+        # For now, use the order from the CBFlib.html
+        members_order = sorted(
+            members.keys(), key=lambda x: (members[x].section_number, x.name)
+        )
+        # Rebuild in this order
+        members = {x: members[x] for x in members_order}
+
+        assert all(x.name.startswith("cbf_") for x in members)
+        assert len(set(x.name for x in members)) == len(members)
+
+        all_definitions[root_object] = RootObject(
+            name=root_object, members=members, init=init_methods, deinit=deinit_method
+        )
+    return all_definitions
+
+
+def format_sphinx_domain(definitions: Dict[str, RootObject]):
+    """Write direct sphinx python-domain documentation files"""
+
+    DOC_ROOT = Path(__file__).parent / "docs"
+
+    for root in definitions.values():
+        root_classname = f"{root.name}_struct"
+
+        domain_defs = [f"{root_classname}\n{'*'*len(root_classname)}"]
+        domain_defs.append(f".. py:class:: {root_classname}")
+
+        member: FunctionPrototype
+        defn: Definition
+        for member, defn in tqdm(
+            root.members.items(), desc=root_classname, total=len(root.members)
+        ):
+            # Now emit the definition for each
+            entries = [
+                f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})"
+            ]
+            entries.append("")
+            entries.append(textwrap.indent(pandoc_format_rst(defn.description), "   "))
+            entries.append("")
+            # Do parameters
+            param: FunctionArgument
+            for param in member.args[1:]:
+                # Find this arg in the definition
+                # assert param.name in defn["ARGUMENTS"]
+
+                if param.name in defn.arguments:
+                    arg_desc = defn.arguments[param.name]
+                else:
+                    arg_desc = ""
+                entries.append(f"   :param {param.name}: {arg_desc}".rstrip())
+            domain_defs.append("\n".join(entries))
+
+        (DOC_ROOT / "objects" / f"{root.name}.rst").write_text("\n\n".join(domain_defs))
+
+
 # Parse the soup
 sys.setrecursionlimit(8096)
 data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
@@ -474,92 +624,10 @@ for tag in h4s:
 # Extract all sections
 defs = {n: extract_definition(section, n) for n, section in sections.items()}
 
+# Build the member lookup for our parsers
+member_lookup = build_member_lookups(defs)
 
-# A list of objects we want to bind, and the lifecycle methods for them
-objects_lifecycle_methods = {
-    "cbf_handle": ("cbf_make_handle", "cbf_free_handle"),
-    "cbf_detector": [],
-    "cbf_goniometer": [],
-    "cbf_positioner": [],
-    "cbf_h5handle": [],
-    "cbf_config": ("cbf_config_create", "cbf_config_free"),
-}
-
-re_multiple_newlines = re.compile(r"\n\n\n+")
-
-
-def format_description(desc):
-    # if "cbf_get_axis_poise" in desc.get_text():
-    #     breakpoint()
-    out = (
-        re_multiple_newlines.sub("\n\n", desc.get_text().strip())
-        .replace("\xa0", " ")
-        .replace("*", "\\*")
-    )
-    # Dedent everything except the first line....
-    ddlines = out.splitlines()
-    out = ddlines[0] + "\n" + textwrap.dedent("\n".join(ddlines[1:]))
-    return out
-
-
-DOC_ROOT = Path(__file__).parent / "docs"
-
-for root_object in objects_lifecycle_methods:
-    output = StringIO()
-    # Find all methods which take this object as the first argument
-    obj_methods = [
-        defn
-        for n, defn in defs.items()
-        if "PROTOTYPE" in defn
-        and defn["PROTOTYPE"]
-        and defn["PROTOTYPE"][0].args
-        and defn["PROTOTYPE"][0].args[0].type[0] == root_object
-    ]
-
-    # Make a "Reverse" lookup for each object method
-    members = dict(
-        ChainMap(
-            *[{proto: defn for proto in defn["PROTOTYPE"]} for defn in obj_methods]
-        )
-    )
-    # For now, use the order from the CBFlib.html
-    members_order = sorted(
-        members.keys(), key=lambda x: (members[x]["SECTION_NUMBER"], x.name)
-    )
-    assert all(x.name.startswith("cbf_") for x in members)
-    assert len(set(x.name for x in members)) == len(members)
-    root_classname = f"{root_object}_struct"
-
-    domain_defs = [f"{root_classname}\n{'*'*len(root_classname)}"]
-    domain_defs.append(f".. py:class:: {root_classname}")
-
-    print([x.name for x in members_order[:10]])
-    for member, defn in zip(members_order, [members[x] for x in members_order]):
-        # Don't document the constructor or destructor
-        if member.name in objects_lifecycle_methods[root_object]:
-            continue
-        # Now emit the definition for each
-        entries = [
-            f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})"
-        ]
-        entries.append("")
-        entries.append(textwrap.indent(format_description(defn["DESCRIPTION"]), "   "))
-        entries.append("")
-        # Do parameters
-        for param in member.args[1:]:
-            # Find this arg in the definition
-            # assert param.name in defn["ARGUMENTS"]
-
-            if param.name in defn["ARGUMENTS"]:
-                arg_desc = defn["ARGUMENTS"][param.name]
-            else:
-                arg_desc = ""
-            entries.append(f"   :param {param.name}: {arg_desc}".rstrip())
-        domain_defs.append("\n".join(entries))
-
-    (DOC_ROOT / "objects" / f"{root_object}.rst").write_text("\n\n".join(domain_defs))
-
-
+format_sphinx_domain(member_lookup)
 # breakpoint()
 # # breakpoint()
 # parse_function_definition(

@@ -36,6 +36,7 @@ dials-data = {git = "https://github.com/ndevenish/data", rev = "pycbf"}
 bump2version = "^1.0.1"
 Sphinx = "^4.0.1"
 sphinx-rtd-theme = "^0.5.2"
+tqdm = "^4.60.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23"]
