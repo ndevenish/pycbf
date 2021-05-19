@@ -257,18 +257,10 @@ def extract_definition(element, section_number=None):
         macro_definition=definition.get("DEFINITION", None),
         section_number=definition["SECTION_NUMBER"],
     )
-    #     prototypes: List[FunctionPrototype]
-    # description: Tag
-    # arguments: Dict[str, str]
-    # returns: Tag
-    # see_also: Tag
-    # macro_definition: Tag
-    # section_number: str
-    return definition
 
 
 def parse_prototype(element: Tag) -> List[FunctionPrototype]:
-    """Parse a prototye subsection"""
+    """Parse a function prototye subsection"""
     header = None
     definitions: List[str] = []
     prototype_text = element.get_text()
@@ -608,7 +600,7 @@ sys.setrecursionlimit(8096)
 data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
 soup = BeautifulSoup(data, "html5lib")
 
-# Find all headers in sections 2.3+
+# Find all headers in sections 2.3, .4, .6, .7, .8 and . 9
 rePrototype = re.compile(r"^2\.[346789]\d*\.")
 h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
 
@@ -625,9 +617,3 @@ defs = {n: extract_definition(section, n) for n, section in sections.items()}
 member_lookup = build_member_lookups(defs)
 
 format_sphinx_domain(member_lookup)
-# breakpoint()
-# # breakpoint()
-# parse_function_definition(
-#     "int cbf_H5Drequire_scalar_F64LE2_ULP (const hid_t location, hid_t *const dataset, const char *const name, const double value, int(*cmp)(const void *, const void *, size_t, const void *), const void *const cmp_params)"
-# )
-# parse_function_definition("cbf_config_t* cbf_config_create ()")
