@@ -23,7 +23,7 @@ include = ["pycbf_wrap.c", "LICENCE.txt", "cbflib/src/*.c", "cbflib/include/*.h"
 
 [tool.poetry.dependencies]
 python = ">=3.6.0"
-numpy = ">=1.17"
+#numpy = ">=1.17"
 
 [tool.poetry.dev-dependencies]
 setuptools = "^56.1.0"
