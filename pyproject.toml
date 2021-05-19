@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pycbf"
-version = "0.9.6.1"
+version = "0.9.6.3.dev"
 description = "An API for CBF/imgCIF Crystallographic Binary Files"
 homepage="http://www.bernstein-plus-sons.com/software/CBF/"
 authors = ["Herbert J. Bernstein <yaya@bernstein-plus-sons.com>", "Paul J. Ellis"]
@@ -18,22 +18,25 @@ classifiers = [
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering",
 ]
+include = ["pycbf_wrap.c", "LICENCE.txt", "cbflib/src/*.c", "cbflib/include/*.h"]
 
 
 [tool.poetry.dependencies]
-python = ">=2.7,<3.0.0 || >=3.6.0"
+python = ">=3.6.0"
+numpy = ">=1.17"
 
 [tool.poetry.dev-dependencies]
-pytest = [
-    { version="^4.6", python="^2.7" },
-    { version=">6", python=">=3.6"},
-]
 setuptools = "^56.1.0"
 beautifulsoup4 = "^4.9.3"
 html5lib = "^1.1"
+Cython = "^0.29.23"
+toml = "^0.10.2"
+pytest = "^6.2.4"
+dials-data = {git = "https://github.com/ndevenish/data", rev = "pycbf"}
+bump2version = "^1.0.1"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools"]
+requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]

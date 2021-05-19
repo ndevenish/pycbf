@@ -1,16 +1,17 @@
 import pycbf
+from pycbf.utils import cbf2str
 
 
 def test_get_local_integer_byte_order():
-    assert pycbf.get_local_integer_byte_order() == "little_endian"
+    assert cbf2str(pycbf.get_local_integer_byte_order()) == "little_endian"
 
 
 def test_get_local_real_byte_order():
-    assert pycbf.get_local_real_byte_order() == "little_endian"
+    assert cbf2str(pycbf.get_local_real_byte_order()) == "little_endian"
 
 
 def test_get_local_real_format():
-    assert pycbf.get_local_real_format() == "ieee 754-1985"
+    assert cbf2str(pycbf.get_local_real_format()) == "ieee 754-1985"
 
 
 def test_compute_cell_volume():

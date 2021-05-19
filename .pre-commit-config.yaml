@@ -9,7 +9,7 @@ repos:
       hooks:
           - id: black
             args: [--safe, --quiet]
-            exclude: ^src/pycbf/__init__.py
+            exclude: ^src/pycbf/_wrapper.py
 
     - repo: https://github.com/PyCQA/flake8
       rev: 3.9.1
@@ -20,4 +20,8 @@ repos:
       rev: 5.8.0
       hooks:
           - id: isort
-            exclude: ^src/pycbf/__init__.py
+            exclude: ^src/pycbf/_wrapper.py
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.0.0
+      hooks:
+          - id: no-commit-to-branch
