@@ -1,9 +1,10 @@
 import copy
 import itertools
+import pprint
 import re
 import sys
 from pathlib import Path
-from typing import Callable, Iterable, NamedTuple, Optional, Union
+from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -339,6 +340,31 @@ def fix_known_bad_header_titles(header_text, definition):
     return header_text
 
 
+def get_section_headers(
+    soup: BeautifulSoup, all_sections: Iterable[str]
+) -> Dict[str, str]:
+    """
+    Given a list of section numbers, extract a dictionary of titles
+
+    Args:
+        soup: The Beautify Soup object
+        all_sections: List of sections e.g. ["2.3.1", "2.4.5"]. This will
+            be used to generate a list of "minor" sections ["2.3", "2.4"],
+            and the section titles will be extracted for those numbers.
+    """
+    sectionhead = re.compile(r"^\d+\.\d+")
+    for section in set(itertools.chain(*[sectionhead.findall(x) for x in defs])):
+        # Get the description of this from the a
+        sectiontitle = soup.find("a", attrs={"name": section})
+        if sectiontitle:
+            sec = sectiontitle.string
+        else:
+            sectiontitle = soup.find("div", attrs={"id": section})
+            sec = sectiontitle.find(["h2", "h4"]).string
+
+        sections[section] = sec.replace(section + " ", "").strip()
+
+
 # Parse the soup
 sys.setrecursionlimit(8096)
 data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
@@ -352,9 +378,9 @@ h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
 sections = {}
 for tag in h4s:
     number = tag.text.split()[0]
-    print(number)
+    # print(number)
     sections[number] = extract_section(tag)
-    print(".....length =", len(str(sections[number])))
+    # print(".....length =", len(str(sections[number])))
 
 # sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
 
@@ -397,6 +423,9 @@ defs = {n: extract_definition(section, n) for n, section in sections.items()}
 
 # print("no arguments")
 # for num, defn in defs.items():
+#     for p in defn.get("PROTOTYPE", []):
+#         print(p.definition)
+
 #     if "ARGUMENTS" in defn:
 #         pass
 #         # print(num)
@@ -404,17 +433,70 @@ defs = {n: extract_definition(section, n) for n, section in sections.items()}
 #     else:
 #         print(num)
 
-sectionhead = re.compile(r"^\d+\.\d+")
 
-sections = {}
-for section in set(itertools.chain(*[sectionhead.findall(x) for x in defs])):
-    # Get the description of this from the a
-    sec = soup.find("a", attrs={"name": section})
-    sections[section] = sec
-# section_links = [x for x in soup.find_all("a") if ]
-breakpoint()
-# # # Now let's try parsing the arguments list
-# # print(cm["ARGUMENTS"])
-# # print(parse_arguments(cm["ARGUMENTS"]))
-# # print(cm["ARGUMENTS"])
+def split_with_nested(splitter: str, string: str, keep_splitter: str = "") -> List[str]:
+    """
+    Split a string on a character, ignoring nested parentheses.
+
+    Args:
+        splitter: The characters to split on
+        string: The string to split
+        keep_splitter: These split characters will be included as arguments on their own
+    """
+    args = []
+    cur_arg = ""
+    in_subarg = 0
+    for c in string:
+        if c == "(":
+            in_subarg += 1
+        elif c == ")":
+            in_subarg -= 1
+
+        if not in_subarg and c in splitter:
+            if cur_arg.strip():
+                args.append(cur_arg.strip())
+            if c in keep_splitter:
+                args.append(c)
+            cur_arg = ""
+        else:
+            cur_arg += c
+    if cur_arg:
+        args.append(cur_arg.strip())
+    return args
+
+
+class FunctionPrototype(NamedTuple):
+    name: str
+    ret: List[str]
+    args: List[str]
+
+
+def parse_function_definition(definition):
+    split_parts = re.compile(r"^([^(]+)\((.*)\);?$")
+    return_and_name, all_args = split_parts.match(definition).groups()
+    pre_types = split_with_nested("* ", return_and_name, keep_splitter="*")
+    args = split_with_nested(",", all_args)
+
+    proto = FunctionPrototype(
+        name=pre_types[-1],
+        ret=pre_types[:-1],
+        args=args,
+    )
+    return proto
+    print("   ", pre_types)
+    print("   ", args)
+
+
+# Extract and Print prototypes
+for n, defn in defs.items():
+    print(n)
+    for proto in defn.get("PROTOTYPE", []):
+        print(proto.definition)
+        p = parse_function_definition(proto.definition)
+        pprint.pprint(p)
+
 # # breakpoint()
+# parse_function_definition(
+#     "int cbf_H5Drequire_scalar_F64LE2_ULP (const hid_t location, hid_t *const dataset, const char *const name, const double value, int(*cmp)(const void *, const void *, size_t, const void *), const void *const cmp_params)"
+# )
+# parse_function_definition("cbf_config_t* cbf_config_create ()")
