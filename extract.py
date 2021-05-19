@@ -1,10 +1,12 @@
 import copy
 import itertools
-import pprint
 import re
 import sys
+import textwrap
+from collections import ChainMap
+from io import StringIO
 from pathlib import Path
-from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Union
+from typing import Callable, Dict, Iterable, List, NamedTuple, Optional, Tuple, Union
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 
@@ -229,7 +231,11 @@ def parse_prototype(element):
         else:
             definitions.append(line.strip())
 
-    return [Prototype(header, x) for x in definitions]
+    return [
+        x._replace(header=header)
+        for x in [parse_function_definition(dn) for dn in definitions]
+    ]
+    # return [Prototype(header, x) for x in definitions]
 
 
 def parse_arguments(element):
@@ -284,14 +290,21 @@ def parse_title_and_preamble(defn):
     if "PROTOTYPE" in defn:
         assert len(defn["PROTOTYPE"]) == len(names), "Header-prototype length mismatch"
 
-        checknames = set(names)
+        # checknames = set(names)
         # Check that every header name has a prototype definition
-        for proto in defn["PROTOTYPE"]:
-            for name in list(checknames):
-                if name in proto.definition:
-                    checknames.remove(name)
-                    break
-        assert not checknames, f"Not all title names in {num} had prototype definitions"
+        # assert all(any(name in [x.name for x in proto]) )
+        all_protos = {x.name for x in defn["PROTOTYPE"]}
+        if not all_protos == set(names):
+            breakpoint()
+        assert all_protos == set(
+            names
+        ), f"Not all title names in {num} had prototype definitions"
+        # for proto in defn["PROTOTYPE"]:
+        #     for name in list(checknames):
+        #         if name == proto.name:
+        #             checknames.remove(name)
+        #             break
+        # assert not checknames,
 
     if defn["PREAMBLE"].get_text().strip():
         # print(defn["PREAMBLE"].get_text().strip())
@@ -311,14 +324,16 @@ def fix_known_bad_header_titles(header_text, definition):
         "PROTOTYPE" in definition
         and "cbf_write_file" in header_text
         and "cbf_write_widefile" not in header_text
-        and any("cbf_write_widefile" in x.definition for x in definition["PROTOTYPE"])
+        and any("cbf_write_widefile" in x.raw for x in definition["PROTOTYPE"])
     ):
         # 2.3.4 missing title entry
         header_text = header_text.replace(
             "cbf_write_file", "cbf_write_file, cbf_write_widefile"
         )
     header_text = (
-        header_text.replace("cbf_ ", "cbf_")
+        header_text.replace("\n", " ")
+        .replace("cbf_ ", "cbf_")
+        .replace("\xa0", " ")
         .replace(
             "cbf_reset_datablock, cbf_reset_datablock",
             "cbf_reset_datablock, cbf_reset_saveframe",
@@ -336,6 +351,8 @@ def fix_known_bad_header_titles(header_text, definition):
             "cbf_get_detector_axis_slow, cbf_get_detector_axis_fast,",
         )
         .replace("cbf_get_reference_poise", "cbf_get_axis_reference_poise")
+        .replace(" set_reference_beam_center", "cbf_set_reference_beam_center")
+        .replace(" set_reference_beam_center", " cbf_set_reference_beam_center")
     )
     return header_text
 
@@ -363,75 +380,6 @@ def get_section_headers(
             sec = sectiontitle.find(["h2", "h4"]).string
 
         sections[section] = sec.replace(section + " ", "").strip()
-
-
-# Parse the soup
-sys.setrecursionlimit(8096)
-data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
-soup = BeautifulSoup(data, "html5lib")
-
-# Find all headers in sections 2.3+
-rePrototype = re.compile(r"^2\.[346789]\d*\.")
-h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
-
-# Turn the list of headers into a list of sections (the whole block of tags)
-sections = {}
-for tag in h4s:
-    number = tag.text.split()[0]
-    # print(number)
-    sections[number] = extract_section(tag)
-    # print(".....length =", len(str(sections[number])))
-
-# sections = {tag.text.split()[0]: extract_section(tag) for tag in h4s}
-
-
-# breakpoint()
-# pprint(extract_definition(sections["2.3.55"]))
-# sys.exit(1)
-# breakpoint()
-# Extract all sections
-defs = {n: extract_definition(section, n) for n, section in sections.items()}
-# defs = {}
-# for n, section in sections.items():
-#     try:
-#         defs[n] = extract_definition(section)
-#     except:
-#         print("Failed on:", n)
-#         raise
-
-# Print all the sections nicely, with colour
-# import itertools
-# for c, defn in zip(itertools.cycle([B, G]), defs):
-#     print(c, type(c), repr(c))
-#     print(f"{c}{defn}:")
-#     pprint(defs[defn])
-#     print(NC)
-
-
-# # Extract and Print prototypes
-# for n, defn in defs.items():
-#     print(n)
-#     if "PROTOTYPE" in defn:
-#         # if n == "2.3.62":
-#         #     breakpoint()
-#         proto = parse_prototype(defn["PROTOTYPE"])
-#         assert proto
-#         if len(proto) > 0:
-#             for p in proto:
-#                 print("PROTO", n, p)
-
-
-# print("no arguments")
-# for num, defn in defs.items():
-#     for p in defn.get("PROTOTYPE", []):
-#         print(p.definition)
-
-#     if "ARGUMENTS" in defn:
-#         pass
-#         # print(num)
-#         # print(defn["ARGUMENTS"])
-#     else:
-#         print(num)
 
 
 def split_with_nested(splitter: str, string: str, keep_splitter: str = "") -> List[str]:
@@ -467,34 +415,144 @@ def split_with_nested(splitter: str, string: str, keep_splitter: str = "") -> Li
 
 class FunctionPrototype(NamedTuple):
     name: str
-    ret: List[str]
-    args: List[str]
+    ret: Tuple[str]
+    args: Tuple[str]
+    raw: str
+    header: str = None
+
+
+class FunctionArgument(NamedTuple):
+    type: str
+    const: bool
+    name: str
+
+
+def parse_function_argument(arg):
+    if "(" in arg:
+        # We're complex - just skip this parsing
+        return FunctionArgument(type=[arg], const=None, name="")
+    args = split_with_nested(" *", arg, keep_splitter="*")
+    # if args[0] == "const"
+    const = False
+    if args[0] == "const":
+        args = args[1:]
+        const = True
+
+    return FunctionArgument(type=tuple(args[:-1]), name=args[-1], const=const)
 
 
 def parse_function_definition(definition):
     split_parts = re.compile(r"^([^(]+)\((.*)\);?$")
     return_and_name, all_args = split_parts.match(definition).groups()
     pre_types = split_with_nested("* ", return_and_name, keep_splitter="*")
-    args = split_with_nested(",", all_args)
+    raw_args = split_with_nested(",", all_args)
 
+    args = [parse_function_argument(arg) for arg in raw_args]
     proto = FunctionPrototype(
-        name=pre_types[-1],
-        ret=pre_types[:-1],
-        args=args,
+        name=pre_types[-1], ret=tuple(pre_types[:-1]), args=tuple(args), raw=definition
     )
     return proto
     print("   ", pre_types)
     print("   ", args)
 
 
-# Extract and Print prototypes
-for n, defn in defs.items():
-    print(n)
-    for proto in defn.get("PROTOTYPE", []):
-        print(proto.definition)
-        p = parse_function_definition(proto.definition)
-        pprint.pprint(p)
+# Parse the soup
+sys.setrecursionlimit(8096)
+data = (Path.cwd() / "cbflib" / "doc" / "CBFlib.html").read_text(errors="ignore")
+soup = BeautifulSoup(data, "html5lib")
 
+# Find all headers in sections 2.3+
+rePrototype = re.compile(r"^2\.[346789]\d*\.")
+h4s = [x for x in soup.find_all("h4") if rePrototype.match(x.text)]
+
+# Turn the list of headers into a list of sections (the whole block of tags)
+sections = {}
+for tag in h4s:
+    number = tag.text.split()[0]
+    sections[number] = extract_section(tag)
+
+# Extract all sections
+defs = {n: extract_definition(section, n) for n, section in sections.items()}
+
+
+# A list of objects we want to bind, and the lifecycle methods for them
+objects_lifecycle_methods = {
+    "cbf_handle": ("cbf_make_handle", "cbf_free_handle"),
+    "cbf_detector": None,
+    "cbf_goniometer": None,
+    "cbf_positioner": None,
+    "cbf_h5handle": None,
+    "cbf_config_t": ("cbf_config_create", "cbf_config_free"),
+}
+
+re_multiple_newlines = re.compile(r"\n\n\n+")
+
+
+def format_description(desc):
+    # if "cbf_get_axis_poise" in desc.get_text():
+    #     breakpoint()
+    out = re_multiple_newlines.sub("\n\n", desc.get_text().strip())
+    # Dedent everything except the first line....
+    ddlines = out.splitlines()
+    out = ddlines[0] + "\n" + textwrap.dedent("\n".join(ddlines[1:]))
+    return out
+
+
+for root_object in ["cbf_handle"]:
+    output = StringIO()
+    # Find all methods which take this object as the first argument
+    obj_methods = [
+        defn
+        for n, defn in defs.items()
+        if "PROTOTYPE" in defn
+        and defn["PROTOTYPE"]
+        and defn["PROTOTYPE"][0].args
+        and defn["PROTOTYPE"][0].args[0].type[0] == root_object
+    ]
+
+    # Make a "Reverse" lookup for each object method
+    members = dict(
+        ChainMap(
+            *[{proto: defn for proto in defn["PROTOTYPE"]} for defn in obj_methods]
+        )
+    )
+    # For now, use the order from the CBFlib.html
+    members_order = sorted(
+        members.keys(), key=lambda x: (members[x]["SECTION_NUMBER"], x.name)
+    )
+    assert all(x.name.startswith("cbf_") for x in members)
+
+    root_classname = f"{root_object}_struct"
+
+    domain_defs = []
+    domain_defs.append(f".. py:class:: {root_classname}")
+
+    for member, defn in zip(members_order, [members[x] for x in members_order]):
+        # Don't document the constructor or destructor
+        if member.name in objects_lifecycle_methods[root_object]:
+            continue
+        # Now emit the definition for each
+        entries = [
+            f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})"
+        ]
+        entries.append("")
+        entries.append(textwrap.indent(format_description(defn["DESCRIPTION"]), "    "))
+        entries.append("")
+        # Do parameters
+        for param in member.args[1:]:
+            # Find this arg in the definition
+            # assert param.name in defn["ARGUMENTS"]
+
+            if param.name in defn["ARGUMENTS"]:
+                arg_desc = defn["ARGUMENTS"][param.name]
+            else:
+                arg_desc = ""
+            entries.append(f"    :param {param.name}: {arg_desc}".rstrip())
+            domain_defs.append("\n".join(entries))
+
+    print("\n\n".join(domain_defs))
+
+# breakpoint()
 # # breakpoint()
 # parse_function_definition(
 #     "int cbf_H5Drequire_scalar_F64LE2_ULP (const hid_t location, hid_t *const dataset, const char *const name, const double value, int(*cmp)(const void *, const void *, size_t, const void *), const void *const cmp_params)"
