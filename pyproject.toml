@@ -8,7 +8,7 @@ maintainers = ["Nicholas Devenish <ndevenish@gmail.com>"]
 license = "LGPL-2.1-or-later"
 readme="README.md"
 build = "build.py"
-repository="https://github.com/ndevenish/pycbf"
+repository="https://github.com/dials/pycbf"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
