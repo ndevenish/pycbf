@@ -1,7 +1,7 @@
 import re
 from distutils.core import Extension
 from hashlib import sha256
-from pathlib import Path, PurePath
+from pathlib import Path
 from typing import Any, Dict, Iterable
 
 from Cython.Build import cythonize
@@ -44,7 +44,7 @@ CBF_SOURCES = [
     # "cbflib/src/cbf_hdf5_filter.c",
 ]
 
-PYCBF_ROOT = PurePath(__file__).parent
+PYCBF_ROOT = Path(__file__).parent
 CBFLIB_INCLUDE = PYCBF_ROOT / "cbflib" / "include"
 
 extensions = [
@@ -111,10 +111,13 @@ def generate_combined_checksum(root):
         *swigdir.glob("*.i"),
     ]
     re_toml_hashlines = re.compile("^version ?=|Cython", re.I)
+    # Find the pyproject.toml .... poetry might have moved it for editable install
+    pyprojects = [root / "pyproject.toml", root / "pyproject.tmp"]
+    pyproject = next(iter([x for x in pyprojects if x.is_file()] + [None]))
+    if not pyproject:
+        raise RuntimeError("Could not find pyproject.toml")
     extra_data = [
-        x
-        for x in (root / "pyproject.toml").read_text().splitlines()
-        if re_toml_hashlines.search(x)
+        x for x in pyproject.read_text().splitlines() if re_toml_hashlines.search(x)
     ]
     return hash_files(*gen_files, extra_data=extra_data)
 
@@ -125,14 +128,13 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
 
     # Validate that the SWIG wrappers are generated from the latest
     # sources (if we have them)
-    thisdir = Path(__file__).parent
-    swigdir = thisdir / "SWIG"
+    swigdir = PYCBF_ROOT / "SWIG"
     if swigdir.is_dir():
-        combined_checksum = generate_combined_checksum(thisdir)
+        combined_checksum = generate_combined_checksum(PYCBF_ROOT)
         if (
-            combined_checksum not in (thisdir / "pycbf_wrap.c").read_text()
+            combined_checksum not in (PYCBF_ROOT / "pycbf_wrap.c").read_text()
             or combined_checksum
-            not in thisdir.joinpath("src", "pycbf", "_wrapper.py").read_text()
+            not in PYCBF_ROOT.joinpath("src", "pycbf", "_wrapper.py").read_text()
         ):
             raise RuntimeError("Error: The SWIG generated sources are out of date")
 
