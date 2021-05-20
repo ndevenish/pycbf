@@ -34,7 +34,11 @@ dials-data = {git = "https://github.com/dials/data", rev = "pycbf"}
 bump2version = "^1.0.1"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23"]
+requires = [
+    "poetry-core>=1.1.0",
+    "setuptools",
+    "Cython~=0.29.23",
+]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
