@@ -18,7 +18,12 @@ classifiers = [
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering",
 ]
-include = ["pycbf_wrap.c", "LICENCE.txt", "cbflib/src/*.c", "cbflib/include/*.h"]
+include = [
+    {path = "pycbf_wrap.c", format = "sdist"},
+    {path = "LICENCE.txt", format = "sdist"},
+    {path = "cbflib/src/*.c", format = "sdist"},
+    {path = "cbflib/include/*.h", format = "sdist"},
+]
 
 
 [tool.poetry.dependencies]
