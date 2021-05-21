@@ -48,7 +48,7 @@ class FunctionPrototype(NamedTuple):
 
 
 class Definition(NamedTuple):
-    prototypes: List[FunctionPrototype]
+    prototypes: Sequence[FunctionPrototype]
     description: Tag
     arguments: Dict[str, str]
     returns: Tag
@@ -250,7 +250,7 @@ def extract_definition(element, section_number=None):
     parse_title_and_preamble(definition)
 
     return Definition(
-        prototypes=prototypes,
+        prototypes=tuple(prototypes) if prototypes else None,
         description=definition["DESCRIPTION"],
         arguments=arguments,
         returns=definition.get("RETURN VALUE", None),
@@ -281,7 +281,6 @@ def parse_prototype(element: Tag) -> List[FunctionPrototype]:
             definitions[-1].endswith(";") or definitions[-1].endswith(")")
         ):
             definitions[-1] = definitions[-1] + " " + line.strip()
-            # print("CONTINUE: " + definitions[-1])
         else:
             definitions.append(line.strip())
 
@@ -316,10 +315,24 @@ def parse_arguments(element):
     # Pad out if not 2 items
     data = [x if len(x) == 2 else x + [""] for x in data]
 
-    return {
-        name: " ".join(line.strip() for line in desc.splitlines())
-        for name, desc in data
-    }
+    # Translate each row to a dictionary
+    arguments = {}
+    for name, desc in data:
+        desc_text = " ".join(line.strip() for line in desc.splitlines())
+        # If this already exists - we have a duplicate entry. Handle
+        # known cases where the documentation is bad
+        if name in arguments:
+            if name == "datablockname" and "save" in desc_text:
+                name = "saveframename"
+            elif name == "axis_id1":
+                name = "axis_id3"
+                desc_text = "Pointer to the destination third surface axis name"
+        arguments[name] = desc_text
+    assert len(arguments) == len(
+        data
+    ), f"Argument table mismatch: Duplicate definition '{name}'?"
+
+    return arguments
 
 
 def parse_title_and_preamble(defn: Dict[str, Any]):
@@ -474,7 +487,11 @@ def parse_function_argument(arg):
     if args[0] == "const":
         args = args[1:]
         const = True
-
+    # if the name ends with an array definition...
+    if args[-1].endswith("]"):
+        _name, _arr = re.match(r"([^[\]]+)(\[\d+\])", args[-1]).groups()
+        # print(args[-1], *parts)
+        args = args[:-1] + [_arr] + [_name]
     return FunctionArgument(type=tuple(args[:-1]), name=args[-1], const=const)
 
 
@@ -566,33 +583,68 @@ def format_sphinx_domain(definitions: Dict[str, RootObject]):
     DOC_ROOT = Path(__file__).parent / "docs"
 
     for root in definitions.values():
+        # Reverse the member dictionary as a test of multi-defining
+        all_defs = []
+        for definition in root.members.values():
+            if definition not in all_defs:
+                all_defs.append(definition)
+
         root_classname = f"{root.name}_struct"
 
         domain_defs = [f"{root_classname}\n{'*'*len(root_classname)}"]
         domain_defs.append(f".. py:class:: {root_classname}")
 
-        member: FunctionPrototype
+        # member: FunctionPrototype
         defn: Definition
-        for member, defn in tqdm(
-            root.members.items(), desc=root_classname, total=len(root.members)
-        ):
-            # Now emit the definition for each
-            entries = [
-                f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})"
-            ]
-            entries.append("")
+        for defn in tqdm(all_defs, desc=root_classname, total=len(all_defs)):
+            # Now emit the definition for each member
+            entries = []
+            # Do all member headers
+            for member in defn.prototypes:
+                entries.extend(
+                    [
+                        f".. py:method:: {root_classname}.{member.name.replace('cbf_', '')}({', '.join(x.name for x in member.args[1:])})",
+                        "",
+                    ]
+                )
+
             entries.append(textwrap.indent(pandoc_format_rst(defn.description), "   "))
             entries.append("")
             # Do parameters
+            all_listed_args = dict(defn.arguments)
             param: FunctionArgument
             for param in member.args[1:]:
                 if param.name in defn.arguments:
                     arg_desc = defn.arguments[param.name]
+                    del all_listed_args[param.name]
                 else:
                     arg_desc = ""
+                    print(param.name)
                 entries.append(f"   :param {param.name}: {arg_desc}".rstrip())
+                # Form the type string
+                ptype = "const" if param.const else ""
+                for typepart in param.type:
+                    prefix = " "
+                    if typepart == "*" or typepart.startswith("["):
+                        prefix = ""
+                    ptype += prefix + typepart
+                entries.append(f"   :type {param.name}: {ptype.strip()}")
+            if defn.returns and (return_text := defn.returns.get_text().strip()):
+                # return_text: str = defn.returns.get_text()
+                if return_text.startswith("Returns an"):
+                    return_text = return_text.removeprefix("Returns an").lstrip()
+                    return_text = return_text[0].upper() + return_text[1:]
+                return_texts = [x.rstrip() for x in return_text.splitlines()]
+                return_text = return_texts[0] + textwrap.indent(
+                    "\n".join(return_texts[1:]), "      "
+                )
+                entries.append(f"   :return: {return_text}")
+                entries.append(f"   :rtype:  {' '.join(member.ret)}")
+                # breakpoint()
+
             domain_defs.append("\n".join(entries))
 
+        (DOC_ROOT / "objects").mkdir(exist_ok=True)
         (DOC_ROOT / "objects" / f"{root.name}.rst").write_text("\n\n".join(domain_defs))
 
 
