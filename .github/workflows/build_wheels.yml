@@ -21,14 +21,14 @@ jobs:
                   submodules: true
             - name: Install dials-data
               run: |
-                  pip3 install git+https://github.com/ndevenish/data@pycbf
+                  pip3 install git+https://github.com/dials/data@pycbf
                   dials.data get pycbf
             - name: Build wheel
               uses: joerick/cibuildwheel@v1.11.0
               env:
                   CIBW_SKIP: cp2* cp35* pp*
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
-                  CIBW_BEFORE_TEST: pip install pytest git+https://github.com/ndevenish/data@pycbf
+                  CIBW_BEFORE_TEST: pip install pytest git+https://github.com/dials/data@pycbf
 
             # to supply options, put them in 'env', like:
             # env:
