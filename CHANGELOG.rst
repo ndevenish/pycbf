@@ -1,3 +1,12 @@
+Pycbf 0.9.6.3 (2021-05-26)
+==========================
+
+Bugfixes
+--------
+
+- Prevent source files from being scattered across site-packages (#14)
+
+
 pycbf 0.9.6.2 (2021-05-18)
 ==========================
 
