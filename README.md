@@ -22,6 +22,7 @@ In addition to the base 0.9.6, this has the following alterations:
 | 0.9.6.0     | Regenerated SWIG bindings for Python 3 compatibility. Compiled with `SWIG_PYTHON_STRICT_BYTE_CHAR`. |
 | ~~0.9.6.1~~ | This was an unreleased internal version.                                                            |
 | 0.9.6.2     | Drop python 2.7. Accept both `bytes` and `str`. Add `read_buffer` method, and `libimg` bindings.    |
+| 0.9.6.3     | Clean up the package installation to remove source-only files.                                      |
 
 For details, please see the [CHANGELOG](CHANGELOG.rst).
 
