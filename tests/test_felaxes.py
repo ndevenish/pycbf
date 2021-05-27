@@ -5,7 +5,7 @@ import pytest
 import pycbf
 
 
-@pytest.mark.xfail
+@pytest.mark.skip("Don't know what data sets were designed for this test")
 def test_felaxes():
     image_file = sys.argv[1]
 
