@@ -20,7 +20,7 @@ def test_get_number():
 
 @pytest.fixture
 def mar_image(dials_data):
-    return dials_data("pycbf", pathlib=True) / "mar345_01_001.mar2300"
+    return dials_data("pycbf", pathlib=True) / "endonat3_001.mar2300"
 
 
 def test_regression_image(mar_image):

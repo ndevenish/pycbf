@@ -35,7 +35,7 @@ setuptools = "^56.1.0"
 Cython = "^0.29.23"
 toml = "^0.10.2"
 pytest = "^6.2.4"
-dials-data = {git = "https://github.com/dials/data", rev = "pycbf"}
+dials-data = ">2.1.58"
 bump2version = "^1.0.1"
 
 [build-system]
