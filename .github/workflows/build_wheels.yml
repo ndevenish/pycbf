@@ -28,7 +28,7 @@ jobs:
               env:
                   CIBW_SKIP: cp2* cp35* pp*
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
-                  CIBW_ARCHS_MACOS: x86_64 universal2 arm64
+                  CIBW_ARCHS_MACOS: x86_64 arm64
                   CIBW_BEFORE_TEST: pip install pytest git+https://github.com/dials/data@pycbf
 
             # to supply options, put them in 'env', like:
