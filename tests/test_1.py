@@ -51,19 +51,6 @@ def test_1(dials_data):
                     print(type(s))
                     print(dir(s))
                     print(len(s))
-                    try:
-                        import Numeric
-
-                        d = Numeric.fromstring(s, Numeric.UInt32)
-                        # Hard wired Unsigned Int32
-                        print(d.shape)
-                        print(d[0:10], d[d.shape[0] / 2], d[-1])
-                        d = Numeric.reshape(d, (2300, 2300))
-                    #                   from matplotlib import pylab
-                    #                   pylab.imshow(d,vmin=0,vmax=1000)
-                    #                   pylab.show()
-                    except ImportError:
-                        print("You need to get Numeric and matplotlib to see the data")
                 else:
                     value = object.get_value()
                     print("Val:", value, i)
