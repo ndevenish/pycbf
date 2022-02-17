@@ -23,6 +23,7 @@ include = [
     {path = "LICENCE.txt", format = "sdist"},
     {path = "cbflib/src/*.c", format = "sdist"},
     {path = "cbflib/include/*.h", format = "sdist"},
+    {path = "src/pycbf/py.typed"},
 ]
 
 
