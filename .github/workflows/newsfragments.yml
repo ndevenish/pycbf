@@ -15,7 +15,7 @@ jobs:
               uses: actions/checkout@v2
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
-                  token: ${{ secrets.USER_TOKEN || github.token }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
             - name: Added a newsfragment
               run: |
                   set -x
