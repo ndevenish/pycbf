@@ -1,0 +1,12 @@
+diff -ru a/cbflib/include/cbf.h b/cbflib/include/cbf.h
+--- a/cbflib/include/cbf.h	2022-03-22 14:30:51.000000000 +0000
++++ b/cbflib/include/cbf.h	2022-03-22 14:32:22.000000000 +0000
+@@ -250,8 +250,6 @@
+ #ifndef CBF_H
+ #define CBF_H
+
+-#include "hdf5.h"
+-
+ #ifdef __cplusplus
+
+ extern "C" {
