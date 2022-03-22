@@ -1,3 +1,20 @@
+Pycbf 0.9.6.4 (2022-03-22)
+==========================
+
+Features
+--------
+
+- Use dials-data release for test data, instead of experimental branch. (#17)
+- Added PEP-484 type hints for ``pycbf.Img``, and mark as typing-compatible. (#20)
+- Windows is now a supported target. (#21)
+
+
+Misc
+----
+
+- #18
+
+
 Pycbf 0.9.6.3 (2021-05-26)
 ==========================
 
