@@ -1,4 +1,5 @@
 import re
+import subprocess
 from distutils.core import Extension
 from hashlib import sha256
 from pathlib import Path
@@ -123,9 +124,6 @@ def generate_combined_checksum(root):
 
 
 def build(setup_kwargs: Dict[str, Any]) -> None:
-    # print("Build C Extensions Here")
-    # Rewrite the cbf.h file to not require hdf5
-
     # Validate that the SWIG wrappers are generated from the latest
     # sources (if we have them)
     swigdir = PYCBF_ROOT / "SWIG"
@@ -138,14 +136,20 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
         ):
             raise RuntimeError("Error: The SWIG generated sources are out of date")
 
-    # Rewrite cbf.h so that it doesn't require HDF5.h (it doesn't need it)
-    cbf_h = Path(__file__).parent.joinpath("cbflib", "include", "cbf.h")
-    cbf_h_data = cbf_h.read_bytes()
-    cbf_h_data_rw = re.sub(
-        b'^#include "hdf5.h"', b'// #include "hdf5.h"', cbf_h_data, flags=re.MULTILINE
-    )
-    if cbf_h_data != cbf_h_data_rw:
-        cbf_h.write_bytes(cbf_h_data_rw)
+    # Apply Custom patches to the HDF5 sources - we want to build on upstream
+    for patch in sorted(Path(__file__).parent.joinpath("patches").glob("*.patch")):
+        print(f"Applying patch {patch}...")
+        try:
+            with patch.open("rb") as f:
+                output = subprocess.check_output(
+                    ["patch", "-p1", "-N"], stdin=f, encoding="utf-8"
+                )
+                print(output)
+        except subprocess.CalledProcessError as e:
+            print(e.output)
+            # We want to ignore this if it was a case of already applied
+            if "Skipping patch" not in e.output:
+                raise
 
     setup_kwargs.update({"ext_modules": extensions})
 
