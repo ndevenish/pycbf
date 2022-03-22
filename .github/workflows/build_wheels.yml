@@ -5,10 +5,8 @@ on:
     push:
         branches:
             - main
-    # pull_request:
-    #     types:
-    #         - opened
-    #         - synchronize
+    pull_request:
+        types: [opened, synchronize]
 
 jobs:
     build_wheels:
@@ -28,10 +26,6 @@ jobs:
                   CIBW_SKIP: cp2* cp35* pp*
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
                   CIBW_BEFORE_TEST: pip install pytest dials-data
-
-            # to supply options, put them in 'env', like:
-            # env:
-            #   CIBW_SOME_OPTION: value
 
             - uses: actions/upload-artifact@v2
               with:
