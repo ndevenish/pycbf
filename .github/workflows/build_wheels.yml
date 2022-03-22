@@ -16,7 +16,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [ubuntu-20.04, macos-10.15, windows-2019]
+                os: [macos-10.15]
 
         steps:
             - uses: actions/checkout@v2
@@ -26,6 +26,7 @@ jobs:
               uses: joerick/cibuildwheel@v1.11.0
               env:
                   CIBW_SKIP: cp2* cp35* pp*
+                  CIBW_ARCHS_MACOS: universal2 arm64
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
                   CIBW_BEFORE_TEST: pip install pytest dials-data
 
@@ -33,37 +34,37 @@ jobs:
               with:
                   path: ./wheelhouse/*.whl
 
-    build_sdist:
-        name: Build source distribution
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-              with:
-                  submodules: true
+    # build_sdist:
+    #     name: Build source distribution
+    #     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - uses: actions/checkout@v2
+    #           with:
+    #               submodules: true
 
-            - name: Build sdist
-              run: pipx run poetry build -f sdist
+    #         - name: Build sdist
+    #           run: pipx run poetry build -f sdist
 
-            - uses: actions/upload-artifact@v2
-              with:
-                  path: dist/*.tar.gz
+    #         - uses: actions/upload-artifact@v2
+    #           with:
+    #               path: dist/*.tar.gz
 
 
-    upload_pypi:
-        needs: [build_wheels, build_sdist]
-        runs-on: ubuntu-latest
-        # upload to PyPI on every tag starting with 'v'
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
-        # alternatively, to publish when a GitHub Release is created, use the following rule:
-        # if: github.event_name == 'release' && github.event.action == 'published'
-        steps:
-            - uses: actions/download-artifact@v2
-              with:
-                  name: artifact
-                  path: dist
+    # upload_pypi:
+    #     needs: [build_wheels]
+    #     runs-on: ubuntu-latest
+    #     # upload to PyPI on every tag starting with 'v'
+    #     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    #     # alternatively, to publish when a GitHub Release is created, use the following rule:
+    #     # if: github.event_name == 'release' && github.event.action == 'published'
+    #     steps:
+    #         - uses: actions/download-artifact@v2
+    #           with:
+    #               name: artifact
+    #               path: dist
 
-            - uses: pypa/gh-action-pypi-publish@717ba43cfbb0387f6ce311b169a825772f54d295
-              with:
-                  user: __token__
-                  password: ${{ secrets.PYPI_TOKEN }}
+    #         - uses: pypa/gh-action-pypi-publish@717ba43cfbb0387f6ce311b169a825772f54d295
+    #           with:
+    #               user: __token__
+    #               password: ${{ secrets.PYPI_TOKEN }}
