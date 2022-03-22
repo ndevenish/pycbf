@@ -44,7 +44,7 @@ diff -ru a/cbflib/src/cbf_context.c b/cbflib/src/cbf_context.c
    #include <sys/types.h>
 diff -ru a/cbflib/src/cbf_copy.c b/cbflib/src/cbf_copy.c
 --- a/cbflib/src/cbf_copy.c	2021-05-26 18:02:08.000000000 +0100
-+++ b/cbflib/src/cbf_copy.c	2022-03-22 15:46:12.000000000 +0000
++++ b/cbflib/src/cbf_copy.c	2022-03-22 15:47:05.000000000 +0000
 @@ -2288,9 +2288,9 @@
                  
                  index = elsize*(fastlow +indexmid*dimfast+indexslow*dimfast*dimmid);
@@ -501,3 +501,18 @@ diff -ru a/cbflib/src/cbf_minicbf_header.c b/cbflib/src/cbf_minicbf_header.c
              
              if (!cbf_get_array_section_pixel_sizes(cbf,array_id,rank,psizes)) {
                  
+diff -ru a/cbflib/src/cbff.c b/cbflib/src/cbff.c
+--- a/cbflib/src/cbff.c	2021-05-14 15:29:02.000000000 +0100
++++ b/cbflib/src/cbff.c	2022-03-22 17:00:53.000000000 +0000
+@@ -261,6 +261,11 @@
+ #include "cbf_simple.h"
+ #include "cbff.h"
+     
++#ifdef _MSC_VER
++// Windows doesn't have the same symbol for this
++#define strcasecmp _stricmp
++#endif
++
+     /* Return the bit pattern of a FILE * pointer as a size_t opaque
+      handle */
+     
