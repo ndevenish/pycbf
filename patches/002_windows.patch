@@ -1,3 +1,18 @@
+diff -ru a/cbflib/include/cbf.h b/cbflib/include/cbf.h
+--- a/cbflib/include/cbf.h	2021-05-26 18:05:10.000000000 +0100
++++ b/cbflib/include/cbf.h	2022-03-22 15:35:59.000000000 +0000
+@@ -307,6 +305,11 @@
+ #include <limits.h>
+ #include <stdio.h>
+ 
++// Large parts of the code assume ssize_t, which doesn't exist on windows
++#if defined(_MSC_VER)
++#include <BaseTsd.h>
++typedef SSIZE_T ssize_t;
++#endif
+ 
+   /* Currently the cbf library assumes a 32-bit or larger integer */
+ 
 diff -ru a/cbflib/src/cbf_codes.c b/cbflib/src/cbf_codes.c
 --- a/cbflib/src/cbf_codes.c	2021-05-14 15:29:02.000000000 +0100
 +++ b/cbflib/src/cbf_codes.c	2022-03-22 13:33:27.000000000 +0000
@@ -471,4 +486,3 @@ diff -ru a/cbflib/src/cbf_minicbf_header.c b/cbflib/src/cbf_minicbf_header.c
              
              if (!cbf_get_array_section_pixel_sizes(cbf,array_id,rank,psizes)) {
                  
-
