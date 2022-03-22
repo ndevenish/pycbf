@@ -89,7 +89,7 @@ def hash_files(*files, extra_data: Iterable[str] = None) -> str:
     hashes = []
     for filename in sorted(files):
         h = sha256()
-        h.update(filename.read_bytes().replace(b"\r\n", "\n"))
+        h.update(filename.read_bytes().replace(b"\r\n", b"\n"))
         hashes.append(h.hexdigest() + "  " + filename.name)
     if extra_data:
         h = sha256()
