@@ -36,7 +36,7 @@ jobs:
 
     build_sdist:
         name: Build source distribution
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/tv')
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
