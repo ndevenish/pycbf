@@ -6,6 +6,8 @@ on:
         branches:
             - main
             - test_ci_upload
+        tags:
+            - tv**
     # pull_request:
     #     types: [opened, synchronize]
 
