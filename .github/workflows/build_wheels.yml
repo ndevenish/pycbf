@@ -46,7 +46,7 @@ jobs:
                   submodules: true
 
             - name: Build sdist
-              run: pipx run build --sdist
+              run: pipx run poetry build -f sdist
 
             - uses: actions/upload-artifact@v2
               with:
