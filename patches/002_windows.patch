@@ -1,0 +1,474 @@
+diff -ru a/cbflib/src/cbf_codes.c b/cbflib/src/cbf_codes.c
+--- a/cbflib/src/cbf_codes.c	2021-05-14 15:29:02.000000000 +0100
++++ b/cbflib/src/cbf_codes.c	2022-03-22 13:33:27.000000000 +0000
+@@ -313,6 +313,7 @@
+ #include <string.h>
+ #include <sys/stat.h>
+ #include <wchar.h>
++#include <sys/types.h>
+ 
+     /* Check a 24-character base-64 MD5 digest */
+     
+diff -ru a/cbflib/src/cbf_context.c b/cbflib/src/cbf_context.c
+--- a/cbflib/src/cbf_context.c	2021-05-26 18:02:08.000000000 +0100
++++ b/cbflib/src/cbf_context.c	2022-03-22 13:33:27.000000000 +0000
+@@ -261,12 +261,13 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <limits.h>
+-#include <unistd.h>
+ #include <fcntl.h>
+ #ifdef _WIN32
++  #include <sys/stat.h>
+   #include <direct.h>
+   #define MKDIR(x) _mkdir(x)
+ #else
++  #include <unistd.h>
+   #include <errno.h>
+   #include <sys/stat.h>
+   #include <sys/types.h>
+diff -ru a/cbflib/src/cbf_hdf5.c b/cbflib/src/cbf_hdf5.c
+--- a/cbflib/src/cbf_hdf5.c	2021-05-26 18:02:08.000000000 +0100
++++ b/cbflib/src/cbf_hdf5.c	2022-03-22 13:33:27.000000000 +0000
+@@ -282,7 +282,18 @@
+ #include <math.h>
+ #include <assert.h>
+ #include <errno.h>
+-    
++
++// cl.exe doesn't support variable length arrays.
++// If using this, then redefine to use a windows-only function to do the allocation.
++// If nothing is defined, then it will fall through to using VLA's directly
++#if _MSC_VER
++    #include <malloc.h>
++    #define ALLOC_VLA(atype, name, size)    atype *name = (atype*)_alloca(sizeof(atype)*(size))
++#else
++    // Compiler supports VLAs
++    #define ALLOC_VLA(atype, name, size)    atype name[size];
++#endif
++
+ #if !defined(CBF_NO_REGEX)
+ #ifdef CBF_REGEXLIB_REGEX
+ #include <regex.h>
+@@ -291,6 +302,11 @@
+ #endif
+ #endif
+ 
++#ifndef NAN
++#define NAN (0./0.)
++#endif
++
++
+     static int cbf_write_nx2cbf__cbfdb_op
+     (hid_t g_id,
+      const char * name,
+@@ -3592,7 +3608,7 @@
+                     error |= cbf_H5Dcreate(location,&_dataset,name,0,0,0,0,H5T_IEEE_F64LE);
+                     error |= cbf_H5Dwrite2(_dataset,0,0,0,&value,H5T_NATIVE_DOUBLE);
+                 } else {
+-                    double data = 0./0.;
++                    double data = NAN;
+                     error |= cbf_H5Dread(_dataset,0,0,0,&data);
+                     if (fabs(value - data)> 1.e-38+1.e-13*(fabs(value)+fabs(data))) {
+                     cbf_debug_print4("Error: data doesn't match (%g vs %g) for nexus field '%s'\n",data,value,name);
+@@ -3645,7 +3661,7 @@
+         hid_t * dset = dataset ? dataset : &_dataset;
+         found =  cbf_H5Dfind2(location,dset,name,0,0,0,H5T_IEEE_F64LE);
+         if (CBF_SUCCESS==found) {
+-                double data = 0./0.;
++            double data = NAN;
+             error |= cbf_H5Dread2(*dset,0,0,0,&data,H5T_NATIVE_DOUBLE);
+             if (cmp(&value, &data, 1)) {
+                 cbf_debug_print4("data doesn't match (%g vs %g) for nexus field '%s'\n",data,value,name);
+@@ -3709,7 +3725,7 @@
+         hid_t * dset = dataset ? dataset : &_dataset; /* always usable */
+             found =  cbf_H5Dfind2(location,dset,name,0,0,0,H5T_IEEE_F64LE);
+             if (CBF_SUCCESS==found) {
+-                double data = 0./0.;
++            double data = NAN;
+             CBF_CALL2(cbf_H5Dread2(*dset,0,0,0,&data,H5T_NATIVE_DOUBLE),error);
+                 if (cmp(&value, &data, 1, cmp_params)) {
+                 cbf_debug_print4("data doesn't match (%g vs %g) for nexus field '%s'\n",data,value,name);
+@@ -4599,7 +4615,7 @@
+         }
+         if (CBF_SUCCESS==error) { /* vector */
+             const hsize_t vdims[] = {3};
+-            double buf[3] = {0./0.};
++            double buf[3] = { NAN };
+             double matrix[3][3] = {
+                 {-1.,0.0,0.0},
+                 {0.0,1.0,0.0},
+@@ -11809,8 +11825,8 @@
+             hsize_t memtype = CBF_H5ERROR;
+             
+             size_t ii, rank, adim;
+-            
+-            double oldvec[dimension];
++
++            ALLOC_VLA(double, oldvec, dimension);
+ 
+             CBF_UNUSED( adim );
+ 
+@@ -19062,7 +19078,7 @@
+                             error |= CBF_H5ERROR;
+                         } else {
+                             /* check rank, allowing for multiple usable results */
+-                            double value = 0., factor = 0./0.;
++                            double value = 0., factor = NAN;
+                             const int rank = H5Sget_simple_extent_ndims(data_space);
+                             if (0==rank) {
+                                 /* read the value */
+@@ -19112,7 +19128,7 @@
+                             error |= CBF_H5ERROR;
+                         } else {
+                             /* check rank, allowing for multiple usable results */
+-                            double value = 0., factor = 0./0.;
++                            double value = 0., factor = NAN;
+                             const int rank = H5Sget_simple_extent_ndims(data_space);
+                             if (0==rank) {
+                                 /* read the value */
+@@ -19222,7 +19238,7 @@
+                                 } else {
+                                     hsize_t offset[1];
+                                     hsize_t count[] = {1};
+-                                    double value = 0., factor = 0./0.;
++                                    double value = 0., factor = NAN;
+                                     offset[0] = dim[0]>1 ? nx->slice : 0;
+                                     CBF_CALL(cbf_H5Dread2(object,offset,0,count,&value,H5T_NATIVE_DOUBLE));
+                                     if (CBF_SUCCESS==error) {
+@@ -19264,7 +19280,7 @@
+                         } else {
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 if (CBF_SUCCESS==error) {
+                                     /* convert the data to the correct units */
+@@ -19417,7 +19433,7 @@
+                                 } else {
+                                     hsize_t offset[1];
+                                     hsize_t count[] = {1};
+-                                    double value = 0., factor = 0./0.;
++                                    double value = 0., factor = NAN;
+                                     offset[0] = dim[0]>1 ? nx->slice : 0;
+                                     /* read the value */
+                                     CBF_CALL(cbf_H5Dread2(object,offset,0,count,&value,H5T_NATIVE_DOUBLE));
+@@ -19506,7 +19522,7 @@
+                                 } else {
+                                     hsize_t offset[1];
+                                     hsize_t count[] = {1};
+-                                    double value = 0., factor = 0./0.;
++                                    double value = 0., factor = NAN;
+                                     offset[0] = dim[0]>1 ? nx->slice : 0;
+                                     CBF_CALL(cbf_H5Dread2(object,offset,0,count,&value,H5T_NATIVE_DOUBLE));
+                                     if (CBF_SUCCESS==error) {
+@@ -19699,7 +19715,7 @@
+                         } else {
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 if (CBF_SUCCESS==error) {
+                                     /* convert the data to the correct units */
+@@ -19732,7 +19748,7 @@
+                         } else {
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 if (CBF_SUCCESS==error) {
+                                     /* convert the data to the correct units */
+@@ -20043,7 +20059,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -20094,7 +20110,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -20189,7 +20205,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -21014,7 +21030,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -21042,7 +21058,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -21092,7 +21108,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -21121,7 +21137,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -21150,7 +21166,7 @@
+                             /* check rank, allowing for multiple usable results */
+                             if (0==H5Sget_simple_extent_ndims(data_space)) {
+                                 hid_t units = CBF_H5FAIL;
+-                                double value = 0., factor = 0./0.;
++                                double value = 0., factor = NAN;
+                                 const char * unit_string = NULL;
+                                 CBF_CALL(cbf_H5Dread2(object,0,0,0,&value,H5T_NATIVE_DOUBLE));
+                                 CBF_CALL(cbf_H5Afind(object,&units,"units",CBF_H5FAIL,CBF_H5FAIL));
+@@ -22269,7 +22285,7 @@
+                     const char * _axis_set_id[3] = {NULL, NULL,NULL}; /*< always free'able */
+                     const char * axis_set_id[3]; /*< always useable */
+                     hsize_t pixel_offset_dim[3];
+-                    double elem_size[] = {0./0., 0./0.,0./0.};
++                    double elem_size[] = {NAN, NAN,NAN};
+                     int i;
+                     pixel_offset_pat[0] = z_pixel_offset_pat;
+                     pixel_offset_pat[1] = y_pixel_offset_pat;
+@@ -22312,7 +22328,7 @@
+                                 cbf_debug_print("error: problem getting the rank of a dataset");
+                                 error |= CBF_H5ERROR;
+                             } else if (rank > 0) {
+-                                hsize_t dims[rank];
++                                ALLOC_VLA(hsize_t, dims, rank);
+                                 if (rank != H5Sget_simple_extent_dims(data_space,dims,0)) {
+                                     cbf_debug_print("error: problem getting the dimensions of a dataset");
+                                     error |= CBF_H5ERROR;
+@@ -22327,11 +22343,11 @@
+                                      - assume that it's a uniformly spaced array of pixels in 3D space, so ignore subsequent values
+                                      - store it (and dependency chain) in the key, to be converted along with other axes
+                                      */
+-                                    hsize_t off[rank];
+-                                    hsize_t cnt[rank];
++                                    ALLOC_VLA(hsize_t, off, rank);
++                                    ALLOC_VLA(hsize_t, cnt, rank);
+                                     size_t ir;
+                                     double disp2[] = {0.,0.};
+-                                    double factor = 0./0.;
++                                    double factor = NAN;
+                                     for (ir = 0; ir < rank; ir++) { off[ir] = 0; cnt[ir] = (ir<rank-1)?1:2;}
+                                     /* extract data */
+                                     CBF_CALL(cbf_H5Dread2(pixel_data,off,NULL,cnt,disp2,H5T_NATIVE_DOUBLE));
+@@ -22395,7 +22411,7 @@
+                                 error |= CBF_H5ERROR;
+                             } else if (0==rank) {
+                                 double size = 0.;
+-                                double factor = 0./0.;
++                                double factor = NAN;
+                                 CBF_CALL(cbf_H5Dread2(pixel_data,NULL,NULL,NULL,&size,H5T_NATIVE_DOUBLE));
+                                 if (CBF_SUCCESS==error) {
+                                     /* convert the data to the correct units */
+@@ -23174,7 +23190,7 @@
+                                     CBF_CALL(cbf_H5Aread_string(units,&unit_string));
+                                     if (!error) {
+                                         /* need a conversion factor to apply to the offset before storing it */
+-                                        double factor = 0./0.;
++                                        double factor = NAN;
+                                         if (CBF_SUCCESS!=(error|=cbf_scale_units(unit_string,"mm",&factor))) {
+                                             cbf_debug_print(cbf_strerror(error));
+                                         } else {
+@@ -24487,7 +24503,7 @@
+                 } else if (!strcmp(type,"rotation")) {
+                     data = c->angle_strt + (c->angle_incr+c->angle_rstrt_incr)*key->frame_number;
+                 } else {
+-                    data = 0./0.;
++                    data = NAN;
+                 }
+                 CBF_CALL(cbf_H5Dfind2(nx->hfile,&dset,key->axis.path[i],1,max,buf,H5T_IEEE_F64LE));
+                 CBF_CALL(cbf_H5Dinsert(dset,off,0,cnt,buf,&data,H5T_NATIVE_DOUBLE));
+@@ -27965,7 +27981,7 @@
+         cbf_onfailnez(error |= cbf_rewind_datablock(handle), cbf_debug_print("CBF error: cannot find datablock.\n"));
+         while (CBF_SUCCESS==error) {
+             /* get some useful parameters out of the metadata as it's converted */
+-            double pixel_x = 0./0., pixel_y = 0./0.;
++            double pixel_x = NAN, pixel_y = NAN;
+ 
+             /* then search for the 'array_data' category */
+             cbf_onfailnez(cbf_find_category(handle,"array_data"),
+@@ -27986,8 +28002,8 @@
+                         char * token = malloc(n*sizeof(char));
+                         int newline = 1;
+                         /* Numerical values for use after main parsing loop */
+-                        double beam_x = 0./0., beam_y = 0./0.;
+-                        double detector_distance = 0./0.;
++                        double beam_x = NAN, beam_y = NAN;
++                        double detector_distance = NAN;
+                         /* Flags to determine what information I actually have */
+                         /* Other useful values */
+                         hid_t pilatusDiagnostics = CBF_H5FAIL; /* <- non-nexus group to dump some possibly useful information into */
+@@ -28229,7 +28245,7 @@
+                                 hsize_t offset[1];
+                                 const hsize_t count[] = {1};
+                                 hsize_t buf[] = {0};
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 offset[0] = h5handle->slice;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num = strtod(token,0);
+@@ -28248,7 +28264,7 @@
+                                 hsize_t offset[1];
+                                 const hsize_t count[] = {1};
+                                 hsize_t buf[] = {0};
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 offset[0] = h5handle->slice;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num = strtod(token,0);
+@@ -28261,7 +28277,7 @@
+                                 hid_t h5data = CBF_H5FAIL;
+                                 hid_t h5location = detector;
+                                 const char h5name[] = "dead_time";
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num = strtod(token,0);
+                                 CBF_CALL(CBFM_H5Drequire_scalar_F64LE2(h5location,&h5data,h5name,num,cmp_double,cmp_params));
+@@ -28275,7 +28291,7 @@
+                                     saturation_value = _cbf_strdup(token);
+                                 }
+                             } else if (!cbf_cistrcmp("Threshold_setting",token)) {
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 hid_t h5data = CBF_H5FAIL;
+                                 /* Get value & units */
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+@@ -28301,7 +28317,7 @@
+                                 hsize_t offset[1];
+                                 const hsize_t count[] = {1};
+                                 hsize_t buf[] = {0};
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 offset[0] = h5handle->slice;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num = strtod(token,0);
+@@ -28322,7 +28338,7 @@
+                                 Extract x & y positions from the header, put them into the file later.
+                                 I might need to read all the header to know if I can actually convert these values to NeXus data.
+                                 */
+-                                double num_x = 0./0., num_y = 0./0.;
++                                double num_x = NAN, num_y = NAN;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num_x = strtod(token,0);
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+@@ -28341,7 +28357,7 @@
+                                 Either a number with some units or a random string, only do anything if it's a number.
+                                 */
+                                 const char * end = 0;
+-                                double num = 0./0.;
++                                double num = NAN;
+                                 CBF_CALL(_cbf_scan_pilatus_V1_2_miniheader(&token, &n, &newline, 0, &value));
+                                 num = strtod(token,(char**)(&end));
+                                 if (end != token && 0.0 != num) {
+@@ -28547,7 +28563,7 @@
+                             /* TODO: write depends_on attributes with full paths */
+                             /* Common settings */
+                             const hsize_t vdims[] = {3};
+-                            double vbuf[3] = {0./0.};
++                            double vbuf[3] = {NAN};
+                             const hsize_t max[] = {H5S_UNLIMITED};
+                             hsize_t buf[] = {0};
+                             const hsize_t chunk[] = {1};
+@@ -28676,7 +28692,7 @@
+                     {
+                         const double vector[] = {1.0, 0.0, 0.0};
+                         const hsize_t vdims[] = {3};
+-                        double vbuf[3] = {0./0.};
++                        double vbuf[3] = {NAN};
+                         CBF_CALL(CBFM_H5Arequire_cmp2(h5axis,"vector",1,vdims,H5T_IEEE_F64LE,H5T_NATIVE_DOUBLE,
+                                                          vector,vbuf,cmp_double,cmp_params));
+                     }
+@@ -28733,7 +28749,7 @@
+                     {
+                         const double vector[] = {0.0, 1.0, 0.0};
+                         const hsize_t vdims[] = {3};
+-                        double vbuf[3] = {0./0.};
++                        double vbuf[3] = {NAN};
+                         CBF_CALL(CBFM_H5Arequire_cmp2(h5axis,"vector",1,vdims,H5T_IEEE_F64LE,H5T_NATIVE_DOUBLE,
+                                                          vector,vbuf,cmp_double,cmp_params));
+                     }
+@@ -29071,7 +29087,7 @@
+ 
+                 if (type_class==H5T_STRING) {
+ 
+-                    char element[type_size+1];
++                    ALLOC_VLA(char, element, type_size + 1);
+ 
+                     size_t ii, jj;;
+ 
+diff -ru a/cbflib/src/cbf_minicbf_header.c b/cbflib/src/cbf_minicbf_header.c
+--- a/cbflib/src/cbf_minicbf_header.c	2021-05-14 15:29:02.000000000 +0100
++++ b/cbflib/src/cbf_minicbf_header.c	2022-03-22 13:33:27.000000000 +0000
+@@ -258,6 +258,17 @@
+     
+ #include "cbf_minicbf_header.h"
+ #include <time.h>
++
++// cl.exe doesn't support variable length arrays.
++// If using this, then redefine to use a windows-only function to do the allocation.
++// If nothing is defined, then it will fall through to using VLA's directly
++#if _MSC_VER
++    #include <malloc.h>
++    #define ALLOC_VLA(atype, name, size)    atype *name = (atype*)_alloca(sizeof(atype)*(size))
++#else
++    // Compiler supports VLAs
++    #define ALLOC_VLA(atype, name, size)    atype name[size];
++#endif
+     
+ /* cbf_set_minicbf_header -- format a minicbf header conforming both
+  to DECTRIS "PILATUS CBF Header Specification" version 1.4 and to the
+@@ -476,7 +487,7 @@
+         while (cbf_find_nextrow (cbf, array_id) == 0) {
+             
+             int i, index;
+-            const char * direction[rank];
++            ALLOC_VLA(const char*, direction, rank);
+             
+             cbf_failnez (cbf_find_column      (cbf, "index"))
+             cbf_failnez (cbf_get_integervalue (cbf, &index))
+@@ -891,7 +902,7 @@
+         
+         {
+             
+-            double psizes[rank];
++            ALLOC_VLA(double, psizes, rank);
+             
+             if (!cbf_get_array_section_pixel_sizes(cbf,array_id,rank,psizes)) {
+                 
+
