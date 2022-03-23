@@ -137,7 +137,10 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
             raise RuntimeError("Error: The SWIG generated sources are out of date")
 
     # Apply Custom patches to the HDF5 sources - we want to build on upstream
-    for patch in sorted(Path(__file__).parent.joinpath("patches").glob("*.patch")):
+    patches_paths = Path(__file__).parent.joinpath("patches").glob("*.patch")
+    if not patches_paths:
+        print("Warning: No patches found; assuming sources are pre-patched")
+    for patch in sorted(patches_paths):
         print(f"Applying patch {patch}...")
         try:
             with patch.open("rb") as f:

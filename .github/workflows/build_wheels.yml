@@ -11,7 +11,25 @@ on:
         types: [opened, synchronize]
 
 jobs:
+    build_sdist:
+        name: Build source distribution
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  submodules: true
+            - name: Apply patches
+              run: cat $(ls patches/*.patch | sort) | patch -p1 -N
+            - name: Build sdist
+              run: pipx run poetry build -f sdist
+
+            - uses: actions/upload-artifact@v2
+              with:
+                  path: dist/*.tar.gz
+                  name: sdist
+
     build_wheels:
+        needs: [build_sdist]
         name: Build wheels on ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         strategy:
@@ -19,9 +37,17 @@ jobs:
                 os: [ubuntu-20.04, macos-10.15, windows-2019]
 
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/download-artifact@v2
               with:
-                  submodules: true
+                  name: sdist
+                  path: dist
+            - name: Decompress sdist (windows)
+              if: startsWith(matrix.os, 'windows-')
+              run: tar --strip-components=1 -xf $(dir dist/*.tar.gz | % {$_.FullName})
+            - name: Decompress sdist
+              if: "! startsWith(matrix.os, 'windows-')"
+              run: tar --strip-components=1 -xf dist/*.tar.gz
+
             - name: Build wheel
               uses: joerick/cibuildwheel@v1.11.0
               env:
@@ -33,23 +59,6 @@ jobs:
               with:
                   path: ./wheelhouse/*.whl
 
-    build_sdist:
-        name: Build source distribution
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-              with:
-                  submodules: true
-
-            - name: Build sdist
-              run: pipx run poetry build -f sdist
-
-            - uses: actions/upload-artifact@v2
-              with:
-                  path: dist/*.tar.gz
-
-
     upload_pypi:
         needs: [build_wheels, build_sdist]
         runs-on: ubuntu-latest
@@ -58,6 +67,11 @@ jobs:
         # alternatively, to publish when a GitHub Release is created, use the following rule:
         # if: github.event_name == 'release' && github.event.action == 'published'
         steps:
+            - uses: actions/download-artifact@v2
+              with:
+                  name: sdist
+                  path: dist
+
             - uses: actions/download-artifact@v2
               with:
                   name: artifact
