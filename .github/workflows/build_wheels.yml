@@ -52,8 +52,10 @@ jobs:
               with:
                   submodules: true
             - name: Apply patches (windows)
+              if: startsWith(matrix.os, 'windows-')
               run: cat $(dir patches/*.patch | % {$_.FullName} | Sort-Object) | patch -p1 -N
             - name: Apply patches
+              if: "! startsWith(matrix.os, 'windows-')"
               run: cat $(ls patches/*.patch | sort) | patch -p1 -N
 
             - name: Build sdist
