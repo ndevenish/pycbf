@@ -24,11 +24,13 @@ jobs:
               with:
                   name: sdist
                   path: dist
-            - name: Display structure of downloaded files
-              run: ls -R
-              working-directory: dist
+            - name: Decompress sdist (windows)
+              if: startsWith(matrix.os, 'windows-')
+              run: tar --strip-components=1 -xf $(dir dist/*.tar.gz | % {$_.FullName})
             - name: Decompress sdist
+              if: startsWith(matrix.os, 'windows-')
               run: tar --strip-components=1 -xf dist/*.tar.gz
+
 
             - name: Build wheel
               uses: joerick/cibuildwheel@v1.11.0
