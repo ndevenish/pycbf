@@ -139,6 +139,19 @@ echo "New version: $BOLD$M$new_version$NC"
 echo "Regenerating SWIG files$W"
 silently ./regenerate_pycbf.py
 
+# On M1 mac, there are no wheels for numpy, and it doesn't build.
+# Numpy is only a runtime requirement so this is safe
+echo "Removing numpy from dependencies"
+silently cp pyproject.toml pyproject.toml.bak
+silently sed -i'' -e 's/numpy = ">=1.17"/# numpy = ">=1.17"/' pyproject.toml
+
+echo "Installing base environment"
+silently poetry install
+
+# Restore back for the build
+echo "Restoring original pyproject"
+silently mv pyproject.toml.bak pyproject.toml
+
 echo "Re-running build for Cython"
 silently poetry build
 
@@ -192,5 +205,5 @@ echo
 echo "Successfully released $M$new_version$NC and advanced to $M$new_dev_version$NC"
 echo
 if [[ $NO_TAG != true ]]; then
-    echo "Please remember to ${B}git push --tags$NC"
+    echo "Please remember to ${B}git push origin main v$new_version$NC"
 fi
