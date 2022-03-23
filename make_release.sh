@@ -139,6 +139,16 @@ echo "New version: $BOLD$M$new_version$NC"
 echo "Regenerating SWIG files$W"
 silently ./regenerate_pycbf.py
 
+echo "Removing numpy from dependencies"
+silently cp pyproject.toml pyproject.toml.bak
+silently sed -i'' -e 's/numpy = ">=1.17"/# numpy = ">=1.17"/' pyproject.toml
+
+echo "Installing base environment"
+silently poetry install
+
+echo "Restoring original package"
+silently mv pyproject.toml.bak pyproject.toml
+
 echo "Re-running build for Cython"
 silently poetry build
 
