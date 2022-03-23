@@ -24,6 +24,9 @@ jobs:
               with:
                   name: sdist
                   path: dist
+            - name: Display structure of downloaded files
+              run: ls -R
+              working-directory: dist
             - name: Decompress sdist
               run: tar --strip-components=1 -xf dist/*.tar.gz
 
