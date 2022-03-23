@@ -28,7 +28,7 @@ jobs:
               if: startsWith(matrix.os, 'windows-')
               run: tar --strip-components=1 -xf $(dir dist/*.tar.gz | % {$_.FullName})
             - name: Decompress sdist
-              if: startsWith(matrix.os, 'windows-')
+              if: "! startsWith(matrix.os, 'windows-')"
               run: tar --strip-components=1 -xf dist/*.tar.gz
 
 
