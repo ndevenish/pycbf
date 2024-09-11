@@ -49,8 +49,8 @@ Returns : Float vector1,Float vector2,Float vector3,Float offset1,Float offset2,
 *args   : Float ratio
 
 C prototype: int cbf_get_goniometer_poise(cbf_goniometer goniometer,
-                 double ratio,      double * vector1, double * vector2,
-                 double * vector3, double * offset1,      double * offset2,
+                 double ratio,    double * vector1, double * vector2,
+                 double * vector3, double * offset1,    double * offset2,
                  double * offset3, double * angle);
 
 CBFLib documentation:
@@ -82,19 +82,18 @@ offset2, offset3 to point to the components of the axis base offset
 vector for axis axis_id unmodified by axis rotations. Any of the
 pointers may be specified as NULL.
 ARGUMENTS
-handle       CBF handle. ratio        A number between 0 and 1
-indication how far into the frame to go vector1      Pointer to the
-first component of the axis vector vector2      Pointer to the second
-component of the axis vector vector3      Pointer to the third
-component of the axis vector offset1      Pointer to the first
-component of the axis offset offset2      Pointer to the second
-component of the axis offset offset3      Pointer to the third
-component of the axis offset angle        Pointer to the rotation
-angle axis_id      The specified axis frame_id     The specified
+handle   CBF handle. ratio   A number between 0 and 1 indication how
+far into the frame to go vector1   Pointer to the first component of
+the axis vector vector2   Pointer to the second component of the axis
+vector vector3   Pointer to the third component of the axis vector
+offset1   Pointer to the first component of the axis offset offset2
+Pointer to the second component of the axis offset offset3   Pointer
+to the third component of the axis offset angle   Pointer to the
+rotation angle axis_id   The specified axis frame_id   The specified
 frame positioner   CBF goniometer
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_goniometer_poise;
 
   %apply double *OUTPUT {double * vector1, double * vector2, double * vector3, double * offset1, double * offset2, double * offset3,
@@ -114,10 +113,10 @@ Returns : double reciprocal1,double reciprocal2,double reciprocal3
 *args   : double ratio,double wavelength,double real1,double real2,double real3
 
 C prototype: int cbf_get_reciprocal (cbf_goniometer goniometer,
-                 unsigned int      reserved, double ratio, double wavelength,
-                 double real1, double real2,      double real3,
+                 unsigned int    reserved, double ratio, double wavelength,
+                 double real1, double real2,    double real3,
                  double *reciprocal1, double *reciprocal2,
-                 double      *reciprocal3);
+                 double    *reciprocal3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -126,25 +125,24 @@ reciprocal3 to the 3 components of the of the reciprocal-space vector
 corresponding to the real-space vector (real1, real2, real3). The
 reciprocal-space vector is oriented to correspond to the goniometer
 setting with all axes at 0. The value wavelength is the wavlength in
-Å and the value ratio specifies the current goniometer setting and
+and the value ratio specifies the current goniometer setting and
 varies from 0.0 at the beginning of the exposur e to 1.0 at the end,
 irrespective of the actual rotation range.
 Any of the destination pointers may be NULL.
 The parameter reserved is presently unused and should be set to 0.
 ARGUMENTS
-goniometer    Goniometer handle. reserved      Unused. Any value
-other than 0 is invalid. ratio         Goniometer setting. 0 =
-beginning of exposure, 1 = end. wavelength    Wavelength in Å. real1
-       x component of the real-space vector. real2         y
-component of the real-space vector. real3         z component of the
-real-space vector. reciprocal1   Pointer to the destination x
-component of the reciprocal-space vector. reciprocal2   Pointer to
-the destination y component of the reciprocal-space vector.
-reciprocal3   Pointer to the destination z component of the
-reciprocal-space vector.
+goniometer   Goniometer handle. reserved   Unused. Any value other
+than 0 is invalid. ratio   Goniometer setting. 0 = beginning of
+exposure, 1 = end. wavelength   Wavelength in . real1   x component
+of the real-space vector. real2   y component of the real-space
+vector. real3   z component of the real-space vector. reciprocal1
+Pointer to the destination x component of the reciprocal-space
+vector. reciprocal2   Pointer to the destination y component of the
+reciprocal-space vector. reciprocal3   Pointer to the destination z
+component of the reciprocal-space vector.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_reciprocal;
 
 %apply double *OUTPUT {double *reciprocal1, double *reciprocal2,
@@ -165,7 +163,7 @@ Returns : double vector1,double vector2,double vector3
 *args   :
 
 C prototype: int cbf_get_rotation_axis (cbf_goniometer goniometer,
-                 unsigned int      reserved, double *vector1, double *vector2,
+                 unsigned int    reserved, double *vector1, double *vector2,
                  double *vector3);
 
 CBFLib documentation:
@@ -175,14 +173,14 @@ components of the goniometer rotation axis used for the exposure.
 Any of the destination pointers may be NULL.
 The parameter reserved is presently unused and should be set to 0.
 ARGUMENTS
-goniometer   Goniometer handle. reserved     Unused. Any value other
-than 0 is invalid. vector1      Pointer to the destination x
-component of the rotation axis. vector2      Pointer to the
-destination y component of the rotation axis. vector3      Pointer to
-the destination z component of the rotation axis.
+goniometer   Goniometer handle. reserved   Unused. Any value other
+than 0 is invalid. vector1   Pointer to the destination x component
+of the rotation axis. vector2   Pointer to the destination y
+component of the rotation axis. vector3   Pointer to the destination
+z component of the rotation axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_rotation_axis;
 
 %apply double *OUTPUT {double *vector1, double *vector2, double *vector3};
@@ -198,7 +196,7 @@ Returns : Float start,Float increment
 *args   :
 
 C prototype: int cbf_get_rotation_range (cbf_goniometer goniometer,
-                 unsigned int      reserved, double *start, double *increment);
+                 unsigned int    reserved, double *start, double *increment);
 
 CBFLib documentation:
 DESCRIPTION
@@ -213,7 +211,7 @@ than 0 is invalid. start        Pointer to the destination start
 value. increment    Pointer to the destination increment value.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_rotation_range;
 
 %apply double *OUTPUT {double *start,double *increment};
@@ -228,8 +226,8 @@ Returns : double final1,double final2,double final3
 *args   : double ratio,double initial1,double initial2,double initial3
 
 C prototype: int cbf_rotate_vector (cbf_goniometer goniometer,
-                 unsigned int reserved,      double ratio, double initial1,
-                 double initial2, double initial3, double      *final1,
+                 unsigned int    reserved, double ratio, double initial1,
+                 double initial2, double    initial3, double *final1,
                  double *final2, double *final3);
 
 CBFLib documentation:
@@ -253,7 +251,7 @@ the destination y component of the final vector. vector3      Pointer
 to the destination z component of the final vector.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")rotate_vector;
 
 

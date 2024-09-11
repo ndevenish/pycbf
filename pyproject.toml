@@ -87,6 +87,9 @@ dev = [
 # include-dirs = ["cbflib/include"]
 # define-macros = [["CBF_NO_REGEX"], ["SWIG_PYTHON_STRICT_BYTE_CHAR"]]
 
+[tool.ruff]
+exclude = ["src/pycbf/_wrapper.py"]
+
 [tool.ruff.format]
 exclude = ["cbflib/", "src/pycbf/__init__.py"]
 
