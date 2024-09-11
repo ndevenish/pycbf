@@ -1,6 +1,6 @@
 import re
 import subprocess
-from distutils.core import Extension
+from setuptools import Extension, setup
 from hashlib import sha256
 from pathlib import Path
 from typing import Any, Dict, Iterable
@@ -120,6 +120,7 @@ def generate_combined_checksum(root):
     extra_data = [
         x for x in pyproject.read_text().splitlines() if re_toml_hashlines.search(x)
     ]
+    extra_data = []
     return hash_files(*gen_files, extra_data=extra_data)
 
 
@@ -158,4 +159,6 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
 
 
 if __name__ == "__main__":
-    build()
+    setup_kwargs = {}
+    build(setup_kwargs)
+    setup(**setup_kwargs)

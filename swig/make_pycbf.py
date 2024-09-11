@@ -53,7 +53,7 @@ if not args.cbflib_txt.is_file():
 print(f"Generating SWIG wrappers from {args.cbflib_txt}")
 
 # Get the ascii text as a list of strings
-lines = args.cbflib_txt.read_text().splitlines()
+lines = args.cbflib_txt.read_text(errors="ignore").splitlines()
 
 # Variables to hold the useful things we find in the file
 docstring = "\n"
