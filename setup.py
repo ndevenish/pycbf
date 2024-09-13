@@ -151,7 +151,10 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
         except subprocess.CalledProcessError as e:
             print(e.output)
             # We want to ignore this if it was a case of already applied
-            if "Skipping patch" not in e.output:
+            if (
+                "Skipping patch" not in e.output
+                and "Ignoring previously applied" not in e.output
+            ):
                 raise
 
     setup_kwargs.update({"ext_modules": extensions})
