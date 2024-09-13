@@ -120,7 +120,6 @@ def generate_combined_checksum(root):
     extra_data = [
         x for x in pyproject.read_text().splitlines() if re_toml_hashlines.search(x)
     ]
-    extra_data = []
     return hash_files(*gen_files, extra_data=extra_data)
 
 
