@@ -21,7 +21,7 @@ jobs:
             - name: Apply patches
               run: cat $(ls patches/*.patch | sort) | patch -p1 -N
             - name: Build sdist
-              run: pipx run poetry build -f sdist
+              run: pip3 install build && python3 -m build -s .
 
             - uses: actions/upload-artifact@v4
               with:
