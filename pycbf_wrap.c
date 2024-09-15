@@ -10624,7 +10624,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_3d_image_as_string(PyObject *SW
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -10710,7 +10714,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_3d_image_fs_as_string(PyObject 
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -10796,7 +10804,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_3d_image_sf_as_string(PyObject 
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -12274,7 +12286,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_image_as_string(PyObject *SWIGU
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -12352,7 +12368,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_image_fs_as_string(PyObject *SW
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -12430,7 +12450,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_image_sf_as_string(PyObject *SW
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -12640,7 +12664,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_integerarray_as_string(PyObject
   }
   resultobj = SWIG_Py_Void();
   if (*arg2) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg2,*arg3));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg2,*arg3));
+#endif
     free(*arg2);
   }
   return resultobj;
@@ -13758,7 +13786,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_3d_image_as_string(PyObjec
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -13836,7 +13868,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_3d_image_fs_as_string(PyOb
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -13914,7 +13950,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_3d_image_sf_as_string(PyOb
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -13984,7 +14024,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_image_as_string(PyObject *
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -14054,7 +14098,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_image_fs_as_string(PyObjec
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -14124,7 +14172,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_real_image_sf_as_string(PyObjec
   }
   resultobj = SWIG_Py_Void();
   if (*arg3) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg3,*arg4));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg3,*arg4));
+#endif
     free(*arg3);
   }
   return resultobj;
@@ -14163,7 +14215,11 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_get_realarray_as_string(PyObject *S
   }
   resultobj = SWIG_Py_Void();
   if (*arg2) {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = SWIG_Python_AppendOutput(resultobj, PyBytes_FromStringAndSize(*arg2,*arg3));
+#else
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtrAndSize(*arg2,*arg3));
+#endif
     free(*arg2);
   }
   return resultobj;
@@ -16816,8 +16872,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image(PyObject *SWIGUNUSEDPA
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -16846,12 +16901,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_3d_image" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_3d_image" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_3d_image" "', argument " "6"" of type '" "int""'");
@@ -16887,10 +16942,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image(PyObject *SWIGUNUSEDPA
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -16915,8 +16968,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_fs(PyObject *SWIGUNUSE
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -16945,12 +16997,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_fs(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_3d_image_fs" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_3d_image_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_3d_image_fs" "', argument " "6"" of type '" "int""'");
@@ -16986,10 +17038,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_fs(PyObject *SWIGUNUSE
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -17014,8 +17064,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_sf(PyObject *SWIGUNUSE
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -17044,12 +17093,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_sf(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_3d_image_sf" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_3d_image_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_3d_image_sf" "', argument " "6"" of type '" "int""'");
@@ -17085,10 +17134,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_3d_image_sf(PyObject *SWIGUNUSE
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -17713,8 +17760,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image(PyObject *SWIGUNUSEDPARM(
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -17741,12 +17787,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_image" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_image" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_image" "', argument " "6"" of type '" "int""'");
@@ -17777,10 +17823,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image(PyObject *SWIGUNUSEDPARM(
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -17804,8 +17848,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_fs(PyObject *SWIGUNUSEDPA
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -17832,12 +17875,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_fs(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_image_fs" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_image_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_image_fs" "', argument " "6"" of type '" "int""'");
@@ -17868,10 +17911,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_fs(PyObject *SWIGUNUSEDPA
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -17895,8 +17936,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_sf(PyObject *SWIGUNUSEDPA
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -17923,12 +17963,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_sf(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_image_sf" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_image_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_image_sf" "', argument " "6"" of type '" "int""'");
@@ -17959,10 +17999,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_image_sf(PyObject *SWIGUNUSEDPA
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -17985,8 +18023,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray(PyObject *SWIGUNUS
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18011,12 +18048,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray(PyObject *SWIGUNUS
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_integerarray" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_integerarray" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_integerarray" "', argument " "6"" of type '" "int""'");
@@ -18042,10 +18079,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray(PyObject *SWIGUNUS
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -18074,8 +18109,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims(PyObject *SW
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18112,12 +18146,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims(PyObject *SW
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_integerarray_wdims" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_integerarray_wdims" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_integerarray_wdims" "', argument " "6"" of type '" "int""'");
@@ -18169,11 +18203,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims(PyObject *SW
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return NULL;
 }
@@ -18203,8 +18235,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_fs(PyObject 
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18241,12 +18272,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_fs(PyObject 
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_integerarray_wdims_fs" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_integerarray_wdims_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_integerarray_wdims_fs" "', argument " "6"" of type '" "int""'");
@@ -18298,11 +18329,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_fs(PyObject 
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return NULL;
 }
@@ -18332,8 +18361,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_sf(PyObject 
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18370,12 +18398,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_sf(PyObject 
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_integerarray_wdims_sf" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_integerarray_wdims_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_integerarray_wdims_sf" "', argument " "6"" of type '" "int""'");
@@ -18427,11 +18455,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_integerarray_wdims_sf(PyObject 
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc9 == SWIG_NEWOBJ) free((char*)buf9);
   return NULL;
 }
@@ -18880,8 +18906,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image(PyObject *SWIGUNU
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18908,12 +18933,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_3d_image" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_3d_image" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_3d_image" "', argument " "6"" of type '" "int""'");
@@ -18944,10 +18969,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image(PyObject *SWIGUNU
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -18971,8 +18994,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_fs(PyObject *SWIG
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -18999,12 +19021,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_fs(PyObject *SWIG
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_3d_image_fs" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_3d_image_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_3d_image_fs" "', argument " "6"" of type '" "int""'");
@@ -19035,10 +19057,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_fs(PyObject *SWIG
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19062,8 +19082,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_sf(PyObject *SWIG
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19090,12 +19109,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_sf(PyObject *SWIG
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_3d_image_sf" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_3d_image_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_3d_image_sf" "', argument " "6"" of type '" "int""'");
@@ -19126,10 +19145,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_3d_image_sf(PyObject *SWIG
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19152,8 +19169,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image(PyObject *SWIGUNUSED
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19178,12 +19194,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image(PyObject *SWIGUNUSED
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_image" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_image" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_image" "', argument " "6"" of type '" "int""'");
@@ -19209,10 +19225,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image(PyObject *SWIGUNUSED
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19235,8 +19249,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_fs(PyObject *SWIGUNU
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19261,12 +19274,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_fs(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_image_fs" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_image_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_image_fs" "', argument " "6"" of type '" "int""'");
@@ -19292,10 +19305,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_fs(PyObject *SWIGUNU
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19318,8 +19329,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_sf(PyObject *SWIGUNU
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19344,12 +19354,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_sf(PyObject *SWIGUNU
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_real_image_sf" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = (unsigned int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_real_image_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_real_image_sf" "', argument " "6"" of type '" "int""'");
@@ -19375,10 +19385,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_real_image_sf(PyObject *SWIGUNU
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19400,8 +19408,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray(PyObject *SWIGUNUSEDP
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19424,12 +19431,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray(PyObject *SWIGUNUSEDP
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_realarray" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_realarray" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_realarray" "', argument " "6"" of type '" "int""'");
@@ -19450,10 +19457,8 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray(PyObject *SWIGUNUSEDP
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   return NULL;
 }
 
@@ -19481,8 +19486,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims(PyObject *SWIGU
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19517,12 +19521,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims(PyObject *SWIGU
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_realarray_wdims" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_realarray_wdims" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_realarray_wdims" "', argument " "6"" of type '" "int""'");
@@ -19569,11 +19573,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims(PyObject *SWIGU
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return NULL;
 }
@@ -19602,8 +19604,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_fs(PyObject *SW
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19638,12 +19639,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_fs(PyObject *SW
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_realarray_wdims_fs" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_realarray_wdims_fs" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_realarray_wdims_fs" "', argument " "6"" of type '" "int""'");
@@ -19690,11 +19691,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_fs(PyObject *SW
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return NULL;
 }
@@ -19723,8 +19722,7 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_sf(PyObject *SW
   int ecode3 = 0 ;
   int res4 ;
   char *buf4 = 0 ;
-  size_t size4 = 0 ;
-  int alloc4 = 0 ;
+  Py_ssize_t size4 = 0 ;
   int val6 ;
   int ecode6 = 0 ;
   int val7 ;
@@ -19759,12 +19757,12 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_sf(PyObject *SW
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "cbf_handle_struct_set_realarray_wdims_sf" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
-  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, &size4, &alloc4);
+  res4 = PyBytes_AsStringAndSize(swig_obj[3], &buf4, &size4) == -1 ? SWIG_TypeError : SWIG_OK;
   if (!SWIG_IsOK(res4)) {
     SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "cbf_handle_struct_set_realarray_wdims_sf" "', argument " "4"" of type '" "char *""'");
-  }  
+  }
   arg4 = (char *)(buf4);
-  arg5 = (int)(size4 - 1);
+  arg5 = (int)(size4);
   ecode6 = SWIG_AsVal_int(swig_obj[4], &val6);
   if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "cbf_handle_struct_set_realarray_wdims_sf" "', argument " "6"" of type '" "int""'");
@@ -19811,11 +19809,9 @@ SWIGINTERN PyObject *_wrap_cbf_handle_struct_set_realarray_wdims_sf(PyObject *SW
     }
   }
   resultobj = SWIG_Py_Void();
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return resultobj;
 fail:
-  if (alloc4 == SWIG_NEWOBJ) free((char*)buf4);
   if (alloc8 == SWIG_NEWOBJ) free((char*)buf8);
   return NULL;
 }

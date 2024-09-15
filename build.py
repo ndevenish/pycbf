@@ -55,7 +55,6 @@ extensions = [
         include_dirs=[str(CBFLIB_INCLUDE)],
         define_macros=[
             ("CBF_NO_REGEX", None),
-            ("SWIG_PYTHON_STRICT_BYTE_CHAR", None),
         ],
     ),
     *cythonize(
