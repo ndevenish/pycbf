@@ -123,7 +123,7 @@ def generate_combined_checksum(root):
     return hash_files(*gen_files, extra_data=extra_data)
 
 
-def build(**setup_kwargs: Any) -> None:
+def build(**setup_kwargs) -> None:
     # Validate that the SWIG wrappers are generated from the latest
     # sources (if we have them)
     swigdir = PYCBF_ROOT / "SWIG"
