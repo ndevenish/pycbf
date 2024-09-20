@@ -2,13 +2,16 @@
 name = "pycbf"
 version = "0.9.6.6.dev"
 description = "An API for CBF/imgCIF Crystallographic Binary Files"
-homepage="http://www.bernstein-plus-sons.com/software/CBF/"
-authors = ["Herbert J. Bernstein <yaya@bernstein-plus-sons.com>", "Paul J. Ellis"]
+homepage = "http://www.bernstein-plus-sons.com/software/CBF/"
+authors = [
+    "Herbert J. Bernstein <yaya@bernstein-plus-sons.com>",
+    "Paul J. Ellis",
+]
 maintainers = ["Nicholas Devenish <ndevenish@gmail.com>"]
 license = "LGPL-2.1-or-later"
-readme="README.md"
+readme = "README.md"
 build = "build.py"
-repository="https://github.com/dials/pycbf"
+repository = "https://github.com/dials/pycbf"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -19,12 +22,12 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 include = [
-    {path = "pycbf_wrap.c", format = "sdist"},
-    {path = "LICENCE.txt", format = "sdist"},
-    {path = "cbflib/src/*.c", format = "sdist"},
-    {path = "cbflib/include/*.h", format = "sdist"},
-    {path = "tests/*.py", format = "sdist"},
-    {path = "src/pycbf/py.typed"},
+    { path = "pycbf_wrap.c", format = "sdist" },
+    { path = "LICENCE.txt", format = "sdist" },
+    { path = "cbflib/src/*.c", format = "sdist" },
+    { path = "cbflib/include/*.h", format = "sdist" },
+    { path = "tests/*.py", format = "sdist" },
+    { path = "src/pycbf/py.typed" },
 
 ]
 
@@ -42,18 +45,11 @@ dials-data = ">=2.1.58"
 bump2version = "^1.0.1"
 
 [build-system]
-requires = [
-    "poetry-core>=1.0.0",
-    "setuptools",
-    "Cython~=0.29.23",
-]
+requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-exclude = "cbflib/|src/pycbf/__init__.py"
-
-[tool.isort]
-skip = [ "cbflib/", "setup.py", "src/pycbf/__init__.py"]
+[tool.ruff.format]
+exclude = ["cbflib/", "src/pycbf/__init__.py"]
 
 [tool.towncrier]
 package = "pycbf"
@@ -62,6 +58,4 @@ filename = "CHANGELOG.rst"
 
 [tool.pytest.ini_options]
 addopts = "--regression -ra"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]
