@@ -54,7 +54,7 @@ jobs:
             - name: Build wheel
               uses: pypa/cibuildwheel@v2.22.0
               env:
-                  CIBW_SKIP: cp2* cp36* cp37* pp* cp313* *musllinux*
+                  CIBW_SKIP: cp36* cp37* pp* cp313* *musllinux*
                   CIBW_TEST_COMMAND: pytest --regression {package}/tests
                   CIBW_BEFORE_TEST: pip install pytest dials-data
 
