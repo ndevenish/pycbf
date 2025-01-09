@@ -54,10 +54,9 @@ jobs:
             - name: Build wheel
               uses: pypa/cibuildwheel@v2.22.0
               env:
-                  CIBW_SKIP: cp2* cp35* pp* cp313* *musllinux*
-                  # CIBW_TEST_COMMAND: pytest --regression {package}/tests
-                  # CIBW_TEST_COMMAND: pwd && ls && python3 -c "import pycbf, pathlib; print(pycbf.__path__ + '\n'); print(list(pathlib.Path(pycbf.__path__).parent.iterdir()))"
-                  # CIBW_BEFORE_TEST: pip install pytest dials-data
+                  CIBW_SKIP: cp2* cp36* pp* cp313* *musllinux*
+                  CIBW_TEST_COMMAND: pytest --regression {package}/tests
+                  CIBW_BEFORE_TEST: pip install pytest dials-data
 
             - uses: actions/upload-artifact@v4
               with:
