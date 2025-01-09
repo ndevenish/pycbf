@@ -55,9 +55,8 @@ jobs:
               uses: pypa/cibuildwheel@v2.22.0
               env:
                   CIBW_SKIP: cp2* cp35* pp*
-                  CIBW_TEST_COMMAND: python3 -c "import pycbf, pathlib; print(pycbf.__file__ + '\n'); print(list(pathlib.Path(pycbf.__file__).parent.iterdir()))"
+                  CIBW_TEST_COMMAND: pwd && ls && python3 -c "import pycbf, pathlib; print(pycbf.__path__ + '\n'); print(list(pathlib.Path(pycbf.__path__).parent.iterdir()))"
                   CIBW_BEFORE_TEST: pip install pytest dials-data
-                  CIBW_BUILD_FRONTEND: 'pip; args: -vvv'
 
             - uses: actions/upload-artifact@v4
               with:
