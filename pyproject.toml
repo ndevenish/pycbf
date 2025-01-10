@@ -1,17 +1,18 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools", "Cython~=0.29.23"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "pycbf"
 version = "0.9.6.6.dev"
 description = "An API for CBF/imgCIF Crystallographic Binary Files"
-homepage = "http://www.bernstein-plus-sons.com/software/CBF/"
 authors = [
-    "Herbert J. Bernstein <yaya@bernstein-plus-sons.com>",
-    "Paul J. Ellis",
+    { name = "Herbert J. Bernstein", email = "yaya@bernstein-plus-sons.com" },
+    { name = "Paul J. Ellis" },
 ]
-maintainers = ["Nicholas Devenish <ndevenish@gmail.com>"]
-license = "LGPL-2.1-or-later"
+maintainers = [{ name = "Nicholas Devenish", email = "ndevenish@gmail.com" }]
+license = { text = "LGPL-2.1-or-later" }
 readme = "README.md"
-build = "build.py"
-repository = "https://github.com/dials/pycbf"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -21,32 +22,24 @@ classifiers = [
     "Programming Language :: Python",
     "Topic :: Scientific/Engineering",
 ]
-include = [
-    { path = "pycbf_wrap.c", format = "sdist" },
-    { path = "LICENCE.txt", format = "sdist" },
-    { path = "cbflib/src/*.c", format = "sdist" },
-    { path = "cbflib/include/*.h", format = "sdist" },
-    { path = "tests/*.py", format = "sdist" },
-    { path = "src/pycbf/py.typed" },
+requires-python = ">=3.6"
+dependencies = ["numpy>=1.17"]
 
+[project.urls]
+Homepate = "http://www.bernstein-plus-sons.com/software/CBF/"
+Repository = "https://github.com/dials/pycbf"
+
+[project.optional-dependencies]
+dev = [
+    "Cython~=0.29.23",
+    "toml~=0.10.2",
+    "pytest~=6.2.4",
+    "dials-data",
+    "bump2version~=1.0.1",
 ]
 
-
-[tool.poetry.dependencies]
-python = ">=3.6.0"
-numpy = ">=1.17"
-
-[tool.poetry.dev-dependencies]
-setuptools = "^56.1.0"
-Cython = "^0.29.23"
-toml = "^0.10.2"
-pytest = "^6.2.4"
-dials-data = ">=2.1.58"
-bump2version = "^1.0.1"
-
-[build-system]
-requires = ["poetry-core>=1.0.0", "setuptools", "Cython~=0.29.23"]
-build-backend = "poetry.core.masonry.api"
+[tool.ruff]
+exclude = ["src/pycbf/_wrapper.py"]
 
 [tool.ruff.format]
 exclude = ["cbflib/", "src/pycbf/__init__.py"]

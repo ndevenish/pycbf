@@ -1,6 +1,6 @@
 import re
 import subprocess
-from distutils.core import Extension
+from setuptools import Extension, setup
 from hashlib import sha256
 from pathlib import Path
 from typing import Any, Dict, Iterable
@@ -151,11 +151,16 @@ def build(setup_kwargs: Dict[str, Any]) -> None:
         except subprocess.CalledProcessError as e:
             print(e.output)
             # We want to ignore this if it was a case of already applied
-            if "Skipping patch" not in e.output:
+            if (
+                "Skipping patch" not in e.output
+                and "Ignoring previously applied" not in e.output
+            ):
                 raise
 
     setup_kwargs.update({"ext_modules": extensions})
 
 
 if __name__ == "__main__":
-    build()
+    setup_kwargs = {}
+    build(setup_kwargs)
+    setup(**setup_kwargs)

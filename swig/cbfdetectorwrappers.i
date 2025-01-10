@@ -38,7 +38,7 @@ Returns : double index1,double index2,double center1,double center2
 *args   :
 
 C prototype: int cbf_get_beam_center (cbf_detector detector,
-                 double *indexslow,      double *indexfast, double *centerslow,
+                 double *indexslow,    double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -85,14 +85,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_beam_center;
 
 %apply double *OUTPUT {double *index1, double *index2,
@@ -107,7 +107,7 @@ Returns : double indexfast,double indexslow,double centerfast,double centerslow
 *args   :
 
 C prototype: int cbf_get_beam_center_fs (cbf_detector detector,
-                 double *indexfast,      double *indexslow, double *centerfast,
+                 double *indexfast,    double *indexslow, double *centerfast,
                  double *centerslow);
 
 CBFLib documentation:
@@ -154,14 +154,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_beam_center_fs;
 
 %apply double *OUTPUT {double *indexfast, double *indexslow,
@@ -176,7 +176,7 @@ Returns : double indexslow,double indexfast,double centerslow,double centerfast
 *args   :
 
 C prototype: int cbf_get_beam_center_sf (cbf_detector detector,
-                 double *indexslow,      double *indexfast, double *centerslow,
+                 double *indexslow,    double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -223,14 +223,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_beam_center_sf;
 
 %apply double *OUTPUT {double *indexslow, double *indexfast,
@@ -246,8 +246,8 @@ Returns : double slowaxis1,double slowaxis2,double slowaxis3,double fastaxis1,
 *args   :
 
 C prototype: int cbf_get_detector_axes (cbf_detector detector,
-                 double *slowaxis1,      double *slowaxis2, double *slowaxis3,
-                 double *fastaxis1, double      *fastaxis2, double *fastaxis3);
+                 double *slowaxis1,    double *slowaxis2, double *slowaxis3,
+                 double *fastaxis1, double    *fastaxis2, double *fastaxis3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -266,20 +266,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_axes;
 
 %apply double *OUTPUT {double *slowaxis1, double *slowaxis2, double *slowaxis3,
@@ -297,8 +296,8 @@ Returns : double fastaxis1,double fastaxis2,double fastaxis3,double slowaxis1,
 *args   :
 
 C prototype: int cbf_get_detector_axes_fs (cbf_detector detector,
-                 double *fastaxis1,      double *fastaxis2, double *fastaxis3,
-                 double *slowaxis1, double      *slowaxis2, double *slowaxis3);
+                 double *fastaxis1,    double *fastaxis2, double *fastaxis3,
+                 double *slowaxis1, double    *slowaxis2, double *slowaxis3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -317,20 +316,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_axes;
 
 %apply double *OUTPUT {double *slowaxis1, double *slowaxis2, double *slowaxis3,
@@ -348,8 +346,8 @@ Returns : double slowaxis1,double slowaxis2,double slowaxis3,double fastaxis1,
 *args   :
 
 C prototype: int cbf_get_detector_axes_sf (cbf_detector detector,
-                 double *slowaxis1,      double *slowaxis2, double *slowaxis3,
-                 double *fastaxis1, double      *fastaxis2, double *fastaxis3);
+                 double *slowaxis1,    double *slowaxis2, double *slowaxis3,
+                 double *fastaxis1, double    *fastaxis2, double *fastaxis3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -368,20 +366,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_axes_sf;
 
 %apply double *OUTPUT {double *slowaxis1, double *slowaxis2, double *slowaxis3,
@@ -398,7 +395,7 @@ Returns : double fastaxis1,double fastaxis2,double fastaxis3
 *args   :
 
 C prototype: int cbf_get_detector_axis_fast (cbf_detector detector,
-                 double      *fastaxis1, double *fastaxis2, double *fastaxis3);
+                 double    *fastaxis1, double *fastaxis2, double *fastaxis3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -417,20 +414,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_axis_fast;
 
 %apply double *OUTPUT {double *fastaxis1, double *fastaxis2, double *fastaxis3};
@@ -444,7 +440,7 @@ Returns : double slowaxis1,double slowaxis2,double slowaxis3
 *args   :
 
 C prototype: int cbf_get_detector_axis_slow (cbf_detector detector,
-                 double      *slowaxis1, double *slowaxis2, double *slowaxis3);
+                 double    *slowaxis1, double *slowaxis2, double *slowaxis3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -463,20 +459,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_axis_slow;
 
 %apply double *OUTPUT {double *slowaxis1, double *slowaxis2, double *slowaxis3};
@@ -490,7 +485,7 @@ Returns : double distance
 *args   :
 
 C prototype: int cbf_get_detector_distance (cbf_detector detector,
-                 double *distance);
+                 double    *distance);
 
 CBFLib documentation:
 DESCRIPTION
@@ -501,7 +496,7 @@ detector   Detector handle. distance   Pointer to the destination
 distance.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_distance;
 
 %apply double *OUTPUT {double *distance};
@@ -513,7 +508,7 @@ Returns : double normal1,double normal2,double normal3
 *args   :
 
 C prototype: int cbf_get_detector_normal (cbf_detector detector,
-                 double *normal1,      double *normal2, double *normal3);
+                 double *normal1,    double *normal2, double *normal3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -522,13 +517,13 @@ cbf_get_detector_normal sets *normal1, *normal2, and *normal3 to the
 vector is normalized.
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector   Detector handle. normal1    Pointer to the destination x
-component of the normal vector. normal2    Pointer to the destination
-y component of the normal vector. normal3    Pointer to the
+detector   Detector handle. normal1   Pointer to the destination x
+component of the normal vector. normal2   Pointer to the destination
+y component of the normal vector. normal3   Pointer to the
 destination z component of the normal vector.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_detector_normal;
 
 %apply double *OUTPUT {double *normal1, double *normal2, double *normal3};
@@ -543,7 +538,7 @@ Returns : String
 *args   : Integer index
 
 C prototype: int cbf_get_detector_surface_axes(cbf_detector detector,
-                 const char * *      axis_id1, const char * * axis_id2);
+                 const char * *    axis_id1, const char * * axis_id2);
 
 CBFLib documentation:
 DESCRIPTION
@@ -562,20 +557,19 @@ and *axis_id2 to the names of the two surface axes of the detector or
  \". \",
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. slowaxis1   Pointer to the destination x
+detector   Detector handle. slowaxis1   Pointer to the destination x
 component of the slow axis vector. slowaxis2   Pointer to the
 destination y component of the slow axis vector. slowaxis3   Pointer
 to the destination z component of the slow axis vector. fastaxis1
 Pointer to the destination x component of the fast axis vector.
 fastaxis2   Pointer to the destination y component of the fast axis
 vector. fastaxis3   Pointer to the destination z component of the
-fast axis vector. axis_id1    Pointer to the destination first
-surface axis name. axis_id1    Pointer to the destination first
-surface axis name. axis_id2    Pointer to the destination second
-surface axis name.
+fast axis vector. axis_id1   Pointer to the destination first surface
+axis name. axis_id1   Pointer to the destination first surface axis
+name. axis_id2   Pointer to the destination second surface axis name.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")cbf_get_detector_surface_axes;
 
    const char * get_detector_surface_axes (int index ){
@@ -594,7 +588,7 @@ Returns : Float pixel size
 *args   : Int axis_number
 
 C prototype: int cbf_get_inferred_pixel_size (cbf_detector detector,
-                 int axis_number,      double *psize);
+                 int    axis_number, double *psize);
 
 CBFLib documentation:
 DESCRIPTION
@@ -606,16 +600,6 @@ cbf_get_inferred_pixel_size_fs sets *psize to point to the double
 value in millimeters of the pixel size for the axis axis_number
 value. The fast index is treated as axis 1 and the next slower index
 is treated as axis 2.
-If the axis number is negative, the axes are used in the reverse
-order so that an axis_number of -1 indicates the fast axes in a call
-to cbf_get_inferred_pixel_size or cbf_get_inferred_pixel_size_sf and
-indicates the fast axis in a call to cbf_get_inferred_pixel_size_fs.
-ARGUMENTS
-detector      Detector handle. axis_number   The number of the axis.
-area          Pointer to the destination pizel size in mm.
-RETURN VALUE
-Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
 ")get_inferred_pixel_size;
 
 %apply double *OUTPUT { double *psize } get_inferred_pixel_size;
@@ -627,7 +611,7 @@ Returns : Float pixel size
 *args   : Int axis_number
 
 C prototype: int cbf_get_inferred_pixel_size_fs(cbf_detector detector,
-                 int      axis_number, double *psize);
+                 int    axis_number, double *psize);
 
 CBFLib documentation:
 DESCRIPTION
@@ -639,16 +623,6 @@ cbf_get_inferred_pixel_size_fs sets *psize to point to the double
 value in millimeters of the pixel size for the axis axis_number
 value. The fast index is treated as axis 1 and the next slower index
 is treated as axis 2.
-If the axis number is negative, the axes are used in the reverse
-order so that an axis_number of -1 indicates the fast axes in a call
-to cbf_get_inferred_pixel_size or cbf_get_inferred_pixel_size_sf and
-indicates the fast axis in a call to cbf_get_inferred_pixel_size_fs.
-ARGUMENTS
-detector      Detector handle. axis_number   The number of the axis.
-area          Pointer to the destination pizel size in mm.
-RETURN VALUE
-Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
 ")get_inferred_pixel_size_fs;
 
 %apply double *OUTPUT { double *psize } get_inferred_pixel_size;
@@ -660,7 +634,7 @@ Returns : Float pixel size
 *args   : Int axis_number
 
 C prototype: int cbf_get_inferred_pixel_size_sf(cbf_detector detector,
-                 int      axis_number, double *psize);
+                 int    axis_number, double *psize);
 
 CBFLib documentation:
 DESCRIPTION
@@ -672,16 +646,6 @@ cbf_get_inferred_pixel_size_fs sets *psize to point to the double
 value in millimeters of the pixel size for the axis axis_number
 value. The fast index is treated as axis 1 and the next slower index
 is treated as axis 2.
-If the axis number is negative, the axes are used in the reverse
-order so that an axis_number of -1 indicates the fast axes in a call
-to cbf_get_inferred_pixel_size or cbf_get_inferred_pixel_size_sf and
-indicates the fast axis in a call to cbf_get_inferred_pixel_size_fs.
-ARGUMENTS
-detector      Detector handle. axis_number   The number of the axis.
-area          Pointer to the destination pizel size in mm.
-RETURN VALUE
-Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
 ")get_inferred_pixel_size_sf;
 
 %apply double *OUTPUT { double *psize } get_inferred_pixel_size;
@@ -693,7 +657,7 @@ Returns : double area,double projected_area
 *args   : double index1,double index2
 
 C prototype: int cbf_get_pixel_area (cbf_detector detector, double indexslow,
-                 double      indexfast, double *area, double *projected_area);
+                 double    indexfast, double *area, double *projected_area);
 
 CBFLib documentation:
 DESCRIPTION
@@ -710,7 +674,7 @@ destination area in mm2. projected_area   Pointer to the destination
 apparent area in mm2.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_area;
 
 %apply double *OUTPUT{double *area,double *projected_area};
@@ -724,7 +688,7 @@ Returns : double area,double projected_area
 *args   : double indexfast,double indexslow
 
 C prototype: int cbf_get_pixel_area_fs(cbf_detector detector,
-                 double indexfast,      double indexslow, double *area,
+                 double indexfast,    double indexslow, double *area,
                  double *projected_area);
 
 CBFLib documentation:
@@ -742,7 +706,7 @@ destination area in mm2. projected_area   Pointer to the destination
 apparent area in mm2.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_area_fs;
 
 %apply double *OUTPUT{double *area,double *projected_area};
@@ -756,7 +720,7 @@ Returns : double area,double projected_area
 *args   : double indexslow,double indexfast
 
 C prototype: int cbf_get_pixel_area_sf(cbf_detector detector,
-                 double indexslow,      double indexfast, double *area,
+                 double indexslow,    double indexfast, double *area,
                  double *projected_area);
 
 CBFLib documentation:
@@ -774,7 +738,7 @@ destination area in mm2. projected_area   Pointer to the destination
 apparent area in mm2.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_area_sf;
 
 %apply double *OUTPUT{double *area,double *projected_area};
@@ -788,8 +752,8 @@ Returns : double coordinate1,double coordinate2,double coordinate3
 *args   : double index1,double index2
 
 C prototype: int cbf_get_pixel_coordinates (cbf_detector detector,
-                 double indexslow,      double indexfast, double *coordinate1,
-                 double *coordinate2, double      *coordinate3);
+                 double indexslow,    double indexfast, double *coordinate1,
+                 double *coordinate2, double    *coordinate3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -806,7 +770,7 @@ coordinate2   Pointer to the destination y component. coordinate3
 Pointer to the destination z component.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_coordinates;
 
 %apply double *OUTPUT {double *coordinate1,
@@ -823,8 +787,8 @@ Returns : double coordinate1,double coordinate2,double coordinate3
 *args   : double indexfast,double indexslow
 
 C prototype: int cbf_get_pixel_coordinates_fs (cbf_detector detector,
-                 double      indexfast, double indexslow, double *coordinate1,
-                 double *coordinate2,      double *coordinate3);
+                 double    indexfast, double indexslow, double *coordinate1,
+                 double *coordinate2,    double *coordinate3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -841,7 +805,7 @@ coordinate2   Pointer to the destination y component. coordinate3
 Pointer to the destination z component.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_coordinates_fs;
 
 %apply double *OUTPUT {double *coordinate1,
@@ -857,8 +821,8 @@ Returns : double coordinate1,double coordinate2,double coordinate3
 *args   : double indexslow,double indexfast
 
 C prototype: int cbf_get_pixel_coordinates_sf (cbf_detector detector,
-                 double      indexslow, double indexfast, double *coordinate1,
-                 double *coordinate2,      double *coordinate3);
+                 double    indexslow, double indexfast, double *coordinate1,
+                 double *coordinate2,    double *coordinate3);
 
 CBFLib documentation:
 DESCRIPTION
@@ -875,7 +839,7 @@ coordinate2   Pointer to the destination y component. coordinate3
 Pointer to the destination z component.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_coordinates_sf;
 
 %apply double *OUTPUT {double *coordinate1,
@@ -891,7 +855,7 @@ Returns : double normal1,double normal2,double normal3
 *args   : double index1,double index2
 
 C prototype: int cbf_get_pixel_normal (cbf_detector detector,
-                 double indexslow,      double indexfast, double *normal1,
+                 double indexslow,    double indexfast, double *normal1,
                  double *normal2, double *normal3);
 
 CBFLib documentation:
@@ -902,14 +866,14 @@ components of the of the normal vector to the pixel at (indexfast,
 indexslow). The vector is normalized.
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. indexslow   Slow index. indexfast   Fast
-index. normal1     Pointer to the destination x component of the
-normal vector. normal2     Pointer to the destination y component of
-the normal vector. normal3     Pointer to the destination z component
-of the normal vector.
+detector   Detector handle. indexslow   Slow index. indexfast   Fast
+index. normal1   Pointer to the destination x component of the normal
+vector. normal2   Pointer to the destination y component of the
+normal vector. normal3   Pointer to the destination z component of
+the normal vector.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_normal;
 
 %apply double *OUTPUT {double *normal1, double *normal2, double *normal3};
@@ -924,7 +888,7 @@ Returns : double normal1,double normal2,double normal3
 *args   : double indexfast,double indexslow
 
 C prototype: int cbf_get_pixel_normal_fs (cbf_detector detector,
-                 double indexfast,      double indexslow, double *normal1,
+                 double indexfast,    double indexslow, double *normal1,
                  double *normal2, double *normal3);
 
 CBFLib documentation:
@@ -935,14 +899,14 @@ components of the of the normal vector to the pixel at (indexfast,
 indexslow). The vector is normalized.
 Any of the destination pointers may be NULL.
 ARGUMENTS
-detector    Detector handle. indexslow   Slow index. indexfast   Fast
-index. normal1     Pointer to the destination x component of the
-normal vector. normal2     Pointer to the destination y component of
-the normal vector. normal3     Pointer to the destination z component
-of the normal vector.
+detector   Detector handle. indexslow   Slow index. indexfast   Fast
+index. normal1   Pointer to the destination x component of the normal
+vector. normal2   Pointer to the destination y component of the
+normal vector. normal3   Pointer to the destination z component of
+the normal vector.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")get_pixel_normal_fs;
 
 %apply double *OUTPUT {double *normal1, double *normal2, double *normal3};
@@ -957,7 +921,7 @@ Returns :
 *args   : double indexslow,double indexfast,double centerslow,double centerfast
 
 C prototype: int cbf_set_beam_center (cbf_detector detector,
-                 double *indexslow,      double *indexfast, double *centerslow,
+                 double *indexslow,    double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -1004,14 +968,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_beam_center;
 
     void set_beam_center(double *indexslow, double *indexfast,
@@ -1024,7 +988,7 @@ Returns :
 *args   : double indexfast,double indexslow,double centerfast,double centerslow
 
 C prototype: int cbf_set_beam_center_fs (cbf_detector detector,
-                 double *indexfast,      double *indexslow, double *centerfast,
+                 double *indexfast,    double *indexslow, double *centerfast,
                  double *centerslow);
 
 CBFLib documentation:
@@ -1071,14 +1035,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_beam_center_fs;
 
     void set_beam_center_fs(double *indexfast, double *indexslow,
@@ -1091,7 +1055,7 @@ Returns :
 *args   : double indexslow,double indexfast,double centerslow,double centerfast
 
 C prototype: int cbf_set_beam_center_sf (cbf_detector detector,
-                 double *indexslow,      double *indexfast, double *centerslow,
+                 double *indexslow,    double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -1138,14 +1102,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_beam_center_sf;
 
     void set_beam_center_sf(double *indexslow, double *indexfast,
@@ -1158,7 +1122,7 @@ Returns :
 *args   : double indexslow,double indexfast,double centerslow,double centerfast
 
 C prototype: int cbf_set_reference_beam_center (cbf_detector detector,
-                 double      *indexslow, double *indexfast, double *centerslow,
+                 double    *indexslow, double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -1205,14 +1169,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_reference_beam_center;
 
     void set_reference_beam_center(double *indexslow, double *indexfast,
@@ -1225,7 +1189,7 @@ Returns :
 *args   : double indexfast,double indexslow,double centerfast,double centerslow
 
 C prototype: int cbf_set_reference_beam_center_fs (cbf_detector detector,
-                 double      *indexfast, double *indexslow, double *centerfast,
+                 double    *indexfast, double *indexslow, double *centerfast,
                  double *centerslow);
 
 CBFLib documentation:
@@ -1272,14 +1236,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_reference_beam_center_fs;
 
     void set_reference_beam_center_fs(double *indexfast, double *indexslow,
@@ -1292,7 +1256,7 @@ Returns :
 *args   : double indexslow,double indexfast,double centerslow,double centerfast
 
 C prototype: int cbf_set_reference_beam_center_sf (cbf_detector detector,
-                 double      *indexslow, double *indexfast, double *centerslow,
+                 double    *indexslow, double *indexfast, double *centerslow,
                  double *centerfast);
 
 CBFLib documentation:
@@ -1339,14 +1303,14 @@ and _diffrn_detector_element.reference_center_slow in millimetres and
 the value of _diffrn_detector_element.reference_units will be set to
 'mm'.
 ARGUMENTS
-detector     Detector handle. indexfast    Pointer to the destination
-fast index. indexslow    Pointer to the destination slow index.
+detector   Detector handle. indexfast   Pointer to the destination
+fast index. indexslow   Pointer to the destination slow index.
 centerfast   Pointer to the destination displacement along the fast
 axis. centerslow   Pointer to the destination displacement along the
 slow axis.
 RETURN VALUE
 Returns an error code on failure or 0 for success.
-----------------------------------------------------------------------
+__________________________________________________________________
 ")set_reference_beam_center_sf;
 
     void set_reference_beam_center_sf(double *indexslow, double *indexfast,

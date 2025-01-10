@@ -212,7 +212,7 @@ if __name__ == "__main__":
 
     # Get the version out of our pyproject.toml
     ppt = toml.loads((ROOT_DIR / "pyproject.toml").read_text())
-    new_version = '__version__ = "{}"'.format(ppt["tool"]["poetry"]["version"]).encode()
+    new_version = '__version__ = "{}"'.format(ppt["project"]["version"]).encode()
 
     OLD_VER = b'__version__ = "CBFlib 0.9"'
     assert OLD_VER in pycbf_data, "Source pycbf.py doesn't appear to be version 0.9"
