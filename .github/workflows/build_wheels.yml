@@ -26,7 +26,7 @@ jobs:
             - uses: actions/upload-artifact@v4
               with:
                   path: dist/*.tar.gz
-                  name: pre_sdist
+                  name: sdist
 
     build_wheels:
         needs: [build_sdist]
@@ -39,7 +39,7 @@ jobs:
         steps:
             - uses: actions/download-artifact@v4
               with:
-                  name: pre_sdist
+                  name: sdist
                   path: dist
             - name: Decompress sdist (windows)
               if: startsWith(matrix.os, 'windows-')
